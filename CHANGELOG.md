@@ -8,8 +8,9 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
-Phase: **v2 spikes complete — decision point (graduate-or-archive).** v1 POC complete; v2 de-risked on
-shipped `recurse()`. Done: replay-reconciliation + Spike 1 (grounding); **Spike 2 = memory-loop wiring proven,
+Phase: **v2 spikes complete + graduation blockers cleared — decision point (graduate-or-archive).** v1 POC
+complete; v2 de-risked on shipped `recurse()`. **Memory loop FIXED (F29, 0/5→5/5); F11 tested (F30);
+depth corrected (F31); BG-1 + budget-enforcement verified by running.** No open blockers. Done: replay-reconciliation + Spike 1 (grounding); **Spike 2 = memory-loop wiring proven,
 then HARDENED — and the probe-09 positive largely did NOT survive the controls** (probe-06/07/08 fit-to-pass +
 RETRACTED; probe-09 honest redo; probe-10/11 hardening, **F26–F27**). The honest end-state: lexical recall
 ranks on *similarity, not correctness* (an equally-rich wrong rule outranks the right one), so naive top-k can
@@ -31,6 +32,24 @@ shippable `src/` yet, by design.
   ranks #3 → starved out of top-k → worker copies a wrong rule); **recall4 4/5** (right note threaded with the
   wrong ones → the **worker discriminates** and converges). Distant transfer fails even in recall4 (reuse copies
   the lesson's output shape). **Durable claim:** *recall proposes, executable verification disposes.*
+
+### Added — graduation push: memory fixed, F11, depth corrected, cost-control verified (2026-07-01)
+- **Memory loop FIXED + validated (probe-13, F29)** — naive rank-trusting top-3 **0/5** → fixed **5/5**. Fix:
+  close-driven recall widening (widen the candidate window on each failed close) + "unverified candidates,
+  the test decides" framing + a **rule-framed lesson**. Corrected F27's `auditBadge` "structure-transfer"
+  failure — it was my fixture underspecifying (the output shape was only in the hidden test); made fair, the
+  fixed loop passes it too.
+- **F11 tested (probe-14, F30)** — under the bare `refine` primitive, `{decision:'terminate'}` **sticks**
+  (`gate.terminated`, a clean stop-signal) but does **not self-stop** the spend (4 calls, same as `deny`) —
+  the caller still needs probe-02's latch. **But relayfact's actual loop is `refineLeaf`, which halts cleanly
+  after exactly 1 over-cap call** (verified by running) — so cost-control is sound; no latch needed there.
+- **Depth CORRECTED (probe-12, F31)** — F28's "haiku won't nest" was a probe misconfig (`opts.count` forces
+  flat Family-B workers). With Family A: haiku splits shallow (d1), sonnet solves at the root (d0); depth is
+  task-tractability + model-choice bounded, and `assessComplexity` is a keyword heuristic (not model-driven).
+  "Depth-2 reach" is ill-posed — the global close covers the whole artifact regardless of tree depth. Doctrine
+  held in every config.
+- **BG-1 verified-shipped by running** — bareguard 0.10.1 masks secrets in the audit by field
+  (`[REDACTED:key=apiKey]`) and value pattern (`[REDACTED:pattern=sk-a...]`), incl. `_ctx.provider.apiKey`.
 
 ### Added — Spike 3: boundary-mapping at depth (2026-07-01)
 - **probe-12 (Spike 3, F28)** — a 6-function/2-module toolkit under one global suite, `maxDepth:2`,

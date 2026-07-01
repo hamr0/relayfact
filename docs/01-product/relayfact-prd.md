@@ -15,13 +15,21 @@ distractor, lexical BM25 ranks two *wrong* rules **above** the right one (F26 �
 confirmed, not killed; and no embeddings tier can fix it since retrieval ranks on similarity, not
 correctness). Decomposed across 5 entities (F27): naive top-3 recall **starves** the worker (right note
 falls out of top-k) → **0/5**; thread top-4 so the right note is present and the **worker discriminates** it
-from the wrong ones → **4/5**; the one **structurally-distant** transfer fails even then (reuse copies the
-lesson's output shape). **Net:** the memory loop's value lives in the **worker + grounded close**, not in
-ranking — *recall proposes, executable verification disposes*. **Spike 3 (boundary at depth) DONE (probe-12,
-F28):** the grounding seam holds under organic decomposition — grounded coverage = the ROOT only (1/3), the
-global top predicate catches a fault owned by an ungrounded child — but haiku won't nest past depth 1 (depth
-is model-bounded; depth-2 reach unproven). **All three v2 spikes are now run; next is the graduate-or-archive
-call.** No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
+from the wrong ones → **4/5**. **Then FIXED + validated (probe-13, F29): naive 0/5 → fixed 5/5.** The fix is
+the thesis operationalized — the grounded close *drives* recall (widen the candidate window on each failed
+attempt; frame notes as "unverified candidates, the test decides") + a **rule-framed lesson**; the worker
+then discriminates the right rule from the higher-ranked wrong ones. (The F27 `auditBadge` "structure
+transfer" failure was **my fixture underspecifying** — the output shape lived only in the hidden test; made
+fair, the fixed loop passes it too.) **Net:** the memory loop's value lives in the **worker + grounded
+close**, and the fix makes recall *reliably surface* the right note to them rather than trusting rank —
+*recall proposes, executable verification disposes*. **Spike 3 (boundary at depth) DONE + CORRECTED (probe-12,
+F28/F31):** the grounding seam holds — grounded coverage = the ROOT only (1/3), the global top predicate
+catches a fault owned by an ungrounded child. F28's "haiku won't nest" was a probe misconfig (`opts.count`
+forces flat workers); with Family A the depth is task-tractability + model-choice bounded (haiku splits
+shallow, sonnet solves at the root) — and "depth-2 reach" is **ill-posed**: the global close covers the whole
+artifact regardless of tree depth. **All three v2 spikes are run; the memory blocker is fixed, cost-control is
+verified (F30), and the eval-grounding boundary is mapped — relayfact is at the graduate-or-archive call with
+no open blockers.** No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
 refers to a section here. The validation companion is `benches-prd.md`.
 
 **relayfact** is an experiment: an autonomous "senior dev" runner **assembled** from the bare suite —

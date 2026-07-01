@@ -594,3 +594,91 @@ is set by how far the model decomposes — small here (2 nodes) because haiku wo
 planner that actually nests (a stronger model, or gaming the complexity scorer, deliberately not done). What
 is proven: at whatever depth this model produces, *grounded-at-root + global predicate = the whole tree is
 covered*, and the ungrounded residue never closes anything green on its own.
+
+> **CORRECTED by F31:** F28's "haiku won't nest, depth is model-bounded" conflated two things and was partly
+> a **probe misconfig** — I had set `opts.count`, which forces *flat* Family-B workers that never re-decompose.
+> With Family A (no `count`), children DO recurse. Read F31 for the corrected depth picture. The doctrine
+> half of F28 (global predicate catches an ungrounded child's fault; grounded coverage = root only) stands.
+
+## F29 — the memory loop, FIXED and validated: naive 0/5 → fixed 5/5
+
+F26/F27 showed the naive loop fails because lexical recall ranks on similarity, not correctness. `poc/probe-13-memory-fixed.mjs`
+builds and validates the fix — same 5 entities, same adversarial store (the two length-matched wrong
+distractors from F26), haiku, `node --test` close:
+
+| arm | recall strategy | lesson form | rate | note |
+|---|---|---|---|---|
+| naive | thread top-3, rank-trusting (F27 repro) | verbatim code | **0/5** | right note ranks #3 → never in the slate (`rightInSlate=false` every attempt) |
+| fixed | **close-driven widening** (3→6 on each failed close) + "unverified candidates; the TEST decides" framing | **rule-framed** (explicit `<PREFIX>-<pad6>-<CHK>` rule + example) | **5/5** | worker discriminates the right rule from the higher-ranked wrong ones; converges at iterations=2 |
+
+Two fixes, each doing a job:
+- **FIX-1 (retrieval):** don't trust rank. The grounded close *drives* recall — widen the candidate window
+  on each failed attempt until the right note is present, framed as candidates the test adjudicates. This is
+  the thesis operationalized: *recall proposes, executable verification disposes.* (Bonus: the rule-framed
+  note also ranks better than verbatim code — the rule text lexically matches a "what is the convention"
+  query, so it was in the top-3 slate from attempt 1 for the plain entities.)
+- **FIX-2 (structure) + an F27 correction:** F27 blamed a "structure-transfer" failure on `auditBadge`
+  (wrapped `<<…>>` output). That was **my fixture underspecifying**: the wrapping lived ONLY in the hidden
+  test, so the worker could not know it from task or memory — an unpassable spec, not a transfer failure.
+  Made fair by putting the output *shape* in the task (a per-function spec, NOT a project convention →
+  belongs in the task, not memory) with a neutral example that doesn't contain the answer. With the ID rule
+  from memory + the shape from the task, the fixed loop passes `auditBadge` too (`<<AUDIT-000042-A>>`).
+
+**Honest scaling caveat (logged, not papered over):** widening to the full pool works for a BOUNDED
+candidate set. A large store can't thread everything — it needs either better retrieval or a hard widen cap;
+the close-driven widening degrades to "try the top-k, widen k on failure up to a cap", which bounds cost but
+can miss a note buried below the cap. The durable claim is unchanged: the discriminator is the worker+close,
+and the fix makes recall *reliably surface* the right note to them rather than trusting rank to rank it first.
+
+## F30 — F11 tested: `terminate` STICKS but does not self-stop `refine`; `refineLeaf` (relayfact's loop) halts cleanly
+
+`poc/probe-14-terminate-halt.mjs` (v3 — two earlier versions were wrong: a single `Loop` finishes in one
+round; the Loop *catches* HaltError internally so it never reaches the caller). Tested with the v1 `refine`
+primitive (F11's origin), tiny budget, always-failing leaf, 4 iterations, `deny` vs `terminate`:
+
+- **`deny`:** 4 iterations, 4 LLM calls, ~$0.0041, `humanEvents=4` (a fresh `budget.maxCostUsd` halt each
+  iteration), `gate.terminated=false` — the F11 problem: refine keeps spending, one call per iteration.
+- **`terminate`:** 4 iterations, **4 LLM calls**, ~$0.0039 — halts 2–4 are `rule=gate.terminated`
+  (`gate.terminated=true`). It **STICKS** (a clean, unambiguous stop-signal, unlike a transient per-action
+  `deny`) **but does NOT self-stop**: same call count/cost as `deny`, because `refine` seeds a fresh Loop
+  each iteration that makes its first LLM call *before* the gate is consulted. **So the caller still needs
+  probe-02's latch** (break refine on `gate.terminated`); `terminate` only makes that stop-condition
+  unambiguous. F11 hypothesis "terminate removes the latch" → **PARTIAL/refuted.**
+
+**But this does not affect relayfact**, whose actual loop is `recurse` + **`refineLeaf`**, not bare `refine`.
+Verified directly (minimal probe, tiny budget, always-fail sensor): under `refineLeaf` a budget cap fires
+after **exactly 1 over-cap LLM call** then clean-halts (`humanChannel` halt, `llmCalls=1`, cost $0.0012 > cap
+$0.0008, recurse returns cleanly). That is F17's "recurse halts cleaner than refine" confirmed for the leaf
+path — **budget IS enforced in relayfact's loop; no latch, no `terminate` needed.** (An earlier probe-14 v2
+reading of "9× overspend under refineLeaf" was a measurement artifact, corrected by this direct test.)
+Net: cost-control is sound for graduation; the `terminate`-doesn't-self-stop nuance is a caveat for anyone
+using the bare `refine` primitive, logged upstream-adjacent (see UPSTREAM-FIXES).
+
+## F31 — depth CORRECTED: decomposition depth is task-tractability + model choice; the doctrine is depth-independent
+
+F28 concluded "haiku won't nest (model-bounded)". That was partly **my misconfig**: `opts.count` forces
+Family-B *flat* workers that never re-decompose (recurse.js:391 → `recurseFanout`; "forced fan-out is NOT
+re-applied to children"). Removing `count` (Family A) lets children run `recurse(…, depth+1)` and re-split.
+Re-ran across the matrix (`poc/probe-12-spike3-depth.mjs`, Family A unless noted):
+
+| config | tree | why |
+|---|---|---|
+| forced `count:2` (Family B), haiku | depth 1, flat | forced fanout → flat workers by design |
+| Family A, haiku, plain framing | depth 1 (2 module children, each in-worker) | haiku splits the top, solves each module itself |
+| Family A, **sonnet-5**, plain framing | **depth 0** (root solves all 6) | a stronger model just *solves* a tractable task |
+| Family A, haiku, **hard/complex-noun framing**, maxDepth 3 | depth 0 | "pipeline" framing made it one cohesive task |
+
+**Also corrected:** decomposition depth is NOT model-driven the way I told the user. `assessComplexity`
+(recurse's spawn gate, `canSpawn = depth<maxDepth && level!=='simple'`) is a **pure keyword heuristic, no
+LLM** — so a stronger model does not "nest more". In Family A the *Planner* (model) chooses width, but
+capable models solve tractable tasks shallowly. **I could not induce a natural depth-2 tree in any config**
+(weak/strong model, plain/hard framing) — it would need an intractably large task or gaming the scorer, both
+artificial.
+
+**The load-bearing point stands and is stronger for it:** the grounding doctrine held in **every** config
+(depth 0, 1; flat and adaptive; haiku and sonnet) — the global top predicate caught the planted fault every
+time and the control converged. That is because the predicate's reach is the **entire artifact** (the whole
+test suite), which is **independent of decomposition depth** by construction: a fault at any node fails the
+suite. So "depth-2 reach" is an **ill-posed milestone** — the global close's coverage does not depend on how
+deep the tree goes. What's real is the boundary map (grounded = root only; residue = every descendant;
+safety carried entirely by the global root close), and it holds at whatever depth the model produces.

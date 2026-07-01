@@ -34,10 +34,14 @@ const { Anthropic } = require('bare-agent/providers');
 const { JsonlTransport } = require('bare-agent/transports');
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = process.env.RELAYFACT_MODEL || 'claude-haiku-4-5-20251001';
 const MAX_COST_USD = Number(process.env.RELAYFACT_MAX_COST_USD ?? 2.0); // depth tree = more workers; gated below
 const MAX_DEPTH = Number(process.env.RELAYFACT_MAX_DEPTH ?? 2);
-const TOP_COUNT = Number(process.env.RELAYFACT_TOP_COUNT ?? 2); // push 2 module-groups at the top; let them re-split
+// TOP_COUNT>0 => FORCED Family-B fanout (flat workers that NEVER re-decompose — this is why the first
+// probe-12 run stayed at depth 1, NOT because the model won't nest; F28 corrected). TOP_COUNT=0 => Family A
+// (adaptive): the model decides width AND each child runs `recurse(...,depth+1)` so it can spawn grandchildren
+// (recurse.js:936). Family A + maxDepth:2 is the config that can actually reach depth 2.
+const TOP_COUNT = Number(process.env.RELAYFACT_TOP_COUNT ?? 0);
 
 const LEAVES = ['sUpper', 'sReverse', 'sTrim', 'nDouble', 'nSquare', 'nInc'];
 const S = {
@@ -101,12 +105,24 @@ const PERSONA = [
   'CRITICAL: each file must `export function <name>(...) { ... }`. Vanilla JS, no deps. Never edit tests.',
 ].join(' ');
 
-const buildTask = () =>
-  `Build a toolkit of 6 functions so that \`node --test ${TEST}\` passes in ${FIX_DIR}. It is organized as TWO\n`
-  + `modules — a "strings" module (sUpper, sReverse, sTrim) and a "numbers" module (nDouble, nSquare, nInc).\n`
-  + `Delegate each module, then implement its functions (you do NOT need to read the test):\n`
-  + LEAVES.map((fn, i) => `  - ${fn}.js: ${SPECS[mode][i]}`).join('\n')
-  + `\n\nEdit ONLY these six files with edit_file; never the test.`;
+// HARD framing (RELAYFACT_HARD=1): name the two groups with COMPLEX-scoring nouns ("validation" /
+// "search" module) so the Planner's child subtasks score non-`simple` and RE-DECOMPOSE into function
+// grandchildren (recurse.js:420 canSpawn gate is keyword-driven — complexity.js is a pure heuristic, NOT
+// model-based). This is an explicit attempt to INDUCE a depth-2 tree so the global-close reach can be
+// tested one level deeper; disclosed as induced, not organic.
+const HARD = process.env.RELAYFACT_HARD === '1';
+const buildTask = () => HARD
+  ? `Build and validate a data-processing pipeline so that \`node --test ${TEST}\` passes in ${FIX_DIR}. It has\n`
+    + `TWO subsystems that each need their own breakdown: a "validation" module (sUpper, sReverse, sTrim) and a\n`
+    + `"search" indexing module (nDouble, nSquare, nInc). Decompose each subsystem into its individual functions,\n`
+    + `then implement each (you do NOT need to read the test):\n`
+    + LEAVES.map((fn, i) => `  - ${fn}.js: ${SPECS[mode][i]}`).join('\n')
+    + `\n\nEdit ONLY these six files with edit_file; never the test.`
+  : `Build a toolkit of 6 functions so that \`node --test ${TEST}\` passes in ${FIX_DIR}. It is organized as TWO\n`
+    + `modules — a "strings" module (sUpper, sReverse, sTrim) and a "numbers" module (nDouble, nSquare, nInc).\n`
+    + `Delegate each module, then implement its functions (you do NOT need to read the test):\n`
+    + LEAVES.map((fn, i) => `  - ${fn}.js: ${SPECS[mode][i]}`).join('\n')
+    + `\n\nEdit ONLY these six files with edit_file; never the test.`;
 
 // Recursive walk of the RC-10 receipts tree → flat node list with the grounding picture per node.
 function walk(node, depth = 0, acc = []) {
@@ -171,9 +187,10 @@ async function main() {
   };
 
   for (const fn of LEAVES) copyFileSync(join(FIX_DIR, `${fn}.stub.js`), join(FIX_DIR, `${fn}.js`)); // all red
-  emit('run.start', { mode, expect: EXPECT[mode], model: MODEL, maxDepth: MAX_DEPTH, topCount: TOP_COUNT, leaves: LEAVES.length });
+  emit('run.start', { mode, expect: EXPECT[mode], model: MODEL, maxDepth: MAX_DEPTH, family: TOP_COUNT > 0 ? `B(count=${TOP_COUNT}, flat)` : 'A(adaptive, can nest)', leaves: LEAVES.length });
 
-  const opts = { persona: PERSONA, tools: [editTool], evaluate, contract: `\`node --test ${TEST}\` passes`, synthesize: 'concat', maxDepth: MAX_DEPTH, count: TOP_COUNT };
+  const opts = { persona: PERSONA, tools: [editTool], evaluate, contract: `\`node --test ${TEST}\` passes`, synthesize: 'concat', maxDepth: MAX_DEPTH };
+  if (TOP_COUNT > 0) opts.count = TOP_COUNT; // omit => Family A (adaptive, children recurse => depth possible)
   let result;
   try { result = await recurse(buildTask(), { provider, policy, onLlmResult, stream }, opts); }
   catch (e) { emit('run.error', { source: 'recurse', message: e.message }); finish(1); return; }
@@ -210,9 +227,9 @@ async function main() {
   const doctrineOk = wantGreen ? pass : !pass;
   const deep = maxDepthReached >= 2;
   emit('depth.note', {
-    maxDepthReached, deep,
-    finding: deep ? 'tree nested to depth >=2 — depth reach demonstrated'
-      : 'tree stayed at depth 1: haiku + inline specs UNDER-decomposes (each module child did its functions in-worker, no grandchildren) despite maxDepth headroom — depth is MODEL-bounded, not mechanism-bounded (cf. F18 over-decomposition when workers must explore). Depth-2 reach UNPROVEN with this model.',
+    model: MODEL, family: TOP_COUNT > 0 ? 'B(flat)' : 'A(adaptive)', maxDepthReached, deep,
+    finding: deep ? `tree nested to depth ${maxDepthReached} — DEPTH-2 REACH DEMONSTRATED (a fault below the root, caught by the global top predicate)`
+      : `tree stayed at depth ${maxDepthReached}. ${TOP_COUNT > 0 ? 'FORCED fanout (count) makes flat workers that never re-decompose — expected.' : 'Family A but the model still solved each child in-worker rather than spawning grandchildren.'}`,
   });
   if (doctrineOk && wantGreen) emit('spike.PASS', { msg: `DOCTRINE HELD: control converged GREEN across a ${total}-node organic tree; grounded coverage ${grounded}/${total} (root only), ungrounded residue ${ungrounded}` });
   else if (doctrineOk && !wantGreen) emit('spike.PASS', { msg: `DOCTRINE HELD: fault owned by an UNGROUNDED child (depth ${maxDepthReached}) CAUGHT by the global top predicate; grounded coverage ${grounded}/${total} (root only), ungrounded residue ${ungrounded}` });

@@ -27,3 +27,12 @@ executable verification disposes.* When you measure a "memory helps" result, the
 an **equally-rich wrong distractor** (kills the length confound) and **multiple instances for a rate**,
 not n on one easy fixture. This is the [[no-fit-to-pass-tests]] discipline applied to retrieval: the
 positive arm must be unable to win by construction (here, by being the longest doc).
+
+**THE FIX (probe-13/F29, validated naive 0/5 → fixed 5/5):** since ranking can't discriminate, don't rely
+on it — let the **grounded close DRIVE recall**: on each failed close, WIDEN the candidate window (top-k,
+k grows on failure up to a cap) and frame the notes as "unverified candidates — the test decides which
+applies." The worker then discriminates the right note from higher-ranked wrong ones. Also store lessons
+as an explicit **RULE + example**, not verbatim code (a rule both ranks better on a "what's the
+convention" query AND transfers across output structure). Per-function output *shape* is a task spec, NOT
+memory (don't ask memory to carry what belongs in the task). Scaling caveat: widening works for a bounded
+candidate pool; a large store needs better retrieval or a hard widen cap.

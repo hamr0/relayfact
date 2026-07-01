@@ -25,7 +25,7 @@ Status legend: 🔴 **blocking** · 🟠 **non-blocking / propagate** · 🟢 **
 | BA-3 | F7 | 🟠 doc / sharp-edge | 🟢 **SHIPPED v0.22.0** | `with-bareguard.mjs` rewritten with a real `actionTranslator` (shell→bash/fs primitives), `onToolResult`+`onLlmResult` (dropped deprecated `wrapTools`), and `result.metrics.costUsd`. |
 | BA-4 | F10 | 🟠 doc | 🟢 **SHIPPED v0.22.0** | `litectx-as-store.mjs` now uses `new LiteCtx({ root })` (temp dir, cleaned up); runs the litectx half end-to-end. |
 | BA-5 | F15 | 🟠 observability | 🟢 **works-as-intended — documented (v0.22.0)** | Confirmed: worker Loops emit `loop:tool_call`/`loop:tool_result` to `ctx.stream` (loop.js). Documented on `RecurseCtx.stream` JSDoc (stream + RC-10 receipts + gate audit are the substrate; no `onToolCall` callback by design). |
-| BA-6 | F11 / F17 | 🟠 doc / behavior | 🟢 **SHIPPED v0.22.0** | Documented at `with-bareguard.mjs`'s `humanChannel`: `deny` denies one action (loop continues; under `refine` it can keep spending); `terminate` is the clean-halt (`HaltError`) path. |
+| BA-6 | F11 / F17 / F30 | 🟠 doc / behavior | 🟢 **SHIPPED v0.22.0 — nuance VERIFIED (F30)** | Documented at `with-bareguard.mjs`'s `humanChannel`: `deny` denies one action (loop continues; under `refine` it can keep spending); `terminate` is the clean-halt (`HaltError`) path. **F30 (`poc/probe-14`) verified the nuance by running:** under the bare `refine` primitive, `terminate` **STICKS** (`gate.terminated` becomes the halting rule for later iterations — a clean, unambiguous stop-signal) but does **NOT self-stop** the spend (each fresh-Loop iteration makes its first LLM call before the gate is consulted → same call count as `deny`); the caller still needs the probe-02 latch. **Under `refineLeaf` (the leaf path relayfact uses) a budget cap halts cleanly after exactly 1 over-cap call** (verified) — no latch needed there. *Doc could note: `terminate` is self-executing under `Loop`/`refineLeaf` but NOT under bare `refine` — there the caller must break on `gate.terminated`.* |
 | BA-7 | F12 | 🟢 | **SHIPPED v0.21.0** | `opts.persona` worker-stance seam (augments, carries down, not on the verifier). |
 | BA-8 | F17 | 🟠 enhancement | 🟢 **SHIPPED + VERIFIED v0.23.0** | `recurse({ refineLeaf: { sensor, maxIterations?, temperatures? } })` — a definite leaf (`!canSpawn`) runs as a bounded generate→sense→regenerate loop (reuses `refine.js`); deterministic sensor, GAP fed fresh, **escalating temperature** (the load-bearing finding). Gate-bounded; honest non-recovery (`receipts.refineLeaf.passed`); carries down. **Verified-shipped (F21, `poc/probe-05`): recover arm `iterations=2,passed=true,temps=[0.2,0.7]` + result carried a critique-only token (gap-feedback proven); never arm `iterations=3,passed=false` (honest non-recovery).** |
 | BA-9 | F19 | 🟠 enhancement | 🟢 **SHIPPED + VERIFIED v0.23.0** | `recurse({ context })` — a read-only working-context string prepended to every worker's task message + forwarded to the Planner as `info` + shown to the verifier; carries down via `forChild` (distinct from `persona`). Replaces the persona-laundering workaround. **Verified-shipped (F21, `poc/probe-05`): context arm read the ABS path + recovered the token; no-context control DENIED (reproduces F19) — proves the channel, not a rig.** |
@@ -127,11 +127,11 @@ the worker is single-pass (F17). Document that `{decision:'terminate'}` is the i
 
 ---
 
-## bareguard (currently v0.9.0 → BG-1 lands in v0.10.0, pending publish)
+## bareguard (currently v0.10.1)
 
 | # | Finding | Severity | Status | The fix |
 |---|---|---|---|---|
-| BG-1 | F16 | 🔴 security | 🟠 **BUILT — bareguard `main`, releasing v0.10.0 (pending publish)** | Key-aware redaction walk, **default-on**, narrow configurable key set — as built in `src/primitives/secrets.js`. Verify-shipped-vs-spec on v0.10.0. |
+| BG-1 | F16 | 🔴 security | 🟢 **SHIPPED + VERIFIED v0.10.1** | Key-aware redaction walk, **default-on** (`DEFAULT_SECRET_KEYS = apiKey/api_key/authorization` + `sk-`/`Bearer` value patterns), narrow configurable key set — `src/primitives/secrets.js`. **Verified-shipped by running (2026-07-01):** a `gate.check` on an action carrying a fake `sk-ant-…` key masks it in the audit both by field (`[REDACTED:key=apiKey]`) and value pattern (`[REDACTED:pattern=sk-a...]`), including `_ctx.provider.apiKey`; the raw key is absent from the audit file. |
 | BG-2 | F9 | 🟢 | works-as-intended | Layered enforcement (floor → ask → allowlist) verified correct; no change. |
 
 ### BG-1 — 🔴 redact secrets in the audit (F16, defense-in-depth)
