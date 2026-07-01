@@ -1,0 +1,658 @@
+{
+  "analyzed_at": "2026-06-30T20:28:38.789Z",
+  "sessions_analyzed": 700,
+  "config_used": {
+    "weights": {
+      "user_correction": 8,
+      "user_curse": 8,
+      "interrupt_cascade": 8,
+      "tool_loop": 6,
+      "repeated_question": 5,
+      "request_interrupted": 3,
+      "exit_error": 0.5,
+      "false_success": 1,
+      "no_resolution": 0.5,
+      "session_abandoned": 1,
+      "user_intervention": 1,
+      "rapid_exit": 1,
+      "long_silence": 0.5,
+      "compaction": 0.5,
+      "sibling_tool_error": 0.5,
+      "exit_success": 0,
+      "checkpoint": 0
+    },
+    "thresholds": {
+      "friction_peak": 15,
+      "intervention_predictability": 0.5,
+      "signal_noise_ratio": 1.5,
+      "long_silence_minutes": 10
+    },
+    "notes": {
+      "model": "Threshold monitor - friction accumulates, no subtraction",
+      "exit_error": "Single error = noise (+1)",
+      "exit_success": "Zero weight - tracked as momentum only",
+      "user_intervention": "Gold signal - user gave up (/stash)",
+      "user_curse": "Reliable frustration indicator",
+      "false_success": "Trust violation - LLM claimed success but failed",
+      "tool_loop": "Agent stuck - same tool 3x",
+      "user_negation": "Low weight - still noisy after filtering",
+      "request_interrupted": "User hit Ctrl+C / Escape - impatience signal",
+      "long_silence": "User walked away >10 min - disengagement",
+      "repeated_question": "User asked same thing twice - confusion/frustration",
+      "compaction": "Context overflow - memory loss indicator",
+      "interrupt_cascade": "Multiple ESC/Ctrl+C within 60s - escalating frustration",
+      "rapid_exit": "Quick quit (<3 turns) after error - immediate rejection",
+      "no_resolution": "Errors without success - unresolved session",
+      "session_abandoned": "High friction at end, no clean exit - gave up silently",
+      "sibling_tool_error": "SDK cascade - parallel tool batch canceled when one fails"
+    }
+  },
+  "aggregate_by_source": {
+    "user": {
+      "sessions_with_signals": 231,
+      "total_friction": 1918,
+      "avg_friction_per_session": 8.303030303030303,
+      "top_signals": {
+        "checkpoint": 1428,
+        "repeated_question": 265,
+        "request_interrupted": 86,
+        "user_intervention": 55,
+        "user_correction": 25,
+        "user_curse": 7,
+        "interrupt_cascade": 3
+      }
+    },
+    "tool": {
+      "sessions_with_signals": 126,
+      "total_friction": 134,
+      "avg_friction_per_session": 1.0634920634920635,
+      "top_signals": {
+        "exit_error": 268,
+        "exit_success": 4
+      }
+    },
+    "llm": {
+      "sessions_with_signals": 108,
+      "total_friction": 546,
+      "avg_friction_per_session": 5.055555555555555,
+      "top_signals": {
+        "false_success": 162,
+        "tool_loop": 64
+      }
+    },
+    "session": {
+      "sessions_with_signals": 25,
+      "total_friction": 19,
+      "avg_friction_per_session": 0.76,
+      "top_signals": {
+        "no_resolution": 12,
+        "rapid_exit": 12,
+        "checkpoint": 9,
+        "session_abandoned": 1
+      }
+    }
+  },
+  "by_project": {
+    "hamr": {
+      "total_sessions": 5,
+      "interactive_sessions": 5,
+      "bad_sessions": 1,
+      "bad_rate": 0.2,
+      "avg_friction": 28.4,
+      "avg_duration_min": 3182,
+      "avg_turns": 15.8
+    },
+    "addypin": {
+      "total_sessions": 3,
+      "interactive_sessions": 3,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 3,
+      "avg_duration_min": 918.7,
+      "avg_turns": 9.7
+    },
+    "bareagent": {
+      "total_sessions": 36,
+      "interactive_sessions": 35,
+      "bad_sessions": 3,
+      "bad_rate": 0.09,
+      "avg_friction": 6.3,
+      "avg_duration_min": 1029.6,
+      "avg_turns": 15.7
+    },
+    "barebrowse": {
+      "total_sessions": 4,
+      "interactive_sessions": 4,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 5.8,
+      "avg_duration_min": 295.3,
+      "avg_turns": 12.3
+    },
+    "bareguard": {
+      "total_sessions": 93,
+      "interactive_sessions": 18,
+      "bad_sessions": 1,
+      "bad_rate": 0.06,
+      "avg_friction": 2.5,
+      "avg_duration_min": 312.4,
+      "avg_turns": 4.2
+    },
+    "bareguard-harness-code-mode": {
+      "total_sessions": 150,
+      "interactive_sessions": 0,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 0,
+      "avg_duration_min": 0,
+      "avg_turns": 1
+    },
+    "beeperbox": {
+      "total_sessions": 5,
+      "interactive_sessions": 5,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 13.1,
+      "avg_duration_min": 6155.2,
+      "avg_turns": 15.8
+    },
+    "career-ops": {
+      "total_sessions": 5,
+      "interactive_sessions": 5,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 16.3,
+      "avg_duration_min": 924.4,
+      "avg_turns": 21.2
+    },
+    "dwi": {
+      "total_sessions": 5,
+      "interactive_sessions": 4,
+      "bad_sessions": 2,
+      "bad_rate": 0.5,
+      "avg_friction": 12.2,
+      "avg_duration_min": 4003.6,
+      "avg_turns": 15.2
+    },
+    "flightlog": {
+      "total_sessions": 2,
+      "interactive_sessions": 2,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 5,
+      "avg_duration_min": 1418.5,
+      "avg_turns": 16.5
+    },
+    "gitdone": {
+      "total_sessions": 5,
+      "interactive_sessions": 5,
+      "bad_sessions": 1,
+      "bad_rate": 0.2,
+      "avg_friction": 22.7,
+      "avg_duration_min": 1420.6,
+      "avg_turns": 16.8
+    },
+    "healthwatch": {
+      "total_sessions": 1,
+      "interactive_sessions": 1,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 143.5,
+      "avg_duration_min": 2494,
+      "avg_turns": 83
+    },
+    "knowless": {
+      "total_sessions": 2,
+      "interactive_sessions": 2,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 2,
+      "avg_duration_min": 206.5,
+      "avg_turns": 12
+    },
+    "latefyi": {
+      "total_sessions": 3,
+      "interactive_sessions": 3,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 27.8,
+      "avg_duration_min": 11935.3,
+      "avg_turns": 16
+    },
+    "liteagents": {
+      "total_sessions": 4,
+      "interactive_sessions": 4,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 41.6,
+      "avg_duration_min": 7841,
+      "avg_turns": 32.8
+    },
+    "litectx": {
+      "total_sessions": 307,
+      "interactive_sessions": 66,
+      "bad_sessions": 6,
+      "bad_rate": 0.09,
+      "avg_friction": 2.1,
+      "avg_duration_min": 151.2,
+      "avg_turns": 3.9
+    },
+    "litectx-poc": {
+      "total_sessions": 3,
+      "interactive_sessions": 3,
+      "bad_sessions": 1,
+      "bad_rate": 0.33,
+      "avg_friction": 5,
+      "avg_duration_min": 534,
+      "avg_turns": 15.3
+    },
+    "mailproof": {
+      "total_sessions": 4,
+      "interactive_sessions": 4,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 8.6,
+      "avg_duration_min": 9846,
+      "avg_turns": 16.8
+    },
+    "multis": {
+      "total_sessions": 38,
+      "interactive_sessions": 38,
+      "bad_sessions": 6,
+      "bad_rate": 0.16,
+      "avg_friction": 8.4,
+      "avg_duration_min": 1532.1,
+      "avg_turns": 15.4
+    },
+    "notes-smol-mlearn": {
+      "total_sessions": 1,
+      "interactive_sessions": 1,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 18.5,
+      "avg_duration_min": 1428,
+      "avg_turns": 23
+    },
+    "plato": {
+      "total_sessions": 8,
+      "interactive_sessions": 8,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 5.2,
+      "avg_duration_min": 382.3,
+      "avg_turns": 13
+    },
+    "privcloud": {
+      "total_sessions": 9,
+      "interactive_sessions": 9,
+      "bad_sessions": 3,
+      "bad_rate": 0.33,
+      "avg_friction": 15.3,
+      "avg_duration_min": 2131.6,
+      "avg_turns": 22.4
+    },
+    "relayfact": {
+      "total_sessions": 3,
+      "interactive_sessions": 3,
+      "bad_sessions": 1,
+      "bad_rate": 0.33,
+      "avg_friction": 7.2,
+      "avg_duration_min": 2578,
+      "avg_turns": 15
+    },
+    "wearehere": {
+      "total_sessions": 1,
+      "interactive_sessions": 1,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 0,
+      "avg_duration_min": 5,
+      "avg_turns": 5
+    },
+    "stuff-docs-work-resumes": {
+      "total_sessions": 1,
+      "interactive_sessions": 1,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 3,
+      "avg_duration_min": 31,
+      "avg_turns": 5
+    },
+    "tmp": {
+      "total_sessions": 1,
+      "interactive_sessions": 0,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 0,
+      "avg_duration_min": 0,
+      "avg_turns": 1
+    },
+    "tmp-litectx-e2e": {
+      "total_sessions": 1,
+      "interactive_sessions": 0,
+      "bad_sessions": 0,
+      "bad_rate": 0,
+      "avg_friction": 0,
+      "avg_duration_min": 0,
+      "avg_turns": 1
+    }
+  },
+  "overall": {
+    "total_sessions": 700,
+    "interactive_sessions": 230,
+    "bad_sessions": 25,
+    "bad_rate": 0.11,
+    "avg_friction": 3.7,
+    "avg_duration_min": 569.2,
+    "avg_turns": 6
+  },
+  "daily_stats": [
+    {
+      "date": "2026-05-19",
+      "total": 1,
+      "interactive": 1,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 54.5
+    },
+    {
+      "date": "2026-05-22",
+      "total": 1,
+      "interactive": 1,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 12.5
+    },
+    {
+      "date": "2026-05-26",
+      "total": 2,
+      "interactive": 2,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 22.3
+    },
+    {
+      "date": "2026-05-27",
+      "total": 1,
+      "interactive": 1,
+      "bad": 1,
+      "bad_rate": 1,
+      "avg_friction": 35
+    },
+    {
+      "date": "2026-05-29",
+      "total": 2,
+      "interactive": 2,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 7.5
+    },
+    {
+      "date": "2026-05-30",
+      "total": 2,
+      "interactive": 2,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 33.3
+    },
+    {
+      "date": "2026-05-31",
+      "total": 7,
+      "interactive": 7,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 22.4
+    },
+    {
+      "date": "2026-06-01",
+      "total": 9,
+      "interactive": 9,
+      "bad": 1,
+      "bad_rate": 0.11,
+      "avg_friction": 13.9
+    },
+    {
+      "date": "2026-06-02",
+      "total": 26,
+      "interactive": 16,
+      "bad": 2,
+      "bad_rate": 0.13,
+      "avg_friction": 8.5
+    },
+    {
+      "date": "2026-06-03",
+      "total": 4,
+      "interactive": 4,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 9.4
+    },
+    {
+      "date": "2026-06-04",
+      "total": 7,
+      "interactive": 7,
+      "bad": 3,
+      "bad_rate": 0.43,
+      "avg_friction": 7.4
+    },
+    {
+      "date": "2026-06-05",
+      "total": 13,
+      "interactive": 13,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 8.8
+    },
+    {
+      "date": "2026-06-08",
+      "total": 3,
+      "interactive": 3,
+      "bad": 1,
+      "bad_rate": 0.33,
+      "avg_friction": 10.8
+    },
+    {
+      "date": "2026-06-09",
+      "total": 3,
+      "interactive": 3,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 12
+    },
+    {
+      "date": "2026-06-10",
+      "total": 11,
+      "interactive": 5,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 1.4
+    },
+    {
+      "date": "2026-06-11",
+      "total": 13,
+      "interactive": 13,
+      "bad": 2,
+      "bad_rate": 0.15,
+      "avg_friction": 9.1
+    },
+    {
+      "date": "2026-06-12",
+      "total": 82,
+      "interactive": 11,
+      "bad": 1,
+      "bad_rate": 0.09,
+      "avg_friction": 2.2
+    },
+    {
+      "date": "2026-06-13",
+      "total": 155,
+      "interactive": 11,
+      "bad": 2,
+      "bad_rate": 0.18,
+      "avg_friction": 0.9
+    },
+    {
+      "date": "2026-06-14",
+      "total": 27,
+      "interactive": 6,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 3.2
+    },
+    {
+      "date": "2026-06-15",
+      "total": 225,
+      "interactive": 9,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 0.3
+    },
+    {
+      "date": "2026-06-16",
+      "total": 11,
+      "interactive": 11,
+      "bad": 1,
+      "bad_rate": 0.09,
+      "avg_friction": 25
+    },
+    {
+      "date": "2026-06-17",
+      "total": 7,
+      "interactive": 7,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 5.6
+    },
+    {
+      "date": "2026-06-18",
+      "total": 8,
+      "interactive": 8,
+      "bad": 1,
+      "bad_rate": 0.13,
+      "avg_friction": 14.7
+    },
+    {
+      "date": "2026-06-19",
+      "total": 9,
+      "interactive": 9,
+      "bad": 1,
+      "bad_rate": 0.11,
+      "avg_friction": 16.9
+    },
+    {
+      "date": "2026-06-20",
+      "total": 1,
+      "interactive": 1,
+      "bad": 1,
+      "bad_rate": 1,
+      "avg_friction": 13
+    },
+    {
+      "date": "2026-06-21",
+      "total": 2,
+      "interactive": 2,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 0.8
+    },
+    {
+      "date": "2026-06-22",
+      "total": 8,
+      "interactive": 8,
+      "bad": 3,
+      "bad_rate": 0.38,
+      "avg_friction": 14.4
+    },
+    {
+      "date": "2026-06-23",
+      "total": 9,
+      "interactive": 9,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 7.1
+    },
+    {
+      "date": "2026-06-24",
+      "total": 3,
+      "interactive": 3,
+      "bad": 2,
+      "bad_rate": 0.67,
+      "avg_friction": 15.2
+    },
+    {
+      "date": "2026-06-25",
+      "total": 12,
+      "interactive": 12,
+      "bad": 1,
+      "bad_rate": 0.08,
+      "avg_friction": 5.8
+    },
+    {
+      "date": "2026-06-26",
+      "total": 10,
+      "interactive": 10,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 3
+    },
+    {
+      "date": "2026-06-27",
+      "total": 8,
+      "interactive": 8,
+      "bad": 2,
+      "bad_rate": 0.25,
+      "avg_friction": 5.6
+    },
+    {
+      "date": "2026-06-28",
+      "total": 6,
+      "interactive": 6,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 3.9
+    },
+    {
+      "date": "2026-06-29",
+      "total": 8,
+      "interactive": 8,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 0.9
+    },
+    {
+      "date": "2026-06-30",
+      "total": 2,
+      "interactive": 2,
+      "bad": 0,
+      "bad_rate": 0,
+      "avg_friction": 3
+    }
+  ],
+  "best_session": {
+    "session_id": "hamr/0608-2152-a576fb77",
+    "quality": "OK",
+    "peak_friction": 0,
+    "turns": 7,
+    "duration_min": 68
+  },
+  "worst_session": {
+    "session_id": "healthwatch/0531-1740-7c0c25c1",
+    "quality": "FRICTION",
+    "peak_friction": 143.5,
+    "turns": 83,
+    "duration_min": 2494
+  },
+  "correlations": {
+    "high_friction_sessions": 57,
+    "intervention_sessions": 25,
+    "intervention_predictability": 0.44
+  },
+  "common_sequences": [],
+  "verdict": {
+    "status": "INCONCLUSIVE",
+    "reasons": [
+      "Intervention predictability: 44% (threshold: 50%)"
+    ],
+    "recommended_actions": []
+  }
+}

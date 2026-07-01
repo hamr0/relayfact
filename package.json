@@ -1,0 +1,20 @@
+{
+  "name": "relayfact",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Experiment: an autonomous senior-dev runner assembled from bareagent + litectx + bareguard. Relays facts through the bare suite; graduates or gets archived. Builds no primitives.",
+  "scripts": {
+    "probe:fake": "node poc/probe-01-inner-loop.mjs fake",
+    "probe:noop": "node poc/probe-01-inner-loop.mjs noop",
+    "probe:llm": "node poc/probe-01-inner-loop.mjs llm",
+    "probe2:sum": "node poc/probe-02-real-attempt.mjs sum",
+    "probe2:csv": "node poc/probe-02-real-attempt.mjs csv"
+  },
+  "dependencies": {
+    "bare-agent": "file:../bareagent",
+    "bareguard": "file:../bareguard",
+    "litectx": "file:../litectx"
+  },
+  "comment:deps": "All three bare-suite libs now mounted by probe-02 (gated real attempt + litectx store). probe-01's harness needs only bareagent — see FINDINGS F4."
+}

@@ -1,0 +1,7 @@
+{
+  "name": "csv-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hard fixture for probe-02: a single-line CSV parser. Naive split() stub is genuinely red; passing it requires real quote/escape handling. Real uncrafted difficulty, not authored to contain the answer."
+}

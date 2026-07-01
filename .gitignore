@@ -1,0 +1,39 @@
+node_modules/
+package-lock.json
+poc/run-*.jsonl
+# fixture working copies are regenerated from their *.stub / *.broken on every run
+poc/fixtures/sum/sum.js
+poc/fixtures/csv/csv.js
+poc/fixtures/stuck/classify.js
+poc/fixtures/multi/ma.js
+poc/fixtures/multi/mb.js
+poc/fixtures/multi/mc.js
+poc/fixtures/multi-ok/ma.js
+poc/fixtures/multi-ok/mb.js
+poc/fixtures/multi-ok/mc.js
+poc/fixtures/recall/sign.js
+poc/fixtures/recall/seal.js
+poc/fixtures/idfmt/userId.js
+poc/fixtures/idfmt/orderId.js
+# probe-11 (idfmt-multi) worker-generated working copies — stubs/tests are the source
+poc/fixtures/idfmt-multi/orderId.js
+poc/fixtures/idfmt-multi/accountId.js
+poc/fixtures/idfmt-multi/invoiceId.js
+poc/fixtures/idfmt-multi/ticketId.js
+poc/fixtures/idfmt-multi/auditBadge.js
+# probe-12 (depth / depth-ok) worker-generated working copies
+poc/fixtures/depth/sUpper.js
+poc/fixtures/depth/sReverse.js
+poc/fixtures/depth/sTrim.js
+poc/fixtures/depth/nDouble.js
+poc/fixtures/depth/nSquare.js
+poc/fixtures/depth/nInc.js
+poc/fixtures/depth-ok/sUpper.js
+poc/fixtures/depth-ok/sReverse.js
+poc/fixtures/depth-ok/sTrim.js
+poc/fixtures/depth-ok/nDouble.js
+poc/fixtures/depth-ok/nSquare.js
+poc/fixtures/depth-ok/nInc.js
+# litectx run stores (seeded fresh per run)
+.litectx/
+poc/.litectx-*/
