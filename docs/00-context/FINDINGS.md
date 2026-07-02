@@ -682,3 +682,37 @@ test suite), which is **independent of decomposition depth** by construction: a 
 suite. So "depth-2 reach" is an **ill-posed milestone** — the global close's coverage does not depend on how
 deep the tree goes. What's real is the boundary map (grounded = root only; residue = every descendant;
 safety carried entirely by the global root close), and it holds at whatever depth the model produces.
+
+---
+
+*Finding F32 came out of **probe-18** + `poc/observer.mjs` (PRD §8.2 G4, 2026-07-02): the observer built
+FIRST (token-free) as the microscope that instruments the remaining graduation probes.*
+
+## F32 — the observer is a pure listener; RC-10 receipts + worker Stream are NOT persisted to the event log
+
+`poc/observer.mjs` is one reusable pure listener (§7 invariant: never imports the engine) over a run's
+persisted artifacts — the `run-*.jsonl` event stream + the sibling bareguard `*-audit.jsonl`. probe-18
+replays it over two existing, differently-shaped logs (probe-12 tree run, probe-13 memory run) and asserts,
+with a **control that can fail**, that it renders the five facets (grounded close / memory / grounding
+boundary / gate / terminal) **and declares a facet ABSENT rather than fabricating it** when a run didn't
+expose it. The self-check caught **three real bugs in the observer itself** (verify-by-running, not
+asserting): (1) it marked the grounding-boundary facet "present" for a memory run off audit spawn-lineage —
+fabricating a boundary that was never reported (fixed: the boundary is present only when the run emits
+`boundary.map`/`receipts`; audit lineage is a separate gate-facet signal); (2) it counted every
+`severity:'action'` record as a "halt" — inventing alarm (the inverse paper-over; fixed: a halt is only a
+`deny`/`terminate` decision or a halt-level severity); (3) audit-file matching by plain `startsWith` let
+`run-probe12-depth` swallow `run-probe12-depth-ok`'s audit (fixed: assign each audit to its longest-matching
+log base). After fixes the numbers cross-check against the raw audit (probe-12: 8 records, llm=2, writes=6,
+cost $0.0088 = the `recurse.failed` event's cost).
+
+**The load-bearing lib-facing finding:** a run's **RC-10 receipts tree and the worker `Stream` events
+(F15: `loop:tool_call`/`loop:tool_result`) are return-value / console-only — NOT written to the JSONL** (the
+audit shows `stream._transport:null`; receipts live in `result.receipts`). So a *pure-replay* observer can
+only reconstruct grounding from the app-level `boundary.map` and spawn shape from the audit lineage — it
+cannot show a real per-node verdict tree because that tree is never persisted. **Carry-forward for G1–G3 +
+the graduated build:** probes must emit a `receipts` event (persist `result.receipts` to the log) and wire
+`ctx.stream` to the `JsonlTransport` so worker tool-calls land in the stream; the observer already renders a
+`receipts` event as `tree.source='receipts event (run-persisted RC-10 tree)'` when present. Not a lib defect
+— a consequence of recurse owning the worker Loop (F12/F15) — but it dictates what every graduation probe
+must persist for the observer to be honest. **G4 status: POC-validated over the two existing logs; the G2
+replay (probe-16) is the third required log, pending.**

@@ -28,8 +28,12 @@ catches a fault owned by an ungrounded child. F28's "haiku won't nest" was a pro
 forces flat workers); with Family A the depth is task-tractability + model-choice bounded (haiku splits
 shallow, sonnet solves at the root) — and "depth-2 reach" is **ill-posed**: the global close covers the whole
 artifact regardless of tree depth. **All three v2 spikes are run; the memory blocker is fixed, cost-control is
-verified (F30), and the eval-grounding boundary is mapped — relayfact is at the graduate-or-archive call with
-no open blockers.** No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
+verified (F30), and the eval-grounding boundary is mapped.** **Graduation is now gated on §8.2 (added
+2026-07-02):** the validated evidence covers the loop's *middle* (worker + close + decomposition + memory +
+caps); the two ends of the stated goal — taking a prose request IN (who authors the close? G1) and coming
+back to a human (escalation artifact, G3) — plus one real-task e2e (G2) remain unproven. **G4
+(observer-as-artifact) is POC-validated (2026-07-02, `poc/observer.mjs` + `probe-18`, F32) — built first,
+token-free, the microscope for the rest.** G1/G2/G3/G5 open. No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
 refers to a section here. The validation companion is `benches-prd.md`.
 
 **relayfact** is an experiment: an autonomous "senior dev" runner **assembled** from the bare suite —
@@ -410,9 +414,115 @@ honest takeaways:** (a) store lessons as `kind:'fact'`; (b) the memory loop's va
 grounded close**, never in ranking — *recall proposes, executable verification disposes*. **Spike 3 DONE
 (probe-12, F28):** grounding seam holds under organic decomposition (grounded coverage = root only; global
 predicate catches an ungrounded child's fault), but depth is model-bounded — haiku won't nest past depth 1,
-so depth-2 reach is unproven. **All three v2 spikes are run.** relayfact now decides **graduate → build** or
-**archive** — the eval-grounding boundary has been mapped (F20/F26/F27/F28): the grounded close is the only
-thing that closes the loop; retrieval and rubric are advisory; the worker (model) is the ceiling.
+so depth-2 reach is unproven. **All three v2 spikes are run.** The eval-grounding boundary has been mapped (F20/F26/F27/F28): the grounded
+close is the only thing that closes the loop; retrieval and rubric are advisory; the worker (model) is the
+ceiling. **The graduate-vs-archive decision now runs through the §8.2 gate** — the spikes above validated the
+loop's middle; §8.2 covers the unproven ends (request-in, come-back-out) before any `src/` is scaffolded.
+
+### 8.2 Graduation gate (gate v3) — what must hold BEFORE scaffolding `src/`
+
+**Why this gate exists (2026-07-02).** The stated goal is: *take input from a human once, go try to achieve
+it, come back and stop if the POC fails / the goal can't be met / it doesn't make sense — otherwise keep
+going.* The v1/v2 spikes validated the loop's **middle** (worker + grounded close + decomposition + memory +
+caps + redaction) on hand-authored fixtures with hand-authored verify commands. The **two ends** of that
+sentence — the prose request coming IN, and the coming-back-to-a-human — have zero evidence, and both are
+where the thesis is most exposed. Graduation = all five criteria below met (or explicitly descoped in
+writing, with the honest claim shrunk to match). Each is a POC-first spike or a written artifact, per
+AGENT_RULES; each test must be able to FAIL (no fit-to-pass — the `no-fit-to-pass-tests` memory applies to
+the agent's own outputs too).
+
+- **G1 — the self-authored close is honest (Spike 4: PRD→evals compilation) — `poc/probe-15-selfauthored-close.mjs`.**
+  *The crux.* Every probe so far was handed its predicate; nobody has tested who WRITES it. If the agent
+  authors its own test suite, the R-S8 trap relocates one level up: a weak/rigged suite closes green on a
+  wrong artifact and the global predicate grounds nothing (the agent-side fit-to-pass failure mode).
+  **Shape — two phases, so "propose the close BEFORE implementing" is structurally enforced, not hoped:**
+  *Phase A (propose):* feed a **prose request only** (no test in the fixture); the worker's single tool is
+  `write_test` (`edit_file` with `fs.writeScope` restricted to `*.test.js`) — it authors an executable
+  `node --test` suite pinning the acceptance criteria. *The relayfact-owned adversarial gate (deterministic,
+  zero rubric)* then runs on the produced suite: **(a) stub-fail** — the suite must exit non-zero against a
+  no-op stub (a suite green on a stub is rejected); **(b) mutation-catch** — relayfact holds a hidden
+  *reference* impl and generates k mutants (k=5: one no-op + **four SUBTLE** — off-by-one, wrong pad width,
+  wrong sign, truncate-not-round); the suite must kill **≥4/5** (the subtle mutants are the real teeth — an
+  easy mutant set makes "honest close" hollow); **(c) N/M count** — the worker emits a criteria→eval map;
+  relayfact counts N grounded (predicate/agentic) of M total (the §1 secondary-goal number, reported not
+  gated). *Phase B (implement):* only if the suite passes (a)+(b), run the normal `refine`/close loop with
+  that validated suite as the executable close.
+  *Arms/controls that can fail:* ≥2 distinct prose requests (`money-cents → "$X.XX"`; a CSV-field parser
+  with quoted commas). Honest-fail paths, all reported: suite green on stub → G1 fails; can't kill subtle
+  mutants → G1 fails; low N/M → claim SHRINKS to "autonomous once a human authors the definition of done."
+  *Fixtures:* `poc/fixtures/g1-*/` = `prose.md` + hidden reference impl + mutant generator + stub.
+  *Run:* `ANTHROPIC_API_KEY=$(pass amr/claude_api) node poc/probe-15-selfauthored-close.mjs money-cents`
+  (then `csv-field`); sonnet arm via `RELAYFACT_MODEL`.
+- **G2 — one real-task e2e integration run (the whole pipe, once, for real) — `poc/probe-16-realtask-e2e.mjs`.**
+  No probe has run request → contract → decompose → workers → synthesize → close → deliver-or-escalate
+  **as one program**, and every fixture was a toy (3-function toolkits, ID conventions). F20's "the worker
+  is the ceiling" was measured on haiku + trivia; the graduated build's regime is unknown.
+  **Shape:** the uncrafted source is a **small real repo pinned at a commit** whose child commit fixed a bug
+  by adding/repairing a HUMAN-written test — check out the **parent**, task = "make the suite pass." The test
+  and the answer are not mine to author (uncrafted by construction); prefer a recent/obscure commit so the
+  fix is not trivially memorized. The pipe runs as one program with **G1's compiled close** (or, if probe-15
+  fails, the repo's own suite as a human-authored close — noted honestly), under a bareguard `Gate`, event
+  stream on, observer (G4) attached. **Measured, not vibed:** scaffolding interventions (F20 baseline 6 on
+  trivia — **pass bar ≤2**; if a real task needs comparable hand-holding, persona/context is reworked BEFORE
+  `src/`), cost/task, close verdict, N/M on this task's criteria. **Production model = sonnet-class; haiku =
+  the A/B control** (the contrast IS the datapoint). *Pass:* delivers green or escalates honestly with ≤2
+  interventions, cost within gate. *First benches-prd datapoint for the graduated shape.*
+  *Run:* `ANTHROPIC_API_KEY=$(pass amr/claude_api) RELAYFACT_MODEL=<sonnet> node poc/probe-16-realtask-e2e.mjs`
+  (then a haiku run).
+- **G3 — the come-back: escalation artifact + pre-flight sanity check — `poc/probe-17-comeback.mjs`.** The
+  goal sentence is an interaction pattern; only its budget-halt corner has ever fired. Two deliverables:
+  **(a) Escalation artifact (the "comes back" shape):** when the loop stops — close exhausted, cap tripped,
+  rubric-uncertain, pre-flight declined — the human receives ONE structured report, not a raw
+  `{incomplete}`: `{ goal, whatWasTried (per-attempt: artifact-delta + verdict + gap), blocker
+  (which HITL trigger fired, §5), decisionNeeded (a concrete question with options), receipts (RC-10 refs),
+  costSpent }`. It is emitted on the event stream like everything else (a terminal `run.escalate` event) and
+  rendered by the CLI listener. *Pass:* probe forces each stop-class and asserts the artifact is complete +
+  decision-ready (a human can answer it without reading the JSONL).
+  **(b) Pre-flight "doesn't make sense" check:** BEFORE spending on decomposition, a bounded plan-time pass
+  classifies the request `{ proceed | clarify(questions) | decline(reason) }`. This is rubric territory and
+  that is FINE under the doctrine — **rubric may OPEN HITL (stop/ask); it may never CLOSE green** (§5
+  unchanged). Ambiguity questions are batched here (HITL trigger 1). *Pass:* a probe with 3 request classes
+  — coherent / underspecified / impossible-or-nonsense — routes each correctly, with a control that can fail
+  (the coherent one must NOT be declined).
+- **G4 — the observer is an artifact, not a rollup — `poc/observer.mjs` + `poc/probe-18-observer.mjs`.**
+  "Observable" is in the goal's name and is the least-built part: F15 relocated the taps (audit + RC-10
+  receipts + `ctx.stream`), but every probe hand-rolls its own counters; no coherent renderer exists.
+  **Shape:** ONE reusable CLI listener module (`poc/observer.mjs`, still `poc/`-grade) that consumes the
+  event stream (`run-*.jsonl`) + audit + receipts of any recurse run and renders: the tree (per-node status
+  + verdict incl. the `verdict=null` ungrounded residue), the recitation (contract + gap-so-far per turn),
+  memory activity (recall candidates threaded, widen steps, which note the worker used), gate activity
+  (denies/halts/cost), and the terminal deliver/escalate line. Pure listener — zero control-flow coupling
+  (§7 invariant); it never imports the engine. *Pass:* replay it over ≥2 EXISTING probe logs (probe-12,
+  probe-13) + the G2 run without modifying the engine side; a reviewer can narrate what happened from the
+  render alone. **Built FIRST (token-free) so it instruments every probe after it.**
+  *Run:* `node poc/observer.mjs poc/run-probe13.jsonl` (replay); `node poc/probe-18-observer.mjs` (the
+  self-check that asserts the render covers the required facets over the two existing logs).
+- **G5 — the graduated PRD exists before the rewrite (spec-before-build).** This document is now a
+  spike changelog; the `src/` build needs its own spec.
+  **Shape:** a v3/graduated PRD whose exit criteria are the goal sentence made testable — *"given a prose
+  request and a repo, relayfact produces a contract, compiles a close (G1 shape), runs gated, and either
+  delivers green or returns a G3 escalation — demonstrated on ≥N real tasks with the grounded/rubric split
+  counted per task"* — and which **explicitly scopes** the known descopes so the eval table stops
+  overselling: the `agentic` tier has never been run (predicate-only evidence); embeddings tier unrun
+  (F26 argues it can't fix correctness-vs-similarity); memory widening needs a cap or real retrieval at
+  store scale (F29 caveat); only the bare-`refine` terminate nuance documented (F30). Each is IN (with a
+  spike) or OUT (with the claim shrunk) — no silent gaps.
+
+**Build & run order (revised 2026-07-02 to fit the harness):**
+1. **G4 `probe-18` / `observer.mjs` FIRST** — token-free, and it instruments every probe after it.
+2. **G1 `probe-15`** — the crux; if it fails hard the archive path opens and G2's close-source changes.
+3. **G2 `probe-16`** — consumes G1's close; most expensive; run sonnet then haiku back-to-back.
+4. **G3 `probe-17`** — cheap; parallelizable with G4.
+5. **G5 PRD** — last, encoding the numbers G1–G4 produced.
+
+All spikes gated (bareguard), all in `poc/` (throwaway), all findings to FINDINGS.md. **Operational (from
+prior sessions):** the `pass amr/claude_api` key expires mid-session — run token probes back-to-back while
+the cache is warm; every probe persists `poc/run-probe*.jsonl` (gitignored) as the observer's + FINDINGS'
+artifact. **Two places this plan itself could still paper over, treated as first-class when building:**
+probe-15's mutant SUBTLETY (easy mutants make "honest close" hollow) and probe-16's REPO choice (a
+memorized fix makes "real" soft — prefer recent/obscure). **Archive path stays live:** if G1 fails hard
+(self-authored closes can't be kept honest) and the human-authored-close claim isn't worth a build,
+archiving IS the honest outcome — that bar is the point (§0).
 
 ---
 
