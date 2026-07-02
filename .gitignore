@@ -37,3 +37,10 @@ poc/fixtures/depth-ok/nInc.js
 # litectx run stores (seeded fresh per run)
 .litectx/
 poc/.litectx-*/
+# probe-15 (g1) worker-generated + oracle-materialized files — only prose.md is source
+poc/fixtures/g1-money/impl.mjs
+poc/fixtures/g1-money/suite.test.mjs
+poc/fixtures/g1-money/gold.test.mjs
+poc/fixtures/g1-csv/impl.mjs
+poc/fixtures/g1-csv/suite.test.mjs
+poc/fixtures/g1-csv/gold.test.mjs

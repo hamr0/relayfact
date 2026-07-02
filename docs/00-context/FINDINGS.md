@@ -716,3 +716,65 @@ the graduated build:** probes must emit a `receipts` event (persist `result.rece
 — a consequence of recurse owning the worker Loop (F12/F15) — but it dictates what every graduation probe
 must persist for the observer to be honest. **G4 status: POC-validated over the two existing logs; the G2
 replay (probe-16) is the third required log, pending.**
+
+---
+
+*Finding F33 came out of **probe-15** (`poc/probe-15-selfauthored-close.mjs`, PRD §8.2 G1 / Spike 4,
+2026-07-02): the crux — who WRITES the close? A two-phase loop (worker self-authors the test suite from a
+PROSE request; a deterministic relayfact-owned gate + a hidden GOLD test judge it) on two requests, haiku.*
+
+## F33 — the self-authored close is honest to the degree the SPEC is complete; its failures were SAFE-direction
+
+**Setup (controls that can fail).** Phase A: the worker (tool = `write_test` only, no read tool) authors a
+`node:test` suite from prose alone; its grounded Phase-A close is "a hidden REFERENCE impl must pass your
+suite" (a correct impl the worker never sees). Deterministic suite-strength gate: (a) STUB must be caught
+(suite fails on a no-op); (b) N/M — each acceptance criterion has an otherwise-correct mutant violating
+exactly it; N = how many the suite catches (the §1 secondary-goal number done honestly: a criterion is
+*grounded* iff the self-authored close can FAIL on its violation). Phase B: the worker (tool = `edit_impl`
+only) implements against its OWN suite. GOLD verdict: a hidden test I authored (fresh values the prose never
+lists) is the independent truth on Phase B's artifact. Oracle self-checked offline first (reference passes
+gold; stub + all 8 mutants fail gold).
+
+**Results (haiku; money ran 3×, csv ran 5×; a scoped signal, not a rate across tasks).**
+- **money (fully-specified: every criterion pinned with an example) — 3/3 HONEST.** Suite grounded **4/4**
+  criteria, caught the stub, a correct impl passed it, and Phase B's artifact was **GOLD-correct** every
+  run. The agent self-authored an honest, executable close and closed the loop on it, no human touching the
+  tests.
+- **csv (under-specified: quoting/escaping corners the prose left open) — 2/5 honest, 3/5
+  OVER-CONSTRAINED.** When it failed, the worker wrote a *thorough* (33-test) suite that **invented
+  assertions for behavior the prose never specified** (e.g. "quote at end of an unquoted field", "four
+  consecutive quotes") and its guesses diverged from a reasonable reference — so the Phase-A validity check
+  (a correct impl must pass) **caught it and escalated** (`run.escalate`, blocker = "over-constrained"). It
+  never reached Phase B on those runs.
+
+**The load-bearing, honest takeaways:**
+1. **Self-authored-close honesty tracks SPEC COMPLETENESS.** A fully-pinned spec → a reliable, gold-correct
+   self-authored close; an under-specified spec → the agent fills the gaps with its own guessed acceptance
+   criteria, which may not match intent. **This is exactly the §5 HITL/rubric boundary, now observed from
+   the close-authoring side: spec ambiguity is the residue.**
+2. **Every observed failure was the SAFE direction.** Across all 8 runs the scary mode — own-suite GREEN
+   while GOLD RED (a self-authored close certifying a wrong artifact) — was observed **0 times**. When the
+   suite was accepted (a correct impl passed it + stub caught), the resulting artifact was always
+   gold-correct. csv's failures were *over*-specification → caught by the validity check → escalated, never
+   silent wrongness. The two-phase gate's "a correct impl must pass your suite" check is what turns a bad
+   self-authored close into a safe escalation instead of a false green.
+3. **Grounding was strong when present** (4/4 both requests) — the weakness was never "the suite is too
+   weak to fail" (vacuous/weak-grounding: 0 observed); it was over-constraint on ambiguous specs.
+
+**Limits I am NOT papering over:** (1) two specs, one small model, small n (money 3, csv 5) — the qualitative
+claim is graduation-relevant; the *rate* is not pinned. (2) **fit-to-pass was UNOBSERVED, not disproven** —
+haiku's self-authored suites erred toward over-specification, so the unsafe mode never triggered; a weaker
+model or a spec that invites a shallow suite could still produce it (that scenario is the honest next test).
+(3) The "over-constrained" verdict uses MY reference as the arbiter of "a correct impl"; on genuinely
+ambiguous CSV corners the worker's guess is *unspecified*, not provably wrong — which is itself the point
+(the ambiguity is the HITL residue), but it means "over-constrained" = "encoded unsanctioned decisions",
+not "wrote buggy tests". (4) A probe-side verdict-logic bug was caught + fixed mid-run: the first pass
+excluded escalated (`broken-suite`) requests from the denominator and printed a false `g1.PASS` — the
+inverse paper-over; now every request counts and each fail-mode is named (over-constrained / fit-to-pass /
+weak-grounding / vacuous / unclosed / no-close).
+
+**G1 status:** the honest signal is **positive-with-a-caveat** — a self-authored close is trustworthy on a
+complete spec and fails SAFE on an incomplete one (over-constrain → escalate), with the unsafe fit-to-pass
+mode unobserved but not excluded. This maps the request-IN boundary onto the same doctrine as the rest of
+relayfact: *the grounded close (here, stub-catch + a-correct-impl-must-pass + independent gold) is what keeps
+even a self-authored close honest — the spec's completeness sets where HITL fires.*

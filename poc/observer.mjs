@@ -69,7 +69,7 @@ export function analyze(events, audits = []) {
   const start = evOfType(events, 'run.start')[0];
   const entity = evOfType(events, 'entity')[0];
   const summary = evOfType(events, 'summary')[0];
-  const model = start?.model || summary?.model || null;
+  const model = start?.model || summary?.model || events.find((e) => e.model)?.model || null;
   facets.header = {
     present: !!(start || entity || summary),
     model,
@@ -102,15 +102,16 @@ export function analyze(events, audits = []) {
   // lineage is a DIFFERENT signal (bareguard-derived) and lives under the gate facet — it is NOT a
   // grounding boundary, so a run with lineage but no boundary.map has this facet honestly ABSENT.
   const bmap = evOfType(events, 'boundary.map')[0];
-  const receipts = evOfType(events, 'receipts')[0]; // future probes may persist the real RC-10 tree here
+  const receiptEvents = evOfType(events, 'receipts'); // probes persist the RC-10 tree here (F32 carry-forward)
+  const receiptNodes = receiptEvents.flatMap((r) => (r.nodes || []).map((n) => ({ ...n, phase: n.phase ?? r.phase })));
   facets.tree = {
-    present: !!bmap || !!receipts,
-    source: bmap ? 'boundary.map (run-reported)' : (receipts ? 'receipts event (run-persisted RC-10 tree)' : null),
+    present: !!bmap || receiptNodes.length > 0,
+    source: bmap ? 'boundary.map (run-reported)' : (receiptNodes.length ? 'receipts event (run-persisted RC-10 tree)' : null),
     groundedCoverage: bmap?.groundedCoverage ?? null,
     ungroundedResidue: bmap?.ungroundedResidue ?? null,
     residueByDepth: bmap?.residueByDepth ?? null,
     maxDepthReached: bmap?.maxDepthReached ?? null,
-    nodes: receipts?.nodes ?? null,
+    nodes: receiptNodes.length ? receiptNodes : null,
   };
 
   // ---- GATE: enforcement activity from the audit ----
@@ -150,8 +151,8 @@ export function analyze(events, audits = []) {
   const done = evOfType(events, 'recurse.done')[0];
   const failed = evOfType(events, 'recurse.failed')[0];
   const incomplete = evOfType(events, 'recurse.incomplete')[0];
-  const escalate = evOfType(events, 'run.escalate')[0];        // G3 will emit this; absent in older logs
-  const spike = evOfType(events, 'spike.PASS', 'spike.FAIL')[0];
+  const escalate = evOfType(events, 'run.escalate')[0];        // G3 escalation artifact
+  const spike = evOfType(events, 'spike.PASS', 'spike.FAIL', 'g1.PASS', 'g1.FAIL')[0]; // probe verdicts
   const armPass = evOfType(events, 'arm.PASS');
   const armFail = evOfType(events, 'arm.FAIL');
   let outcome = null;
@@ -160,11 +161,12 @@ export function analyze(events, audits = []) {
   else if (incomplete) outcome = 'incomplete';
   else if (failed) outcome = 'fail';
   else if (summary) outcome = 'summary';
+  else if (spike) outcome = /PASS/.test(spike.type) ? 'deliver' : 'fail'; // a probe verdict is a terminal too
   facets.terminal = {
     present: !!(done || failed || incomplete || escalate || spike || summary || armPass.length || armFail.length),
     outcome,
     escalation: escalate ? { goal: escalate.goal, blocker: escalate.blocker, decisionNeeded: escalate.decisionNeeded, costSpent: escalate.costSpent } : null,
-    spike: spike ? { type: spike.type, msg: spike.msg } : null,
+    spike: spike ? { type: spike.type, msg: spike.msg || (spike.failModes ? `honest=${JSON.stringify(spike.honest)} failModes=${JSON.stringify(spike.failModes)}` : spike.reading || '') } : null,
     rates: summary ? { naiveRate: summary.naiveRate, fixedRate: summary.fixedRate } : null,
     arms: (armPass.length || armFail.length) ? { pass: armPass.length, fail: armFail.length } : null,
     status: done?.status ?? failed?.status ?? incomplete?.reason ?? null,
@@ -202,6 +204,7 @@ export function render(facets, { runLogPath } = {}) {
     if (facets.tree.groundedCoverage) L.push(`  grounded coverage ${C.grn}${facets.tree.groundedCoverage}${C.rst} · ungrounded residue ${C.ylw}${facets.tree.ungroundedResidue}${C.rst} ${C.dim}(verdict=null descendants)${C.rst}`);
     if (facets.tree.maxDepthReached != null) L.push(`  max depth reached: ${facets.tree.maxDepthReached}`);
     if (facets.tree.residueByDepth) L.push(`  ${C.dim}residue by depth: ${JSON.stringify(facets.tree.residueByDepth)}${C.rst}`);
+    if (facets.tree.nodes) for (const n of facets.tree.nodes) L.push(`  ${C.dim}• ${n.phase ? `[${n.phase}] ` : ''}d${n.depth ?? 0} "${n.task ?? ''}" verdict=${n.verdict}${n.iterations != null ? ` iters=${n.iterations}` : ''}${C.rst}`);
   }
 
   // gate

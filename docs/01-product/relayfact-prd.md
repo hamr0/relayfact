@@ -33,7 +33,11 @@ verified (F30), and the eval-grounding boundary is mapped.** **Graduation is now
 caps); the two ends of the stated goal — taking a prose request IN (who authors the close? G1) and coming
 back to a human (escalation artifact, G3) — plus one real-task e2e (G2) remain unproven. **G4
 (observer-as-artifact) is POC-validated (2026-07-02, `poc/observer.mjs` + `probe-18`, F32) — built first,
-token-free, the microscope for the rest.** G1/G2/G3/G5 open. No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
+token-free, the microscope for the rest. G1 (self-authored close) is POC-run (2026-07-02, `probe-15`, F33):
+positive-with-a-caveat — on a fully-specified spec haiku self-authors a gold-correct close (money 3/3); on
+an under-specified spec it over-specifies and the validity check catches it (csv 2/5, fails SAFE); the unsafe
+fit-to-pass mode was unobserved but not excluded. Spec completeness sets where HITL fires.** G2/G3/G5 open.
+No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
 refers to a section here. The validation companion is `benches-prd.md`.
 
 **relayfact** is an experiment: an autonomous "senior dev" runner **assembled** from the bare suite —
@@ -451,8 +455,14 @@ the agent's own outputs too).
   with quoted commas). Honest-fail paths, all reported: suite green on stub → G1 fails; can't kill subtle
   mutants → G1 fails; low N/M → claim SHRINKS to "autonomous once a human authors the definition of done."
   *Fixtures:* `poc/fixtures/g1-*/` = `prose.md` + hidden reference impl + mutant generator + stub.
-  *Run:* `ANTHROPIC_API_KEY=$(pass amr/claude_api) node poc/probe-15-selfauthored-close.mjs money-cents`
-  (then `csv-field`); sonnet arm via `RELAYFACT_MODEL`.
+  *Run:* `ANTHROPIC_API_KEY=$(pass amr/claude_api) node poc/probe-15-selfauthored-close.mjs money` (then
+  `csv`, or no arg for both); sonnet arm via `RELAYFACT_MODEL`.
+  **✅ POC-run (2026-07-02, F33):** money 3/3 honest (gold-correct); csv 2/5 honest, 3/5 over-constrained
+  (the agent invents assertions for prose-unspecified behavior → the "a correct impl must pass" validity
+  check catches it → escalate). **Failures were SAFE-direction**; the unsafe fit-to-pass mode (own-suite
+  green + gold red) was **unobserved but not excluded** (haiku over-specifies rather than under-specifies —
+  a weaker model / shallow-inviting spec is the honest next test). Self-authored-close honesty tracks SPEC
+  COMPLETENESS — the §5 HITL boundary seen from the authoring side. sonnet arm still to run.
 - **G2 — one real-task e2e integration run (the whole pipe, once, for real) — `poc/probe-16-realtask-e2e.mjs`.**
   No probe has run request → contract → decompose → workers → synthesize → close → deliver-or-escalate
   **as one program**, and every fixture was a toy (3-function toolkits, ID conventions). F20's "the worker
