@@ -778,3 +778,197 @@ complete spec and fails SAFE on an incomplete one (over-constrain → escalate),
 mode unobserved but not excluded. This maps the request-IN boundary onto the same doctrine as the rest of
 relayfact: *the grounded close (here, stub-catch + a-correct-impl-must-pass + independent gold) is what keeps
 even a self-authored close honest — the spec's completeness sets where HITL fires.*
+
+## F34 — G2's production model (`claude-sonnet-5`) can't run `refineLeaf` at all: escalating temperature hits a 400 → silent `incomplete` (→ BA-10)
+
+**Context.** G2 (`poc/probe-16-realtask-e2e.mjs`) is the first probe to run the *whole pipe* on an **uncrafted
+real repo** and the first to use a **sonnet-class production model** (every prior probe was haiku). The repo:
+`~/PycharmProjects/flightlog @ d60011a` — a real 2026-06-01 bug fix (the `examples/read.js` jq-hint dropped
+every `--match` filter but `--where`) locked by a **human-written regression test**. Checked out the **parent**
+(`147eaed`) + dropped the human test on top → suite RED (bug present); task = "make the suite pass"; close =
+`node --test test/examples.test.js`; the gate's `writeScope` excludes `test/` so the close is **ungameable**;
+an independent GOLD (fresh `--match host=web01`) catches a `proc`-hardcode fit-to-pass. **Oracle self-checked
+offline, token-free, BEFORE spending:** parent+humantest = 10 pass / **1 fail** (exactly the new test — the
+control that can fail, fails); +real-fix = 11/0 green; the `proc`-hardcode mutant is **human-close GREEN but
+GOLD RED** (fit-to-pass is catchable). The fixture + gold are valid.
+
+**What actually happened on the first sonnet run.** **Zero LLM calls, zero sensor calls, `$0`, `incomplete`.**
+Not "the model failed the task" — **no attempt was ever made.** Isolated by bisection (all live, sonnet-5 vs
+haiku, same config):
+- tools-only worker (no `refineLeaf`): **works on sonnet** (reads the repo, answers).
+- `refineLeaf` added: **haiku** → `sensorCalls=2`, `receipts.refineLeaf={iterations:2,passed:true}`; **sonnet-5**
+  → `sensorCalls=0`, `incomplete=true`, `refineLeaf=undefined`.
+- direct `provider.generate(..., {temperature})` on sonnet-5: `0.2/0.4` → **400 `"temperature is deprecated for
+  this model."`**; `1.0` or **omitted** → OK.
+
+**Root cause (grounded).** `recurseRefineLeaf`'s `attempt` passes an **escalating `temperature`** per retry
+(`recurse.js:609` + `:621`); `AnthropicProvider.generate` forwards it unconditionally (`provider-anthropic.js:84`);
+sonnet-5's API rejects any non-default temperature with a 400 (`_request`, `provider-anthropic.js:186–190` — it
+is the **upstream** error, no `"deprecated"` string exists in the provider). The first attempt (temp `0.2`) →
+`out.error` → `attempt` rethrows (`recurse.js:624`) → `refine` catch → `node.incomplete=true` (`recurse.js:656`).
+**The sensor — the executable close — is never reached.** haiku accepts `temperature`, so it's unaffected. This
+is a **real bareagent integration bug the toy fixtures never exposed** (they all ran haiku): **BA-10**, a
+one-place provider graceful-degrade (on that specific 400, drop `temperature` + retry once, keyed off the API
+text, not a model list).
+
+**Second-order (the more interesting finding).** BA-8's own hand-off calls temperature escalation *"a design
+REQUIREMENT of the leaf-refine seam"* — but that was measured with the retry prompt held CONSTANT (temperature
+the only diversity source). relayfact's `refineLeaf` **feeds the grounded close's gap critique forward every
+iteration** (`recurse.js:618`), so the prompt already changes each retry: **the critique is the correction
+lever; temperature is a secondary diversity lever.** On a temperature-fixed model that lever is *inert* — so the
+open empirical question (answered once BA-10 ships) is **whether flat-temp + gap-critique still converges on
+sonnet.** If it does, "escalation is REQUIRED" was an artifact of the no-critique POC, and the seam is healthier
+than its own note claims. Also: `node.refineLeaf.temperatures` (`recurse.js:636`) would **misreport** silently
+dropped temps — it should record the *effective* temperatures.
+
+**Honest status.** **G2 is NOT yet run for real** — the production-model arm is **blocked by BA-10** (🔴), and
+the haiku arm is a *control*, not the production datapoint, so running only haiku now would answer a weaker
+question than G2 asks (the PRD calls the sonnet↔haiku contrast "the datapoint"). Per doctrine I did **not** grow
+a workaround (`temperatures:[1.0,…]` would be exactly the silent workaround forbidden here, and would defeat the
+seam's escalation design). **What G2 has produced so far is a genuine graduation finding, not a papered-over
+pass:** the intended production model cannot use the self-correcting leaf seam as shipped. Next: BA-10 fix at the
+lib → verify-shipped-vs-spec → re-run G2 sonnet+haiku (which also answers the flat-temp-convergence question).
+The scaffold, oracle, gold, gate-ungameability, and observer emission are all built and de-risked
+(token-free-validated); only the model-path fix stands between here and the real-task numbers.
+
+**RESOLVED (2026-07-03).** BA-10 shipped in `bare-agent@0.24.0` (`requestWithTemperatureFallback`: drop
+`temperature` + retry once on the deprecation 400, warn once, flow `temperatureDropped` back). **Verified by
+running:** sonnet-5 + `refineLeaf` → `sensorCalls=2`, `iterations=2`, `passed=true`, effective
+`temperatures:[null,null]`; haiku still escalates `[0.2,0.7]`. G2 then ran for real — see **F36**. And the
+flat-temp question is answered: on sonnet the leaf converged in **one** attempt (0 refine iterations needed),
+so the gap critique — not temperature escalation — carried it; escalation was never exercised because the first
+attempt already passed. Escalation's necessity remains open only for tasks that *fail* the first attempt.
+
+## F35 — bareguard's default `content.askPatterns` scan the write PAYLOAD → false-fire on code vocabulary → budget-burn (→ BG-3)
+
+**What happened (reproduced live, probe-16, BOTH arms, before the fix).** The G2 task is to fix a bug about
+**dropping** filters; the fix edits `examples/read.js` code + comments containing "drop"/"remove". bareguard's
+default `content.askPatterns` (`content.js:27`, `/\b(delete|drop|revoke|truncate|destroy|remove|purge)\b/i`)
+are tested against `JSON.stringify(action)` (`serializeForMatch`, `content.js:32`) — the **whole action incl.
+the write payload**. So every fix-write serialized with those whole words → `askHuman` → the probe's auto-deny
+`humanChannel` → **write denied**. The worker retried ~16 llm calls, **burned the full $1 budget cap**, halted,
+and the refine **sensor was never reached** — surfacing as `incomplete`. Sonnet and haiku failed *identically*;
+the `sel`-array fix was never applied. **Token-free mechanism proof:** `gate.check` on a write whose `contents`
+contains whole-word "drop"/"remove" → `outcome:deny, rule:content.askPatterns`; with `content:{askPatterns:[]}`
+→ `outcome:allow`. (Note `\bdrop\b` does NOT match "drop**s**" — the real matches were whole-word occurrences in
+the worker's edits, which is why an early test string with "drops" spuriously "passed".)
+
+**Why this is a bareguard design issue, not just my misconfig.** (1) **It scans the wrong field** — the
+patterns target destructive *operations* (SQL/rm/HTTP, an intent/command signal), but serializing the whole
+action fires them on a write whose *payload text* merely mentions the word; code is saturated with
+delete/remove/drop, so it false-fires on **every coding agent, permanently.** (2) **`fs.writeScope` is the real
+guard for a write**, not a keyword scan of its bytes — an in-scope write (`examples/`+`src/`, `test/` excluded)
+is safe regardless of the text. (3) **The failure mode is expensive + misleading** — a false `askHuman` under
+auto-deny doesn't fail cleanly; the loop retries and exhausts the budget, and it reads as "the model couldn't do
+it" (`incomplete`), not "governance denied a benign action." A false positive here is a budget-burn +
+wrong-diagnosis multiplier.
+
+**Honest process note (why this finding exists in this shape).** I first only *worked around* this in relayfact
+(`content:{askPatterns:[]}`) and logged it as a config lesson — the user correctly flagged that as a silent
+workaround: the doctrine is surface-and-fix-at-the-lib. So this is now **BG-3** (the maintainer may still rule
+works-as-intended like BG-2, but decides it with the budget-burn multiplier on the table). The relayfact-side
+`askPatterns:[]` is a **disclosed** override for an editor-only worker (no bash/network → the default patterns
+protect nothing here), **pending BG-3** — a deployment that adds bash/network must re-scope the patterns to the
+command, not disable them wholesale.
+
+**SETTLED with the bareguard maintainer (2026-07-03) — including an attribution correction I concede.** The
+maintainer accepted the core (payload scanning is the wrong layer: `content` is for destructive *operations*,
+`secrets` owns payload inspection, `fs.writeScope` guards the write, and *executing* the bytes — a later `bash`
+action — is the dangerous act, caught then). The fix is **narrower and better** than my opt-1: `serializeForMatch`
+**excludes the write/edit payload field(s)** (`content`/`contents`) before matching, applied to **both** deny and
+ask (the deny path is worse — `DROP TABLE` in a migration file's bytes currently *hard-denies*, unrecoverable),
+staying **shape-agnostic** otherwise. My opt-1 (a field *allowlist*) was rejected for good reason: it couples
+`content.js` to every primitive's field vocabulary and **fails silent** on a novel action shape (a silent hole in
+a safety floor is worse than a loud false-fire). Rejected too: `content.scope` (YAGNI) and any retry-signal.
+**Attribution correction:** the **budget-burn** symptom ("$1 cap → `incomplete`, sensor never reached") is **not**
+bareguard's — bareguard is stateless per `check()`. It is **bareagent's `refineLeaf`/worker Loop retrying a
+governance-denied action** rather than short-circuiting → filed as **BA-11** (a governance deny ≠ a recoverable
+tool error). bareguard's share is exactly stopping the false-fire. I originally over-attributed the burn to
+bareguard; the maintainer was right to split it. Verified for them: the complete payload-field set today is
+`content` (shell_write) + `contents` (edit_file) — no diff-tool ships, `type:'edit'` reserved-unused.
+
+**RESOLVED (2026-07-03).** BG-3 shipped in `bareguard@0.11.0` — `serializeForMatch` strips
+`PAYLOAD_FIELDS = ["content","contents"]` from a non-mutating `args` copy before matching, for both deny + ask.
+**Verified-shipped by RUNNING (`poc/probe-19-bg3-verify-shipped.mjs`, token-free, 5/5, control-can-fail):**
+payload code-vocab incl. literal `DROP TABLE` bytes → **allow/`default`**; `DROP TABLE`/`rm -rf` in a bash `cmd`
+→ **deny/`content.denyPatterns`**; `method:DELETE` → **ask/`content.askPatterns`** (proven via the audit's
+pre-human askHuman line — the strip does not blind the operation fields). relayfact's disclosed override
+(`content:{askPatterns:[]}`) **removed** from probe-16, default guards left ON. The paired budget-burn
+half is **BA-11**, shipped `bare-agent@0.25.0`, verified token-free by `poc/probe-20-ba11-verify-shipped.mjs`
+(guard fires at exactly the threshold; OFF spins to the cap — load-bearing). See also **F37** (the
+`PAYLOAD_FIELDS` extension point is documented but unreachable through the public export surface).
+
+## F36 — G2 RESULT: the whole pipe delivered a real bug-fix on an uncrafted repo, first attempt, gold-correct, both models
+
+**Setup (uncrafted by construction; oracle self-checked offline BEFORE spending).** `flightlog @ d60011a` — a
+real 2026-06-01 fix (the `examples/read.js` jq-hint dropped every `--match` filter but `--where`) locked by a
+**human-written** regression test. Checked out the **parent** (`147eaed`), dropped the human test on top → suite
+RED. Task = prose bug report ("make the failing suite pass"); close = `node --test test/examples.test.js` (the
+human test, relayfact-owned, `writeScope` excludes `test/` → **ungameable**); worker tools = `shell_read` +
+`edit_file`; leaf-refine sensor = the close, gap fed back; observer (G4) attached. Independent **GOLD** = a
+relayfact test with a **fresh** `--match host=web01` field (catches a `proc`/`where` hardcode). Oracle validated
+token-free: parent+humantest = 10 pass / **1 fail** (the control that can fail, fails); +real-fix = 11/0; the
+proc-hardcode mutant is **human-close GREEN but GOLD RED** (fit-to-pass catchable).
+
+**Result (n=1 real task; sonnet = production, haiku = A/B control; the CONTRAST is the datum, not a rate).**
+
+| arm | verdict | interventions (bar ≤2) | refine iters | close | GOLD | cost | llm calls |
+|---|---|---|---|---|---|---|---|
+| **sonnet-5** (prod) | ✅ delivered | **0** | 1 | green | green | **$0.07–0.12** | 3–5 |
+| **haiku** (control) | ✅ delivered | **0** | 1 | green | green | **$0.13** | 9 |
+
+Both wrote the **general** fix (`...Object.entries(opts.match||{}).map(...)` — conceptually the human fix, not a
+proc-hardcode: the fresh-field GOLD passed), on the **first attempt** (`0` gap-feedback cycles vs F20's trivia
+baseline of **6**), `groundedCalls=1` (F13 holds — grounded close ran exactly once at the top), `maxDepth=0`
+(atomic single-file task, honest for a localized bug). Well under the $1 cap. Sonnet used fewer calls (3–5 vs 9)
+at similar/lower cost.
+
+**What this establishes for graduation.** The *whole pipe* — prose request → grounded contract → worker →
+executable close → deliver — runs as one program on an **uncrafted real repo** and produces a **gold-correct**
+fix within the intervention bar and cost cap, on **both** the production and control models. F20's "the worker
+is the ceiling, measured on trivia" now has a real-task datapoint: on a genuinely localized real bug, a
+capable model needs **zero** hand-holding, and the grounded close (human test) + independent GOLD keep it
+honest (no fit-to-pass). **Honest limits:** n=1 task, one localized single-file bug (not a multi-file or
+cross-module change; no organic decomposition exercised here — that is probe-04/12's evidence); the close is a
+*human-authored* suite (G1 covers the *self-authored*-close case separately); the `agentic` eval tier still
+unrun (predicate-only). Two real integration bugs surfaced en route — **BA-10** (temperature, fixed+verified)
+and **BG-3** (content-guard false-positive, filed) — neither a relayfact bug; both are exactly the lib friction
+this experiment exists to find. G2 status: **PASS.**
+
+**RE-RUN without the BG-3 override (2026-07-03, after BG-3 shipped in bareguard 0.11.0).** Dropped
+`content:{askPatterns:[]}` from probe-16 — **default content guards ON** — and re-ran both arms. Both `g2.PASS`,
+`interventions=0`, close green + GOLD green, `fitToPass=false`, `groundedCalls=1`, `maxDepth=0`, baseline
+control RED first (holds): **sonnet-5** `$0.095`, 4 llm calls (BA-10 temperature-fallback fired + recovered);
+**haiku** `$0.088`, 7 llm calls. So BG-3 is verified **through the whole pipe**, not just token-free (F35/probe-19):
+the fix-write about "DROPPED filters" now passes the default guards instead of false-firing → auto-deny → burn.
+The disclosed workaround is gone and G2 stands on stock library defaults. Logs: `run-probe16-{sonnet,haiku}.jsonl`.
+
+## F37 — BG-3's `PAYLOAD_FIELDS` extension point is documented as an export but is unreachable through the public surface
+
+**What happened (found while verify-shipping BG-3, `poc/probe-19`).** bareguard 0.11.0's changelog documents
+`PAYLOAD_FIELDS` as "**a new export**" and the sanctioned way to extend the payload-strip ("Extend via the
+exported `PAYLOAD_FIELDS` only when a real write primitive adds a distinct payload field"). But `import
+{ PAYLOAD_FIELDS } from 'bareguard'` **throws** `does not provide an export named 'PAYLOAD_FIELDS'`: it is
+exported only from `src/primitives/content.js`, which `src/index.js` does **not** re-export, and the package
+`exports` map exposes only `"."` and `"./types"` — so a deep import (`bareguard/src/primitives/content.js`) is
+also blocked by Node's `exports` enforcement. **Net:** the documented extension point cannot be reached by any
+consumer. **Severity: 🟢 low / docs-vs-code mismatch** — the *fix itself* works (verified 5/5); this only affects
+a consumer who wants to register a new payload field, and today the built-in set (`content`/`contents`) is
+complete for both callers (shell_write, edit_file), so nothing is blocked in practice. **Not worked around**
+(relayfact needs no custom field): filed as a bareguard follow-up — either re-export `PAYLOAD_FIELDS` from
+`index.js` (and, ideally, accept a `content.payloadFields` config so extension doesn't require mutating a shared
+module-level array), or soften the changelog's "export"/"extend via" wording to match what actually ships.
+Grounded at `src/index.js` (no re-export) + `package.json` `exports` (no `./primitives` subpath).
+
+**RESOLVED (2026-07-03, bareguard 0.11.1 — owner chose "Option A", declined the config key).** The owner
+**declined** the `content.payloadFields` config (option 2): zero demand, no adopter (not even relayfact) hit it,
+`["content","contents"]` is complete for every shipping write tool, and a permanent 1.0 config surface to satisfy
+a loosely-written changelog line is the tail wagging the dog. The right fix for a dead-config *implication* is
+to *stop implying the knob*, not build it. Shipped instead: **export `PAYLOAD_FIELDS` from `index.js` for
+read-only introspection, `Object.freeze` it** (the mutate-the-global path now fails **by construction**, not by
+docs), and **reword** the changelog + `content.js` JSDoc to "introspection + fix-at-the-lib (a one-line PR to
+`PAYLOAD_FIELDS`)", not "extend by mutation". A consumer needing different behavior already has full control via
+`content.{ask,deny}Patterns`. **Verified-shipped by RUNNING (relayfact, 2026-07-03, 4/4):** import reachable
+(was a throw); value `["content","contents"]`; `Object.isFrozen` true; `.push("body")` throws + leaves the array
+unchanged. Net: the factual bug ("is a new export" — false in 0.11.0) is fixed and the dead-config implication is
+gone, with **zero** added config surface.

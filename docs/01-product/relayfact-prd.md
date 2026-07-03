@@ -36,7 +36,10 @@ back to a human (escalation artifact, G3) — plus one real-task e2e (G2) remain
 token-free, the microscope for the rest. G1 (self-authored close) is POC-run (2026-07-02, `probe-15`, F33):
 positive-with-a-caveat — on a fully-specified spec haiku self-authors a gold-correct close (money 3/3); on
 an under-specified spec it over-specifies and the validity check catches it (csv 2/5, fails SAFE); the unsafe
-fit-to-pass mode was unobserved but not excluded. Spec completeness sets where HITL fires.** G2/G3/G5 open.
+fit-to-pass mode was unobserved but not excluded. Spec completeness sets where HITL fires. **G2 (real-task e2e)
+is POC-run — PASS (2026-07-03, `probe-16`, F36): the whole pipe delivered a gold-correct fix on an uncrafted
+real repo, both models, first attempt, 0 interventions — now re-verified on STOCK library defaults after BG-3 +
+BG-4 + BA-11 shipped (override removed).** G3/G5 open (+ the still-unrun G1 sonnet arm).
 No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
 refers to a section here. The validation companion is `benches-prd.md`.
 
@@ -479,6 +482,24 @@ the agent's own outputs too).
   interventions, cost within gate. *First benches-prd datapoint for the graduated shape.*
   *Run:* `ANTHROPIC_API_KEY=$(pass amr/claude_api) RELAYFACT_MODEL=<sonnet> node poc/probe-16-realtask-e2e.mjs`
   (then a haiku run).
+  **✅ POC-run — PASS (2026-07-03, F36).** Repo = `flightlog @ d60011a` (real 2026-06-01 jq-hint bug, human
+  test, checked out the parent). **Both arms DELIVERED green, first attempt, GOLD-correct:** sonnet-5
+  (production) 0 interventions / 1 refine iter / $0.07–0.12 / 3–5 calls; haiku (control) 0 / 1 / $0.13 / 9
+  calls. `groundedCalls=1` (F13), `maxDepth=0` (atomic bug), well under the $1 cap, **≤2 bar met (0 vs F20's
+  trivia baseline 6)**, no fit-to-pass (fresh-field GOLD passed). Two real integration bugs surfaced +
+  handled en route: **BA-10** (sonnet rejects `refineLeaf`'s escalating temperature → provider graceful-drop,
+  shipped+verified v0.24.0, F34) and **BG-3** (default `content.askPatterns` scan the write payload → false-fire
+  on "drop"/"remove" code vocabulary → budget-burn, F35). Honest limits: n=1, one localized single-file bug (no
+  organic decomposition here — that is probe-04/12), human-authored close (self-authored = G1), `agentic` tier
+  still unrun.
+  **✅ RE-RUN on STOCK library defaults — still PASS (2026-07-03, F36 re-run).** All three lib fixes now shipped +
+  verified-by-running: **BG-3** (payload-strip, bareguard 0.11.0, `probe-19` token-free 5/5) + its follow-up
+  **BG-4/F37** (frozen `PAYLOAD_FIELDS` export, 0.11.1, 4/4) + **BA-11** (deny-spin short-circuit, bare-agent
+  0.25.0, `probe-20` token-free 4/4 with load-bearing negative control). The disclosed override
+  (`content:{askPatterns:[]}`) was **removed** from probe-16 and G2 re-ran green **both arms on stock defaults**:
+  sonnet-5 `$0.095`/4 calls (BA-10 temperature-fallback fired + recovered), haiku `$0.088`/7 calls; `g2.PASS`,
+  `interventions=0`, close+GOLD green, `fitToPass=false`. So G2's PASS no longer rests on any relayfact
+  workaround — the whole pipe delivers a gold-correct real-repo fix on unmodified bareguard/bareagent.
 - **G3 — the come-back: escalation artifact + pre-flight sanity check — `poc/probe-17-comeback.mjs`.** The
   goal sentence is an interaction pattern; only its budget-halt corner has ever fired. Two deliverables:
   **(a) Escalation artifact (the "comes back" shape):** when the loop stops — close exhausted, cap tripped,

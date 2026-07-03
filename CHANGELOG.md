@@ -8,9 +8,17 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
-Phase: **v2 spikes complete + graduation blockers cleared — decision point (graduate-or-archive).** v1 POC
-complete; v2 de-risked on shipped `recurse()`. **Memory loop FIXED (F29, 0/5→5/5); F11 tested (F30);
-depth corrected (F31); BG-1 + budget-enforcement verified by running.** No open blockers. Done: replay-reconciliation + Spike 1 (grounding); **Spike 2 = memory-loop wiring proven,
+Phase: **v2 spikes complete + graduation gate (§8.2 G1–G5) IN PROGRESS — G1/G2/G4 met, G3/G5 open.** v1 POC
+complete; v2 de-risked on shipped `recurse()`. The earlier "no open blockers / graduate-or-archive" framing was
+**premature** — the validated spikes covered the loop's MIDDLE (worker/close/decomposition/memory/caps); the
+two ends of the goal (request-IN = who authors the close = G1; come-back-OUT = escalation = G3) had no evidence,
+so graduation is now gated on §8.2. **Done: G4 observer (token-free microscope, built first), G1 self-authored
+close (honest-to-spec-completeness, `probe-15`/F33), G2 real-task e2e (whole pipe green on an uncrafted repo,
+both models, `probe-16`/F36). Two real lib bugs surfaced + shipped + verified-by-running en route: BA-10
+(temperature, 0.24.0/F34) and BG-3 (content payload false-fire, 0.11.0/F35) + its sibling BA-11 (deny-spin
+short-circuit, 0.25.0). G2 now stands on STOCK library defaults (override removed).** Remaining: **G3**
+(come-back/escalation, `probe-17`), **G5** (graduated PRD), + the still-unrun G1 sonnet arm. Earlier de-risking:
+replay-reconciliation + Spike 1 (grounding); **Spike 2 = memory-loop wiring proven,
 then HARDENED — and the probe-09 positive largely did NOT survive the controls** (probe-06/07/08 fit-to-pass +
 RETRACTED; probe-09 honest redo; probe-10/11 hardening, **F26–F27**). The honest end-state: lexical recall
 ranks on *similarity, not correctness* (an equally-rich wrong rule outranks the right one), so naive top-k can
@@ -20,6 +28,32 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Verified-shipped — BG-3 + BA-11; G2 now stands on stock library defaults (2026-07-03)
+- **BG-3 verified-shipped (bareguard 0.11.0, `poc/probe-19-bg3-verify-shipped.mjs`, token-free 5/5,
+  control-can-fail).** `serializeForMatch` strips the write payload (`content`/`contents`) before matching, so
+  the default `content` guards no longer false-fire on code vocabulary. Verified by RUNNING: payload code-vocab
+  incl. literal `DROP TABLE` bytes → **allow/`default`**; `DROP TABLE`/`rm -rf` in a bash `cmd` → **deny**;
+  `method:DELETE` → **ask** (proven via the audit's pre-human askHuman line — the strip doesn't blind operation
+  fields). **relayfact's disclosed override (`content:{askPatterns:[]}`) REMOVED from probe-16.**
+- **BA-11 verified-shipped (bare-agent 0.25.0, `poc/probe-20-ba11-verify-shipped.mjs`, token-free 4/4).** The
+  Loop short-circuits a governance deny-spin (`new Loop({ maxConsecutiveDenials })`, default 3) instead of
+  burning to the cap. Verified with a STUB provider (no LLM) + deny-all policy = the spin: guard default → stops
+  at exactly 3 (`error:'denied:edit_file'`); `=5` → stops at 5 (not hardcoded); **negative control** OFF
+  (`Infinity`/`0`) → spins to the stub cap (13 calls) — the ON-vs-OFF contrast proves the guard is load-bearing.
+- **G2 re-run WITHOUT the override — both arms green (F36 re-run).** Default content guards ON: **sonnet-5**
+  `$0.095`/4 calls (BA-10 temperature-fallback fired + recovered), **haiku** `$0.088`/7 calls; both `g2.PASS`,
+  `interventions=0`, close+GOLD green, `fitToPass=false`, `groundedCalls=1`, `maxDepth=0`, baseline RED first.
+  The whole pipe now delivers a gold-correct real-repo fix on **stock bareguard/bareagent defaults**.
+- **F37 / BG-4 (factual export bug) — filed AND resolved same day (bareguard 0.11.1).** 0.11.0's changelog
+  claimed "`PAYLOAD_FIELDS` is a new export," but `import { PAYLOAD_FIELDS } from 'bareguard'` **threw** (exported
+  only from `src/primitives/content.js`, not `index.js`; deep import `exports`-blocked). Owner chose **Option A**
+  and **declined** relayfact's option-2 config key (zero demand, no adopter hit it, `["content","contents"]` is
+  complete for every shipping write tool → a permanent 1.0 config surface for a loose changelog line is the tail
+  wagging the dog; the fix for a dead-config *implication* is to stop implying the knob, not build it). Shipped:
+  re-export from `index.js` for read-only introspection + **`Object.freeze`** (mutate-the-global fails by
+  construction) + reworded docs. **Verified-shipped by RUNNING (4/4):** import reachable, value
+  `["content","contents"]`, `Object.isFrozen` true, `.push` throws + unchanged.
 
 ### Hardened — memory-loop result corrected under controls (2026-06-30)
 - **probe-10 (ranking isolation, F26)** — zero-token, deterministic. Length-matched **wrong** distractors

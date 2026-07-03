@@ -29,6 +29,8 @@ Status legend: 🔴 **blocking** · 🟠 **non-blocking / propagate** · 🟢 **
 | BA-7 | F12 | 🟢 | **SHIPPED v0.21.0** | `opts.persona` worker-stance seam (augments, carries down, not on the verifier). |
 | BA-8 | F17 | 🟠 enhancement | 🟢 **SHIPPED + VERIFIED v0.23.0** | `recurse({ refineLeaf: { sensor, maxIterations?, temperatures? } })` — a definite leaf (`!canSpawn`) runs as a bounded generate→sense→regenerate loop (reuses `refine.js`); deterministic sensor, GAP fed fresh, **escalating temperature** (the load-bearing finding). Gate-bounded; honest non-recovery (`receipts.refineLeaf.passed`); carries down. **Verified-shipped (F21, `poc/probe-05`): recover arm `iterations=2,passed=true,temps=[0.2,0.7]` + result carried a critique-only token (gap-feedback proven); never arm `iterations=3,passed=false` (honest non-recovery).** |
 | BA-9 | F19 | 🟠 enhancement | 🟢 **SHIPPED + VERIFIED v0.23.0** | `recurse({ context })` — a read-only working-context string prepended to every worker's task message + forwarded to the Planner as `info` + shown to the verifier; carries down via `forChild` (distinct from `persona`). Replaces the persona-laundering workaround. **Verified-shipped (F21, `poc/probe-05`): context arm read the ABS path + recovered the token; no-context control DENIED (reproduces F19) — proves the channel, not a rig.** |
+| BA-11 | F35 | 🟠 robustness | 🟢 **SHIPPED + VERIFIED v0.25.0** | A **governance deny** returned to a worker's tool call was retried like any other tool failure — the model tries a variant next turn, gets denied again, and the `refineLeaf`/worker Loop **burns the budget to the cap** (probe-16 pre-BG-3: 16 calls → $1, sensor never reached, surfaced as bare `incomplete`). **Fix: `new Loop({ maxConsecutiveDenials })` (default 3)** — a run-scoped counter incremented on each policy deny, **reset to 0 on any allowed tool call** (allowlist-pivot preserved). At threshold the Loop seals dangling tool_calls and returns cleanly `{ error:'denied:<tool>', … }` (never throws — mirrors the halt-return). `recurse` maps that to a **LABELED `{ incomplete:true, blocker:'governance-deny' }`** on both the plain-worker and `refineLeaf` paths (+ `receipts.blocker`), so a caller distinguishes a governance block (widen scope / re-gate / escalate) from a model failure. `0`/`Infinity` disables. **POC-corrected design:** a live spike (real haiku) disproved the interleaving risk — a retry-inviting deny made the model spin **8 CONSECUTIVE** denied writes (zero reads interspersed) → consecutive-counting is provably sufficient; a terminal deny made it give up after 2 (guard won't false-fire). **Verified-shipped TWO ways.** (1) **relayfact-side, token-free (`poc/probe-20-ba11-verify-shipped.mjs`, 2026-07-03, 4/4):** a STUB provider (no LLM) re-emits the same `edit_file` call + a deny-all policy = the deny-spin, driven through the installed 0.25.0 `Loop`. Guard default → stops at **exactly 3** (`error:'denied:edit_file'`); guard `=5` → stops at **5** (threshold honored, not hardcoded); **NEGATIVE CONTROL** guard `Infinity`/`0` → does **NOT** stop at 3, spins to the stub cap (13 calls, `error:null`) — the ON-vs-OFF contrast proves the guard is load-bearing. (2) **bareagent-side, live (maintainer's `poc/ba11-negative-controls.mjs`, real haiku):** guard ON → stops at 3; OFF → spins to 9. Composes with **BG-3** (shipped 0.11.0): BG-3 stops the false-fire at the source (so BA-11 no longer fires on relayfact's G2 path); BA-11 remains the backstop for *other* governance denies. *Cross-ref BG-3.* |
+| BA-10 | F34 | 🔴 blocking (prod model) | 🟢 **SHIPPED + VERIFIED v0.24.0** | `refineLeaf` hard-codes an **escalating `temperature`** per retry (`recurse.js:609/621`); the Anthropic provider passes it unconditionally (`provider-anthropic.js:84`). `claude-sonnet-5` (the intended production model) **rejects any non-default `temperature`** with a 400 `"temperature is deprecated for this model."` → the first attempt throws → `recurseRefineLeaf` catch → **`incomplete`, sensor NEVER called, 0 LLM calls**. haiku is unaffected. **Fix: graceful degradation in the provider** — on a 400 whose message names `temperature` as deprecated/unsupported, drop `body.temperature` and retry once (model-agnostic; keys off the API error, not a model list). Reproduced live (probe-16 sonnet arm). |
 
 > **Hand-off note (bareagent maintainer, 2026-06-29):** BA-1…BA-6 **SHIPPED in `bare-agent@0.22.0`** — published to npm (OIDC trusted-publishing + provenance), tag `v0.22.0`, [GitHub release](https://github.com/hamr0/bareagent/releases/tag/v0.22.0). All four surfaces agree (npm `latest`=0.22.0, git main, tag, release). Per "fix at the lib, then wait," relayfact can now **verify-shipped-vs-spec** against `npm i bare-agent@0.22.0`: (BA-1) wire a gate with `audit:{path}`, run `recurse` with a key-bearing provider, grep the audit JSONL — the `{type:'llm'}` record should carry the provider NAME but no `apiKey`; (BA-2) `createShellTools()` exposes `shell_write`, denied out-of-scope when translated to `{type:'write'}`. The published suite is green (696 pass / 0 fail / 2 skipped) with the BA-1 (mutation-proven) + BA-2 (writeScope) regressions. **On BG-1:** bareguard 0.9.0 shipped only an **opt-in, value/pattern-based** redactor (`secrets.envVars` ≥8-char values + regex `secrets.patterns`) — NOT auto-redaction by key-NAME. **BG-1 is now BUILT on bareguard `main`**, releasing as **v0.10.0**: a default-on key-aware walk that blanks `apiKey`/`api_key`/`authorization` by name + `Bearer …`/`sk-…` values with **no config required** (extend via `secrets.keys`, opt out via `secrets.redactKeys:false`). **BA-1 alone already closes the recurse-originated leak** (the provider never reaches the audit); BG-1 is the defense-in-depth floor for every *other* path / future ctx. **Verify-shipped-vs-spec once v0.10.0 is on npm.**
 
@@ -125,14 +127,69 @@ the worker is single-pass (F17). Document that `{decision:'terminate'}` is the i
 > - **BA-8** → `recurse({ refineLeaf: { sensor, maxIterations?, temperatures? } })`. Scope = **definite leaves (`!canSpawn`)** so it engages at the tree's leaves (carries down), NOT orchestrator nodes. `sensor(result, { task, context, contract }) → Verdict` (your deterministic executable close); default `temperatures: [0.2, 0.7, 1.0]`, `maxIterations` defaults to `temperatures.length`. Each attempt is gate-checked + metered; a HaltError mid-loop → clean `{ incomplete }`; non-recovery → `receipts.refineLeaf.passed === false` (never a faked pass). The error-keyed `recall` is **yours** via `opts.tools`, keyed off the fed-back `critique` — bareagent stays litectx-agnostic.
 > - **Not yet released** (additive/back-compat → a minor bump). Verify-shipped-vs-spec once it's on npm: BA-9 — run `recurse` with `opts.context` naming a real root + a scoped read tool, confirm a leaf reads the absolute path; BA-8 — wire a `refineLeaf.sensor` that fails once then passes, confirm `receipts.refineLeaf.iterations > 1` and `passed === true`.
 
+### BA-10 — 🔴 `refineLeaf`'s escalating temperature is rejected by newer models → the whole leaf-refine silently collapses to `incomplete` (F34)
+
+- **Symptom (reproduced live, probe-16 sonnet arm, 2026-07-03):** running the whole pipe with the intended
+  **production model `claude-sonnet-5`** made **zero LLM calls**, called the sensor **zero times**, and
+  returned `incomplete` (`refineLeaf` receipts `undefined`, cost `$0`, empty audit). The **exact same config
+  on `claude-haiku-4-5` works** (`sensorCalls=2`, `receipts.refineLeaf={iterations:2,passed:true}`). So the
+  failure is model-triggered, not a relayfact wiring bug — isolated by bisection (tools-only worker runs fine
+  on sonnet; adding `refineLeaf` is what breaks it).
+- **Root cause (the failure chain):**
+  1. `recurseRefineLeaf`'s `attempt` passes an **escalating `temperature`** per retry —
+     `temps[iteration]` (default `[0.2, 0.7, 1.0]`), `recurse.js:609` + `recurse.js:621`
+     (`loop.run(..., { ctx, temperature })`).
+  2. `AnthropicProvider.generate` forwards it **unconditionally** — `provider-anthropic.js:84`
+     (`...(options.temperature != null && { temperature })`).
+  3. `claude-sonnet-5`'s API **rejects any non-default `temperature`** with `400`
+     `"temperature is deprecated for this model."` — surfaced verbatim by `_request` (`provider-anthropic.js:186–190`)
+     as a `ProviderError`. (Confirmed by direct `generate`: `temperature:0.2/0.4` → 400; `temperature:1.0` or
+     **omitted** → OK. It is the upstream API's error, **not** a client-side guard — no `"deprecated"` string
+     exists anywhere in the provider.)
+  4. In `refineLeaf`, the first attempt is at `temps[0]=0.2` → the Loop captures the 400 as `out.error`
+     (`throwOnError:false`) → `attempt` rethrows (`recurse.js:624`, `if (out.error) throw`) → the `refine`
+     wrapper's `try` catches it → `recurseRefineLeaf` catch block sets `node.incomplete = true` and returns
+     `{ incomplete: true }` (`recurse.js:656–657`). **The sensor is never reached** — so the executable close
+     never runs, and the failure looks like "the model couldn't do it" when in fact **no attempt was ever made.**
+- **The fix (bareagent side — provider, one place, model-agnostic): graceful degradation.** In
+  `AnthropicProvider.generate`, wrap `await this._request(body)`: on a `400` whose message indicates
+  `temperature` is unsupported/deprecated **and** `body.temperature` was set, `delete body.temperature`,
+  `console.warn` once, and retry the request **once** without it. Key off the **API error text**, not a
+  hardcoded model list, so it survives future models that drop the param. Only retry for the temperature case
+  (don't mask other 400s), and only when a temperature was actually sent (else re-throw unchanged). Net: a
+  temperature-deprecated model runs the leaf-refine loop normally instead of collapsing to `incomplete`.
+- **Secondary — a design caveat BA-8's own note now needs (`recurse.js`, non-blocking, flag honestly):**
+  the BA-8 hand-off above states *"temperature escalation is a design REQUIREMENT of the leaf-refine seam."*
+  That was measured with the retry prompt held CONSTANT (temperature the only diversity source). In
+  relayfact's usage the **grounded close feeds a gap critique forward every iteration** (`recurse.js:618–620`,
+  *"Your previous attempt FAILED these checks: {critique}"*), so the prompt already changes each retry — the
+  correction lever is the **critique**, temperature is a secondary diversity lever. On a temperature-fixed
+  model that lever is **inert** (every attempt runs at the model's default temp). Two consequences the lib
+  should own: (a) `node.refineLeaf.temperatures` (`recurse.js:636`) will **misreport** temps that were
+  silently dropped — it should record the *effective* temps; (b) BA-8's "REQUIREMENT" claim should be
+  **scoped to models that accept `temperature`**, with an explicit note that on temperature-fixed models the
+  gap critique carries the recovery alone. *(Whether flat-temp + gap-critique still converges on sonnet is an
+  empirical question the fixed run will answer — see F34.)*
+- **Severity: 🔴 blocking for the production-model path.** The PRD (§8.2 G2) names sonnet-class as the
+  **production** model and haiku as the control; as shipped, the production model **cannot run the
+  self-correcting leaf loop at all**. It does **not** block the haiku control. **No relayfact workaround** —
+  setting `temperatures:[1.0,…]` in the probe would be exactly the silent workaround the doctrine forbids
+  (and defeats the seam's escalation design); the fix belongs at the lib.
+- **Verify-shipped-vs-spec (on delivery):** run `recurse({ refineLeaf:{ sensor, temperatures:[0.2,0.7,1.0] } })`
+  with `provider.model = claude-sonnet-5` and a sensor that fails once then passes → confirm
+  `receipts.refineLeaf.iterations > 1`, `passed === true`, and a single one-time temperature-drop warning
+  (not a per-attempt spam); confirm the same config still escalates temps on haiku.
+
 ---
 
-## bareguard (currently v0.10.1)
+## bareguard (currently v0.11.1)
 
 | # | Finding | Severity | Status | The fix |
 |---|---|---|---|---|
 | BG-1 | F16 | 🔴 security | 🟢 **SHIPPED + VERIFIED v0.10.1** | Key-aware redaction walk, **default-on** (`DEFAULT_SECRET_KEYS = apiKey/api_key/authorization` + `sk-`/`Bearer` value patterns), narrow configurable key set — `src/primitives/secrets.js`. **Verified-shipped by running (2026-07-01):** a `gate.check` on an action carrying a fake `sk-ant-…` key masks it in the audit both by field (`[REDACTED:key=apiKey]`) and value pattern (`[REDACTED:pattern=sk-a...]`), including `_ctx.provider.apiKey`; the raw key is absent from the audit file. |
 | BG-2 | F9 | 🟢 | works-as-intended | Layered enforcement (floor → ask → allowlist) verified correct; no change. |
+| BG-4 | F37 | 🟢 docs/api | 🟢 **SHIPPED + VERIFIED v0.11.1** | 0.11.0's "`PAYLOAD_FIELDS` is a new export" was **false** — `import { PAYLOAD_FIELDS } from 'bareguard'` threw (exported only from `src/primitives/content.js`, not `index.js`; deep import `exports`-blocked). **Owner chose Option A + DECLINED my option-2 config key** (zero demand, no adopter hit it, `["content","contents"]` complete for every shipping write tool → a permanent 1.0 config surface for a loose changelog line = tail-wags-dog; the fix for a dead-config *implication* is to stop implying the knob). Shipped: re-export from `index.js` for **read-only introspection**, **`Object.freeze`** (mutate-the-global fails by construction), reword changelog + JSDoc to "introspection + fix-at-the-lib (one-line PR), not extend-by-mutation". **Verified-shipped by RUNNING (relayfact, 4/4):** import reachable; value `["content","contents"]`; `Object.isFrozen` true; `.push` throws + unchanged. Found via `poc/probe-19`. |
+| BG-3 | F35 | 🟠 design | 🟢 **SHIPPED + VERIFIED v0.11.0** | `serializeForMatch` now strips `PAYLOAD_FIELDS = ["content","contents"]` from a non-mutating `args` copy before matching, for **both** deny + ask (`src/primitives/content.js`). **Verified-shipped by RUNNING (2026-07-03, `poc/probe-19-bg3-verify-shipped.mjs`, token-free, 5/5, control-can-fail):** payload code-vocab incl. literal `DROP TABLE` bytes → **allow/`default`**; `DROP TABLE`/`rm -rf` in a bash **`cmd`** → **deny/`content.denyPatterns`**; structural **`method:DELETE`** → **ask/`content.askPatterns`** (the strip does not blind the operation fields — proven via the audit's pre-human askHuman line). relayfact's disclosed override (`content:{askPatterns:[]}`) **REMOVED** from probe-16; default guards left ON. **F37 follow-up (BG-4) SHIPPED v0.11.1:** `PAYLOAD_FIELDS` is now exported from `index.js` (read-only, `Object.freeze`d) — the 0.11.0 "is a new export" claim is made true; see BG-4 row. |
 
 ### BG-1 — 🔴 redact secrets in the audit (F16, defense-in-depth)
 `gate.record` writes `_ctx` (and action args) verbatim to the audit JSONL. bareguard already ships a
@@ -162,6 +219,45 @@ lands raw at **zero config**. BG-1 adds the missing **key-aware** layer.
 - Opt-out is `secrets.redactKeys:false` (disables the whole default-on backstop; explicit `envVars`/`patterns`/`keys` still apply). Extend the key set via `secrets.keys:[…]` (case-insensitive; a `*suffix` spec like `*_token` matches any key ending in `suffix`).
 - Tag format: `[REDACTED:key=<name>]`. Redaction is audit-only and **non-mutating** (eval/execute see the real action; policy matching unweakened). Default-on expansion is re-bounded by the existing `MAX_LINE_BYTES` truncation, so PIPE_BUF audit-line atomicity holds.
 
+### BG-3 — 🟠 content ask/deny-patterns scan the write PAYLOAD → false-fire on code vocabulary → budget-burn (F35)
+
+- **Where:** `content.js:27` `SAFE_DEFAULT_ASK_PATTERNS` includes `/\b(delete|drop|revoke|truncate|destroy|remove|purge)\b/i`; `contentAskCheck` (`content.js:63`) tests it against `serializeForMatch(action)` = `JSON.stringify(action)` (`content.js:32`) — the **whole action**, including a file-write's `args.contents`. Called at `gate.js:250` for every action, "fires even on allowlisted tools." Default-on (opt out via `content:{askPatterns:[]}`).
+- **What breaks (reproduced live, probe-16, BOTH arms, 2026-07-03):** the task was to fix a bug about **dropping** filters; the fix edits code + comments containing "drop"/"remove". Every fix-write serialized to JSON containing those whole words → `askHuman` → the probe's auto-deny `humanChannel` → **write denied**. Over ~16 llm calls the worker retried, **burned the full $1 budget cap**, halted, and the refine **sensor was never reached** — surfacing as `incomplete`. Both sonnet and haiku failed *identically*; the read.js `sel`-array fix was never applied. After `content:{askPatterns:[]}` (relayfact-side, domain-appropriate), both arms **delivered green on the first attempt, GOLD-correct, ~$0.07–0.13** (F36). Token-free proof of the mechanism: a `gate.check` on a write whose `contents` contains whole-word "drop"/"remove" → `outcome:deny, rule:content.askPatterns`; with `askPatterns:[]` → `outcome:allow`.
+- **Why this is a design issue, not just my misconfig (the honest read):**
+  1. **It scans the wrong field.** These patterns target destructive *operations* (`DROP TABLE`, `rm -rf`, `revoke`, destructive HTTP verbs) — an **intent/command** signal. Serializing the entire action makes them also fire on a write whose **payload text** merely *mentions* the word. Code is saturated with delete/remove/drop as ordinary vocabulary, so this false-fires on essentially **every coding agent, permanently.**
+  2. **The real guard for a write is `fs.writeScope`,** not keyword-scanning its bytes. An in-scope write (here: `examples/`+`src/`, `test/` excluded) is safe regardless of the file text. The payload scan adds no protection here — only false alarms. (Scanning file bytes for keywords is also poor security: it neither reliably catches a genuinely malicious write nor avoids benign matches.)
+  3. **The trigger is bareguard's; the expensive tail is bareagent's (attribution corrected 2026-07-03).** The
+     false-fire — a benign write escalated/denied — is bareguard's to stop (this ask). The **budget-burn**
+     symptom ("$1 cap → `incomplete`, sensor never reached") is **not** bareguard's: bareguard is stateless per
+     `check()` and has no concept of a loop. It is **bareagent's `refineLeaf`/worker Loop retrying a
+     governance-denied action** instead of short-circuiting — filed as **BA-11**. bareguard's share is exactly
+     one thing: stop the false-fire at the source. My original F35/BG-3 over-attributed the burn to bareguard;
+     corrected.
+- **Settled fix (maintainer's read, 2026-07-03 — accepted; narrower than my opt-1, and better):**
+  1. **`serializeForMatch(action)` excludes the write/edit payload field(s) before matching** — applied to
+     **both** `contentDenyCheck` and `contentAskCheck` (the deny path has the same defect and is *worse*: a
+     migration file with `DROP TABLE` in its bytes currently **hard-denies**, unrecoverable). Stays
+     **shape-agnostic** otherwise (regex a blob) — the opposite polarity to my field-*allowlist*, which would
+     couple `content.js` to every primitive's field vocabulary and **fail silent** when a new action shape isn't
+     added. Excluding a known payload field fails **loud** (a novel field → a visible, cheap-to-fix false-fire,
+     never a silent hole). Leaves the HTTP-method pattern, force-push, and `DROP TABLE`-in-`cmd` all firing.
+  2. **Payload field names to exclude = `content` (shell_write) + `contents` (relayfact edit_file)** — verified
+     the complete set across both repos (no diff-tool ships; `type:'edit'` reserved-unused). Both sit under
+     `action.args` in relayfact's translators; shell_write's payload only reaches the action if a translator
+     forwards it.
+  3. **Rejected: `content.scope` selector** (YAGNI — no adopter has asked for payload scanning; `secrets` already
+     owns payload inspection; add `scope:'full'` if a real DLP consumer appears) and **the retry-signal tail**
+     (bareguard's statelessness → that's BA-11, bareagent's).
+  4. **Not docs-only / not works-as-intended.** A default that is a pure false-positive generator for an entire
+     adopter class (coding agents doing file writes), failing silently+expensively, is a **bad default** — fixed
+     at the floor, pre-1.0 (the SemVer-cheap moment, same argument that carried BG-1 default-on).
+  5. Doc the boundary + a test: `DROP TABLE`/`rm -rf` in `args.contents` → **allow**; same in `cmd` → still
+     **deny**; `"method":"DELETE"` → still **ask**.
+- **Relayfact-side stance (disclosed):** for probe-16's worker (only `shell_read`+`edit_file`, no bash/network,
+  bounded by read/writeScope) the default ask-patterns protect nothing, so `content:{askPatterns:[]}` is a
+  correct *local* override — a **disclosed workaround pending BG-3**, not the fix. Once BG-3 ships, drop the
+  override and verify-shipped (the "drop/remove in payload → allow, in cmd → deny" test above).
+
 ---
 
 ## litectx (currently v0.21.0)
@@ -182,6 +278,21 @@ first-try (probe-02/03: relevant fact ranked `top@3.681` over two distractors). 
   ctx paths) lands in **bareguard v0.10.0** — non-blocking for the seam measurement, verify on its publish.
 - 🟢 **BA-2…BA-6 — SHIPPED** in `bare-agent@0.22.0` (none ever required a relayfact workaround). BG-2 remains
   works-as-intended.
+- 🟢 **BG-3 (F35) — SHIPPED + VERIFIED v0.11.0; disclosed override REMOVED.** `serializeForMatch` now strips
+  the write payload (`content`/`contents`) before matching, so the default `content` patterns no longer false-fire
+  on code vocabulary. **Verified-shipped by running** (`poc/probe-19`, token-free 5/5, control-can-fail): payload
+  code-vocab → allow; destructive verb in a `cmd`/`method` operation field → still deny/ask. relayfact dropped
+  `content:{askPatterns:[]}` from probe-16 and left the default guards ON. Paired budget-burn half = **BA-11**
+  (bare-agent 0.25.0, verified `poc/probe-20`). Follow-up **BG-4/F37** (unreachable `PAYLOAD_FIELDS` export) is
+  low/non-blocking. **G2 re-run WITHOUT the override confirmed green, both arms** (default guards ON): sonnet-5
+  `$0.095`/4 calls, haiku `$0.088`/7 calls, `interventions=0`, close+GOLD green, `fitToPass=false` (F36 re-run).
+- 🟢 **BA-10 (F34) — UNBLOCKED, SHIPPED + VERIFIED v0.24.0.** The provider now degrades gracefully
+  (`requestWithTemperatureFallback`): on the temperature-deprecation 400 it drops `temperature` + retries once,
+  warns **once**, and flows `temperatureDropped` back so `refineLeaf` receipts report the *effective* temps
+  (the secondary receipts-honesty point, also fixed). **Verified-shipped by running (2026-07-03):** sonnet-5 +
+  `refineLeaf` → `sensorCalls=2`, `receipts.refineLeaf={iterations:2,passed:true,temperatures:[null,null]}`
+  (was `incomplete`, 0 sensor calls); haiku still escalates `[0.2,0.7]` (default byte-identical). Unblocked the
+  G2 production arm → both arms delivered green (F36).
 
 *This doc is updated as asks ship (flip to 🟢 with the version) or as new findings land. It never replaces
 `FINDINGS.md` — that is the grounded log; this is the actionable hand-off.*

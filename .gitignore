@@ -44,3 +44,6 @@ poc/fixtures/g1-money/gold.test.mjs
 poc/fixtures/g1-csv/impl.mjs
 poc/fixtures/g1-csv/suite.test.mjs
 poc/fixtures/g1-csv/gold.test.mjs
+# probe-16 (g2) — the ENTIRE work dir is materialized from `git archive` of a pinned
+# flightlog commit on every run; nothing here is source (the repo pointer + SHAs live in the probe).
+poc/fixtures/g2-flightlog-work/
