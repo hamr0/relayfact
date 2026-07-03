@@ -8,7 +8,7 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
-Phase: **v2 spikes complete + graduation gate (§8.2 G1–G5) IN PROGRESS — G1/G2/G4 met, G3/G5 open.** v1 POC
+Phase: **v2 spikes complete + graduation gate (§8.2 G1–G5) IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
 complete; v2 de-risked on shipped `recurse()`. The earlier "no open blockers / graduate-or-archive" framing was
 **premature** — the validated spikes covered the loop's MIDDLE (worker/close/decomposition/memory/caps); the
 two ends of the goal (request-IN = who authors the close = G1; come-back-OUT = escalation = G3) had no evidence,
@@ -28,6 +28,20 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Added — G3 (the come-back): decision-ready escalation + pre-flight sanity (2026-07-03)
+- **G3 POC-run — PASS (`poc/probe-17-comeback.mjs`, F38).** The loop returns a bare `{incomplete}`; G3 is the
+  two pieces relayfact OWNS on top (§5.1). **(a) Escalation artifact (token-free):** five §5 stop-classes each
+  assemble ONE decision-ready `run.escalate` report `{goal, whatWasTried[], blocker, decisionNeeded{question,
+  options}, receipts, costSpent}` — every stop forced by REAL execution (real `refine` history / real bareguard
+  `budget.maxCostUsd` halt / real BA-11 deny-spin at 3 / §5 rubric-residue / pre-flight decline at 0 spend).
+  **Control-can-fail:** `isDecisionReady` rejects a bare `{incomplete}`, a <2-option report, and an
+  attempt-bearing stop with empty `whatWasTried`. **(b) Pre-flight `{proceed|clarify|decline}` (real haiku,
+  ~$0.05):** the two safety corners held — a coherent request is NEVER declined (`clarify`, a safe HITL-open),
+  nonsense NEVER proceeds (`decline`); the soft middle is model-calibrated + fuzzy ("make it better" → `decline`,
+  reported not gated) = the §5 residue from the pre-flight side. **Design note (parallels F32):** `recurse`
+  persists only the `refineLeaf` summary, not `refine.history` — relayfact self-captures `(attempt,verdict,gap)`
+  via the sensor it owns (`opts.evaluate`), no lib dependency. Graduation gate now: G1/G2/G3/G4 met, G5 open.
 
 ### Verified-shipped — BG-3 + BA-11; G2 now stands on stock library defaults (2026-07-03)
 - **BG-3 verified-shipped (bareguard 0.11.0, `poc/probe-19-bg3-verify-shipped.mjs`, token-free 5/5,

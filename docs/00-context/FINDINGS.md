@@ -972,3 +972,40 @@ docs), and **reword** the changelog + `content.js` JSDoc to "introspection + fix
 (was a throw); value `["content","contents"]`; `Object.isFrozen` true; `.push("body")` throws + leaves the array
 unchanged. Net: the factual bug ("is a new export" — false in 0.11.0) is fixed and the dead-config implication is
 gone, with **zero** added config surface.
+
+## F38 — G3 (the come-back): a decision-ready escalation assembles across every stop-class; pre-flight's safety corners hold, its soft middle is fuzzy (as §5 predicts)
+
+**What was built (`poc/probe-17-comeback.mjs`, PRD §8.2 G3).** The loop returns a bare `{incomplete}`; G3 is the
+two pieces relayfact OWNS on top of that (§5.1): **(a)** an escalation artifact — one structured, human-actionable
+report `{ goal, whatWasTried[], blocker(which §5 trigger), decisionNeeded{question,options}, receipts, costSpent }`
+emitted as a terminal `run.escalate` event (observer renders it); **(b)** a pre-flight rubric that classifies a
+request `{ proceed | clarify | decline }` BEFORE spending — rubric may OPEN HITL, never CLOSE green.
+
+**(a) — PASS, token-free, every stop forced by REAL execution (not hand-authored).** Five §5 stop-classes each
+assembled a **decision-ready** artifact: **close-exhausted** (a real `refine()` whose deterministic-wrong worker
+failed a real grounded close 3× → a real `history` of gaps), **budget-cap** (a **real bareguard** `budget.maxCostUsd`
+halt after recording over-cap spend), **governance-deny** (a **real BA-11** deny-spin short-circuit, stopped at 3),
+**rubric-uncertain** (the §5 residue: grounded checks green but advisory rubric unsure → OPENS HITL), and
+**preflight-declined** (routes to (a) with **0 spend**). **CONTROL THAT CAN FAIL held:** `isDecisionReady`
+**rejected** a raw `{incomplete}` (the thing G3 replaces), a report with <2 options, and an attempt-bearing stop
+with an empty `whatWasTried` — so the acceptance predicate is not a rubber stamp.
+
+**Design finding (parallels F32):** `recurse` persists only the `refineLeaf` **summary** (`{iterations, passed,
+temperatures}`), NOT `refine`'s per-attempt `history` (`{result, verdict}[]`) — so the artifact's `whatWasTried`
+cannot be read back from the recurse receipt. Resolved **within relayfact's ownership**: relayfact owns
+`opts.evaluate` (the sensor), which is called each iteration, so it self-captures `(attempt, verdict, gap)` and
+emits them. No lib dependency; filed the "recurse drops `refine.history` from its receipt" as a low observer-nicety.
+
+**(b) — PASS on the gated corners, honest soft-middle divergence (real haiku, ~$0.05, 3 calls).** The two SAFETY
+corners are hard-gated and **held**: a **coherent** request was NEVER declined (haiku returned `clarify` — asked for
+context, a safe HITL-open, not a false-block), and **nonsense** NEVER proceeded (`decline`). The soft middle is
+model-calibrated and fuzzy: **"make it better" → `decline`** (I expected `clarify`) — reported as a soft miss, not
+pass-gated, and arguably *more* correct (contextless "make it better" is effectively non-actionable). **This is the
+§5 prediction, observed from the pre-flight side:** the proceed/clarify/decline boundary is exactly the rubric
+residue — advisory, model-dependent, never load-bearing; what MUST hold (never false-block a real task, never
+false-go on nonsense) held. Every decline produced a decision-ready come-back with zero spend.
+
+**Honest limits.** n=1 per class; one model (haiku); the rubric-uncertain stop uses a deterministic advisory stub
+(the point under test is that the residue ROUTES to a decision-ready come-back, not that the rubric is a live model
+— that calibration is the pre-flight (b) evidence). The pre-flight soft-middle is n=1 per class; a larger sample
+would characterize the clarify/decline boundary, but the safety corners are the graduation-relevant claim.

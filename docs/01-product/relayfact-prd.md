@@ -39,7 +39,10 @@ an under-specified spec it over-specifies and the validity check catches it (csv
 fit-to-pass mode was unobserved but not excluded. Spec completeness sets where HITL fires. **G2 (real-task e2e)
 is POC-run — PASS (2026-07-03, `probe-16`, F36): the whole pipe delivered a gold-correct fix on an uncrafted
 real repo, both models, first attempt, 0 interventions — now re-verified on STOCK library defaults after BG-3 +
-BG-4 + BA-11 shipped (override removed).** G3/G5 open (+ the still-unrun G1 sonnet arm).
+BG-4 + BA-11 shipped (override removed). G3 (the come-back) is POC-run — PASS (2026-07-03, `probe-17`, F38):
+a decision-ready escalation artifact assembles across every §5 stop-class (checker can fail), and pre-flight's
+safety corners hold (never false-block a coherent request, never false-go on nonsense).** G5 open (+ the
+still-unrun G1 sonnet arm).
 No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
 refers to a section here. The validation companion is `benches-prd.md`.
 
@@ -515,6 +518,17 @@ the agent's own outputs too).
   unchanged). Ambiguity questions are batched here (HITL trigger 1). *Pass:* a probe with 3 request classes
   — coherent / underspecified / impossible-or-nonsense — routes each correctly, with a control that can fail
   (the coherent one must NOT be declined).
+  **✅ POC-run — PASS (2026-07-03, F38).** **(a)** five stop-classes each assembled a **decision-ready**
+  `run.escalate` artifact, every stop forced by REAL execution (real `refine` history / real bareguard
+  `budget.maxCostUsd` halt / real BA-11 deny-spin at 3 / §5 rubric-residue / pre-flight decline at 0 spend).
+  **Control-can-fail held:** `isDecisionReady` REJECTS a bare `{incomplete}`, a <2-option report, and an
+  attempt-bearing stop with empty `whatWasTried`. Design note (parallels F32): `recurse` persists only the
+  `refineLeaf` *summary*, not `refine.history` — relayfact self-captures `(attempt,verdict,gap)` via the sensor
+  it owns (`opts.evaluate`), no lib dependency. **(b)** real haiku (~$0.05): the two **safety corners held** —
+  a coherent request was NEVER declined (returned `clarify` — safe HITL-open), nonsense NEVER proceeded
+  (`decline`); the soft proceed/clarify/decline middle is model-calibrated + fuzzy ("make it better" → `decline`,
+  reported not gated) — the §5 residue seen from the pre-flight side. Honest limits: n=1/class, one model, the
+  rubric-uncertain stop is a deterministic advisory stub (routing under test, not rubric calibration — that is (b)).
 - **G4 — the observer is an artifact, not a rollup — `poc/observer.mjs` + `poc/probe-18-observer.mjs`.**
   "Observable" is in the goal's name and is the least-built part: F15 relocated the taps (audit + RC-10
   receipts + `ctx.stream`), but every probe hand-rolls its own counters; no coherent renderer exists.
@@ -554,6 +568,40 @@ probe-15's mutant SUBTLETY (easy mutants make "honest close" hollow) and probe-1
 memorized fix makes "real" soft — prefer recent/obscure). **Archive path stays live:** if G1 fails hard
 (self-authored closes can't be kept honest) and the human-authored-close claim isn't worth a build,
 archiving IS the honest outcome — that bar is the point (§0).
+
+### 8.3 What's built to date — the POC inventory & what it does (2026-07-03)
+
+**The one-sentence what.** relayfact takes a plain-English request and delivers working code, proven done by a
+test that can *fail* — never by the model's own say-so. It builds **no new machinery**: it assembles bareagent
+(the loop), litectx (the memory), bareguard (the leash), grounds them on an executable close, and narrates every
+step as an append-only event log. Everything to date is throwaway `poc/` code (no shipped `src/` yet); each probe
+de-risks one assumption before any real build.
+
+**The assembled pipe (what the whole thing does end-to-end):**
+```
+prose request
+  → [pre-flight: does this make sense? proceed|clarify|decline]   (G3 ✅ probe-17)
+  → compile the request into a grounded CLOSE (a test command that can fail)
+  → recurse(): decompose → fan out workers → each edits files through the gate
+  → run the CLOSE (exit code = truth); on failure, feed the gap back + retry
+  → deliver GREEN, or come back with a decision-ready escalation    (escalation = G3 ✅ probe-17)
+       …every step written to the event log the observer renders
+```
+The iron rule throughout (§5): the model's judgment (rubric) may *open* a stop/ask, but may **never** be what
+declares the work done — only a deterministic test closes the loop. Mapping where that line falls IS the experiment.
+
+**What the POCs proved, grouped:**
+| Group | Probes | What it establishes |
+|---|---|---|
+| **Inner loop (v1)** | `01`, `02`, `02-gate`, `14` | a real worker edits files through the gate, turns a failing test green, **fails honestly** on an impossible task; the gate genuinely enforces caps/halts (not just waves legit actions through). |
+| **Decomposition (v2 on `recurse()`)** | `03`, `04`, `12` | one **global** top-level test catches a faulty sub-piece even though children are ungraded; decomposition depth follows task difficulty, not model bravado. The grounded close is **top-node-only** and must be a global predicate. |
+| **Memory self-improvement** | `06`→`11`, `13` | `06–08` were **caught fit-to-pass** (recalled "lesson" contained the answer) → retracted. Honest rebuild (`09–11/13`) found the durable truth: **search ranks by similarity, not correctness** — a convincing *wrong* note can outrank the right one, so ranking can never be the correctness discriminator. Fix: the **test drives recall** (widen on each failed close; "candidates — the test decides"), naive 0/5 → fixed 5/5. |
+| **Graduation gate — the two unproven ends** | `observer`+`18` (G4), `15` (G1), `16` (G2), `17` (G3), `19`/`20` (lib verify) | **G4:** a pure log-reader microscope; its self-check caught 3 bugs in itself. **G1:** the agent **self-authors a passing test** from prose and stays honest *to the degree the spec is complete* — vague spec → it over-constrains and is **caught** (fails safe), never silently passes wrong code. **G2:** the **whole pipe** fixed a real uncrafted-repo bug, both models, first try, 0 hand-holding, ~$0.09 — re-verified on **stock libraries** after the three bugs it surfaced (BA-10, BG-3, BA-11 + BG-4) shipped and the workaround was removed. **G3 (the come-back):** a decision-ready escalation artifact assembles across every §5 stop-class (the checker itself can fail — it rejects a bare `{incomplete}`); pre-flight's rubric never false-blocks a real request nor false-goes on nonsense. |
+
+**The big honest finding across all of it:** the loop self-heals only as far as "done" compiles to a test that
+can fail. Beyond that — vague or judgment-only criteria — a human is still required; relayfact's point is to
+**count and map** that boundary, not pretend it isn't there. **Not built yet:** **G5** (graduated spec) + the
+still-unrun G1 sonnet arm; any real `src/` — the last is a rewrite that happens only *if* it graduates.
 
 ---
 
