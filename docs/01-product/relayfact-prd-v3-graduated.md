@@ -194,8 +194,11 @@ Each module works end-to-end before the next (walking skeleton + vertical slices
 3. **The gated worker on `recurse()`** — persona + `edit_file` + `opts.evaluate` global predicate + gate
    caps; `refineLeaf` at the leaf with close-driven recall widening over a **capped** store (**D3**).
 4. **Pre-flight + escalation** (G3) — `{proceed|clarify|decline}` in, `run.escalate` out.
+   **↳ ASSEMBLED (F39):** steps 1–4 composed into one `src/pipeline.mjs::runRequest` (prose + repo →
+   deliver-green | decision-ready escalation, every step on the event log; observer renders it). Live e2e
+   green on real haiku, n=1/double (named). D5 GOLD stays the standing arbiter; D3 memory NOT wired yet.
 5. **The `agentic`-tier close spike (D1)** and the **≥3-real-task cohort (D7)** — the benches datapoints
-   that turn §3's exit criteria green as shipped code.
+   that turn §3's exit criteria green as shipped code. **(next; D3 recall-widening precedes it, own session.)**
 
 Then: retire `poc/` (throwaway, §2), and the build carries its own CHANGELOG entries under a real version
 (`0.1.0`+ per the CHANGELOG's "versioning starts at the first graduated build").

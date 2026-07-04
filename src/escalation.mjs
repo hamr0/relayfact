@@ -18,11 +18,16 @@ export const DECISION = {
                           options: ['confirm — accept as-is', 'revise the requirement', 'pin the criterion in the spec and re-run'] },
   'preflight-declined': { question: 'Before spending, this request did not look actionable. Clarify it, or drop it?',
                           options: ['answer the clarifying questions', 'rephrase the request', 'drop this request'] },
+  'close-untrustworthy':{ question: 'The self-authored grounded close could not be trusted (it did not ground the work safely). Refine the spec, or supply the test yourself?',
+                          options: ['refine/clarify the spec so a trustworthy close can be authored', 'provide the acceptance test yourself', 'drop this task'] },
+  'gold-mismatch':      { question: 'The delivered code passes its own authored close but FAILS the independent GOLD check (a fit-to-pass gap). How should I proceed?',
+                          options: ['strengthen the spec/close and re-run', 'take it from here manually', 'drop this task'] },
 };
 
 // Stops that came from REAL execution must show what was tried; a pre-flight decline legitimately has none
-// (it stopped at 0 spend, before any attempt).
-export const ATTEMPT_BEARING = ['close-exhausted', 'budget-cap', 'governance-deny', 'rubric-uncertain'];
+// (it stopped at 0 spend, before any attempt). close-untrustworthy follows the AUTHOR attempt; gold-mismatch
+// follows a full worker delivery — both are attempt-bearing.
+export const ATTEMPT_BEARING = ['close-exhausted', 'budget-cap', 'governance-deny', 'rubric-uncertain', 'close-untrustworthy', 'gold-mismatch'];
 
 /**
  * Assemble a decision-ready escalation artifact.

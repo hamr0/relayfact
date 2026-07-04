@@ -1070,3 +1070,45 @@ false-go on nonsense) held. Every decline produced a decision-ready come-back wi
 (the point under test is that the residue ROUTES to a decision-ready come-back, not that the rubric is a live model
 — that calibration is the pre-flight (b) evidence). The pre-flight soft-middle is n=1 per class; a larger sample
 would characterize the clarify/decline boundary, but the safety corners are the graduation-relevant claim.
+
+---
+
+## F39 — src/ step "assemble the pipe": the four proven pieces compose into ONE program, live e2e green (n=1, named)
+
+**Status:** src/ build capstone (`src/pipeline.mjs` + `src/observer.mjs::renderRun`). The G1–G4 pieces
+(pre-flight, compile-close, gated worker, escalation) were assembled into a single top-level `runRequest`
+that takes **prose + a repo dir** and returns **DELIVER green** or a **decision-ready `run.escalate`**, every
+step narrated to the append-only event log (§7). This is the §5 pipe drawn as shipped code; it builds no new
+engine — it only composes.
+
+**Live e2e (real haiku, ~21s, 2 token-spending phases):** `proceed` → self-authored close **trusted** (5/5
+mutants killed, reference passes) → gated worker **red→green** through the leash → **independent GOLD green on
+fresh values (7,-9,0 — never in the prose)** → **DELIVER, grounded 1/1**. The pure-listener observer rendered
+the whole timeline from the persisted log alone. Event sequence asserted exactly:
+`run.start → preflight → close.compiled → receipts → worker.done → gold.checked → run.deliver → run.end`.
+
+**Two gates by design (a real assembly constraint, not a workaround):** the author writes ONLY the suite; the
+worker writes ONLY the impl (write-scope EXCLUDES the suite, so own-green can't be gamed). One shared gate
+cannot express both scopes — the pipe threads the author's gate through the injected `authorSuite` closure and
+takes the worker's gate directly. Correct by construction.
+
+**D5 kept as the standing arbiter (permanent, not a probe):** own-green is necessary, not sufficient — the pipe
+runs the INDEPENDENT GOLD (written only AFTER the worker finishes, never visible to it) and **own-green + GOLD-red
+⇒ NEVER deliver** (`gold-mismatch` escalation). This tripwire is fail-capable and proven token-free: a
+deliberately-wrong impl that passes its own suite is caught RED by GOLD and escalated; the correct impl passes both.
+
+**Two escalation stop-classes the assembly genuinely needed** (relayfact-owned decision routing, NOT lib
+primitives): `close-untrustworthy` (the self-authored close failed the validity gate — vacuous/over-constrained/
+weak-grounding) and `gold-mismatch` (the D5 fit-to-pass tripwire). Both attempt-bearing; both emit decision-ready
+come-backs (`isDecisionReady` asserted true on every escalation branch, and it can fail — a bare `{incomplete}` is
+rejected).
+
+**Honest limits (named, per the antigen).** The live e2e is **n=1 on the `double()` fixture, one model (haiku)** —
+it proves the assembled WIRING reproduces the G1/G2/G3 shapes end-to-end **as one program**; it is NOT a fresh
+honesty or cohort claim (that is step 5's ≥3-real-task cohort, **D7**). The GOLD-red direction is verified
+**token-free**, not live. Memory (litectx close-driven widening, **D3**) is deliberately NOT wired here — it is its
+own careful session (memory is where the probes got caught fit-to-pass). costSpent in escalations is audit-derived
+best-effort via `gate.haltContext()`; the observer shows authoritative cost from the audit JSONL.
+
+**src/ suite:** 58 tests / 52 pass / 6 live-skip, 0 fail; the observer §7 pure-listener contract (imports only
+`node:fs`) still holds after adding `renderRun`.
