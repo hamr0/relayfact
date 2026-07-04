@@ -8,7 +8,9 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
-Phase: **v2 spikes complete + graduation gate (§8.2 G1–G5) IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
+Phase: **graduation gate (§8.2 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call is GRADUATE.**
+Next phase is the `src/` build (a rewrite; `poc/` discarded, §2), against `relayfact-prd-v3-graduated.md`.
+_(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
 complete; v2 de-risked on shipped `recurse()`. The earlier "no open blockers / graduate-or-archive" framing was
 **premature** — the validated spikes covered the loop's MIDDLE (worker/close/decomposition/memory/caps); the
 two ends of the goal (request-IN = who authors the close = G1; come-back-OUT = escalation = G3) had no evidence,
@@ -28,6 +30,23 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Added — G5: the graduated PRD, and the GRADUATE call (2026-07-04)
+- **G5 written (`docs/01-product/relayfact-prd-v3-graduated.md`) — the last §8.2 gate item, a spec-before-
+  build artifact, not a code probe.** With G1/G2/G3/G4 all met **on stock library defaults** (bareguard
+  0.11.1 · bare-agent 0.25.0 · litectx 0.26.1) with no papering-over, the documented verdict is
+  **GRADUATE**: scaffold `src/` as a rewrite (never ship the POC, §2). The doc encodes the G1–G4 numbers,
+  makes the goal sentence testable (**G5-EXIT:** prose+repo → pre-flight → grounded close w/ independent
+  GOLD arbiter → gated `recurse()` → deliver-green-or-decision-ready-escalation, narrated to the event log,
+  **demonstrated on ≥3 real tasks with the grounded/rubric split counted per task**), and draws **7 explicit
+  descopes** so the eval table stops overselling — D1 `agentic` tier (IN, first `src/` spike; claim shrunk
+  to predicate-tier until run), D2 embeddings (OUT — F26: can't fix correctness-vs-similarity), D3 memory
+  widening (IN with a hard store cap — F29 bounded-pool caveat), D4 bare-`refine` terminate (OUT/N/A —
+  `refineLeaf` halts clean, F30), D5 fit-to-pass (IN — standing independent-GOLD guard for the
+  unobserved-not-impossible mode), D6 depth (OUT — global close covers any depth, F13/F28/F31), D7 scale
+  (IN via the ≥3-task cohort). The **archive path stayed live and was not chosen** — the answers are
+  positive and the residue is bounded/named, not silenced (that doc's §7). **No `src/` yet; the graduate
+  decision is the user's, recorded here as the evidence-backed recommendation.**
 
 ### Added — G1 sonnet arm (the previously-unrun production-model arm) (2026-07-03)
 - **G1 sonnet arm run (`probe-15`, `RELAYFACT_MODEL=claude-sonnet-5`, F33 update; unblocked by BA-10).** Both

@@ -45,9 +45,12 @@ safety corners hold (never false-block a coherent request, never false-go on non
 now run (2026-07-03, F33 update): both fixtures honest + GOLD-correct. The adversarial fit-to-pass hunt (two
 shallow-inviting fixtures) is also run — fit-to-pass STILL never fired; every observed failure was over-constraint
 (SAFE, reference-gate-caught), and the independent GOLD stays as the standing guard for the unobserved-not-
-impossible corner.** **Only G5 (the graduated PRD) remains before the graduate-or-archive call.**
-No shippable `src/` yet — still POC. The single PRD that guides development; within this doc a bare `§N`
-refers to a section here. The validation companion is `benches-prd.md`.
+impossible corner.** **G5 (the graduated PRD) is now WRITTEN — `relayfact-prd-v3-graduated.md`
+(2026-07-04): all four empirical gates met on stock libs → the call is GRADUATE, and `src/` is the next
+build (a rewrite; `poc/` is discarded, §2). The archive path stayed live and was not chosen — the residue
+is bounded and named, not silenced (that doc's §4 descope table).** No shippable `src/` yet — still POC.
+This doc is now the **spike changelog/rationale**; the **build spec** is the v3 graduated PRD. Within this
+doc a bare `§N` refers to a section here. The validation companion is `benches-prd.md`.
 
 **relayfact** is an experiment: an autonomous "senior dev" runner **assembled** from the bare suite —
 `bareagent` (the loop), `litectx` (the memory substrate), `bareguard` (the leash). It builds **no
@@ -562,9 +565,17 @@ the agent's own outputs too).
   render alone. **Built FIRST (token-free) so it instruments every probe after it.**
   *Run:* `node poc/observer.mjs poc/run-probe13.jsonl` (replay); `node poc/probe-18-observer.mjs` (the
   self-check that asserts the render covers the required facets over the two existing logs).
-- **G5 — the graduated PRD exists before the rewrite (spec-before-build).** This document is now a
-  spike changelog; the `src/` build needs its own spec.
-  **Shape:** a v3/graduated PRD whose exit criteria are the goal sentence made testable — *"given a prose
+- **G5 — the graduated PRD exists before the rewrite (spec-before-build). ✅ WRITTEN (2026-07-04,
+  `docs/01-product/relayfact-prd-v3-graduated.md`).** All four empirical gates met on stock libs → the
+  documented call is **GRADUATE**; `src/` is the next build (a rewrite — `poc/` discarded, §2). The doc
+  encodes the G1–G4 numbers, makes G5-EXIT testable (≥3 real tasks, grounded/rubric split counted per
+  task), and draws every known descope explicitly in a table (D1 `agentic` tier — IN as first `src/`
+  spike, claim shrunk to predicate-tier until run; D2 embeddings — OUT, F26 says it can't fix
+  correctness-vs-similarity; D3 memory widening — IN with a hard store cap; D4 bare-`refine` terminate —
+  OUT/N/A, `refineLeaf` halts clean; D5 fit-to-pass — IN as a standing GOLD guard; D6 depth — OUT, global
+  close covers any depth; D7 scale — IN via the cohort). The **archive path stayed live and was not
+  chosen** (that doc's §7). This document is now the spike changelog; the graduated PRD is the build spec.
+  **Shape (as delivered):** a v3/graduated PRD whose exit criteria are the goal sentence made testable — *"given a prose
   request and a repo, relayfact produces a contract, compiles a close (G1 shape), runs gated, and either
   delivers green or returns a G3 escalation — demonstrated on ≥N real tasks with the grounded/rubric split
   counted per task"* — and which **explicitly scopes** the known descopes so the eval table stops
