@@ -49,6 +49,25 @@ shippable `src/` yet, by design.
     observer: round-trip, corrupt-line survival, and the **§7 pure-listener invariant** (imports are
     node-builtin-only) — proven fail-capable by injecting a spine import (went red, then reverted green).
 
+### Added — `src/` step 3 (core): the gated worker on `recurse()`, live-verified with the grounding control (2026-07-04)
+- **Build-order step 3 from §6 — the single-file gated implement loop, closed by a test that can fail.**
+  `npm test` = 34 pass / 3 live-skip (token-free by default).
+  - **`src/worker.mjs` (`implementAgainstClose`)** — drives a `maxDepth:0` recurse worker whose only mutating
+    tool (`edit_file`) is write-scoped by a bareguard `Gate`. The SAME deterministic close is both the global
+    top predicate (`opts.evaluate`) and the leaf sensor (`refineLeaf.sensor`); a failed attempt feeds its gap
+    forward and retries. The final close is **re-run authoritatively** on the delivered artifact (never trust
+    the loop's own report). `deliveryDecision` is a pure helper (unit-tested): delivers ONLY when the final
+    close is green AND the run is not incomplete — green-but-incomplete and never-green both escalate.
+  - **`test/integration/worker.live.test.js` — LIVE (haiku), both cases passed:**
+    - **deliver:** a satisfiable close went **red→green, DELIVERED** through the gate (1 iter, final close green).
+    - **🎯 the load-bearing CONTROL:** an **UNSATISFIABLE** close (`double(2)` asserted both `4` and `5`) →
+      **`escalated-red`, delivered=false, final close red.** A real worker tried and the deterministic close
+      **refused to certify it** — and it could not fake green because the gate write-scopes it to the impl,
+      NOT the suite. The close grounds the loop; if this had delivered "green", step 3 would have FAILED.
+  - **Deferred WITHIN step 3 (logged, not silently dropped):** multi-file `resolveIn` targeting (probe-16's
+    `shell_read` + path resolution for real repos) and the litectx close-driven recall widening (**D3**) —
+    both are follow-ons; this cut is the gated single-file implement loop.
+
 ### Added — `src/` step 2 (deterministic half): the grounded close + G1 honesty guards (2026-07-04)
 - **Build-order step 2 from §6 — the token-free half (the LLM prose→suite arm is held for a warm key).**
   `npm test` → **26/26 green.**
