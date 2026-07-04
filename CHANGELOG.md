@@ -49,6 +49,24 @@ shippable `src/` yet, by design.
     observer: round-trip, corrupt-line survival, and the **§7 pure-listener invariant** (imports are
     node-builtin-only) — proven fail-capable by injecting a spine import (went red, then reverted green).
 
+### Added — `src/` step 4: pre-flight + escalation (the come-back), live-verified (2026-07-04)
+- **Build-order step 4 from §6 (G3): `{proceed|clarify|decline}` in, a decision-ready `run.escalate` out.**
+  `npm test` = 45 pass / 5 live-skip.
+  - **`src/escalation.mjs`** — the come-back artifact (graduated probe-17/F38), fully deterministic:
+    `buildEscalation` assembles `{goal, blocker(§5 trigger), whatWasTried[], decisionNeeded{question,options},
+    receipts, costSpent}` from a `DECISION` map of the five stop-classes. **`isDecisionReady` is the control
+    that can FAIL** — rejects a bare `{incomplete}` (the thing G3 replaces), a <2-option report, an
+    attempt-bearing stop with empty/gapless `whatWasTried`, and an unknown blocker; accepts a pre-flight
+    decline's legitimately-empty attempts. Seven unit controls, each red on a non-actionable return.
+  - **`src/preflight.mjs`** — the "does this make sense?" rubric gate (§5: rubric may OPEN HITL, never CLOSE).
+    A bounded bareagent `Loop` (system prompt, NO tools — consumed exactly as probe-17 proved; I verified the
+    `Loop.run` interface against the source rather than guessing a `provider.chat`). `parsePreflight` is split
+    out pure with a **SAFETY property unit-tested token-free: garbage/unknown verdict NEVER yields `proceed`**
+    (the only verdict that spends) — it falls back to `clarify` (safe HITL-open).
+  - **`test/integration/preflight.live.test.js` — LIVE (haiku), both SAFETY corners held:** a coherent
+    request ("reverse a string") → **`proceed`** (never false-blocked); nonsense ("banana telephone louder
+    than purple") → **`decline`** (never false-goes). The soft `clarify` middle is reported, not pass-gated.
+
 ### Added — `src/` step 3 (core): the gated worker on `recurse()`, live-verified with the grounding control (2026-07-04)
 - **Build-order step 3 from §6 — the single-file gated implement loop, closed by a test that can fail.**
   `npm test` = 34 pass / 3 live-skip (token-free by default).
