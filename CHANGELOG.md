@@ -67,8 +67,22 @@ shippable `src/` yet, by design.
   - **`test/close.test.js` + `test/validity-gate.test.js`** — controls that FAIL on a dishonest suite:
     a stub-green suite rejected, an over-constrained suite rejected (the SAFE G1 mode), a weak 3/5-mutant
     suite rejected, and the own-green/GOLD-red fit-to-pass tripwire.
-  - **Still HELD for a warm `pass amr/claude_api` key:** the prose→suite compilation (the LLM arm that
-    authors the suite `validateSuite` then judges) — step 2's only token-spending piece.
+  - **`src/compile-close.mjs`** — the prose→close ORCHESTRATION (G1 request-IN end): author (INJECTED —
+    real = a recurse worker, fake = a canned suite) → `validateSuite` → a NAMED verdict
+    (`trusted|vacuous|over-constrained|weak-grounding|no-suite`, probe-15's taxonomy). Verified token-free
+    with a fake author over REAL on-disk suites (actual `node --test` runs); `test/compile-close.test.js`
+    controls: honest→trusted, stub-green→vacuous, over-constrained→caught (SAFE G1 mode), no-suite→never
+    trusted.
+  - **🔴 Correctness fix caught BY RUNNING (`runClose` env isolation).** Under `node --test`, the parent
+    sets `NODE_TEST_CONTEXT`; a spawned `node --test` close INHERITS it, DEFERS reporting to the parent, and
+    **exits 0 even when its tests FAIL** — the close would silently map RED → satisfied (a fit-to-pass-class
+    hazard against the close's "exit code = truth" contract). Fix: `runClose` strips `NODE_TEST_CONTEXT`
+    from the child env. Pinned by a regression test (a failing `node --test` child must report red under a
+    test-runner parent) proven fail-capable — removing the strip turns it red. Reading the source would
+    never have surfaced this; only running the close under a test-runner parent did.
+  - **Still HELD for a warm `pass amr/claude_api` key:** `authorSuiteViaRecurse` (the LLM author that drives
+    a recurse worker with a `write_test`-scoped tool) — written + verified together with the first real
+    prose→suite run, never shipped unverified. It is step 2's only token-spending piece.
 
 ### Added — G5: the graduated PRD, and the GRADUATE call (2026-07-04)
 - **G5 written (`docs/01-product/relayfact-prd-v3-graduated.md`) — the last §8.2 gate item, a spec-before-

@@ -48,7 +48,13 @@ export function runClose(command, { cwd, timeout = 60_000, env } = {}) {
     throw new Error('close command must be a non-empty array [cmd, ...args] (no shell string)');
   }
   const [cmd, ...args] = command;
-  const r = spawnSync(cmd, args, { cwd, timeout, env, encoding: 'utf8' });
+  // Isolate the child from any inherited test-runner context. If relayfact itself runs under `node --test`,
+  // `NODE_TEST_CONTEXT` leaks into the spawned `node --test` close, which then DEFERS reporting to the
+  // "parent" and exits 0 even when its tests FAIL — the close would silently map red → green (a
+  // fit-to-pass-class hazard). The close's whole contract is "exit code = truth", so strip it.
+  const childEnv = { ...(env ?? process.env) };
+  delete childEnv.NODE_TEST_CONTEXT;
+  const r = spawnSync(cmd, args, { cwd, timeout, env: childEnv, encoding: 'utf8' });
   const output = [r.stdout, r.stderr].filter(Boolean).join('\n').trim();
   return verdictFromExit({ status: r.status, signal: r.signal, error: r.error, output });
 }

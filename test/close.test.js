@@ -50,6 +50,17 @@ test('runClose end-to-end: an unrunnable command → failed (terminal)', () => {
   assert.equal(v.pass, false);
 });
 
+test('regression: a failing `node --test` child reports RED even under a test-runner parent', () => {
+  // This test itself runs under `node --test`, so NODE_TEST_CONTEXT is set. Without stripping it, the child
+  // `node --test` would DEFER to this parent and exit 0 — mapping a failing suite to satisfied (fit-to-pass
+  // class). runClose strips it, so the close's "exit code = truth" contract holds.
+  assert.ok(process.env.NODE_TEST_CONTEXT, 'precondition: we are under a test-runner parent');
+  const suite = 'test/fixtures/always-red.test.mjs';
+  const v = runClose(['node', '--test', suite]);
+  assert.equal(v.status, 'needs_revision', 'a failing child suite must NOT map to satisfied');
+  assert.equal(v.pass, false);
+});
+
 test('runClose rejects a shell-string command (array form only, no injection surface)', () => {
   assert.throws(() => runClose('node --test'), /non-empty array/);
   assert.throws(() => runClose([]), /non-empty array/);
