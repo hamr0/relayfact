@@ -49,6 +49,27 @@ shippable `src/` yet, by design.
     observer: round-trip, corrupt-line survival, and the **§7 pure-listener invariant** (imports are
     node-builtin-only) — proven fail-capable by injecting a spine import (went red, then reverted green).
 
+### Added — `src/` step 2 (deterministic half): the grounded close + G1 honesty guards (2026-07-04)
+- **Build-order step 2 from §6 — the token-free half (the LLM prose→suite arm is held for a warm key).**
+  `npm test` → **26/26 green.**
+  - **`src/close.mjs`** — the grounded close (§5 doctrine anchor), the ONE primitive relayfact owns. Runs a
+    real command (array form, NO shell = no injection surface) and maps exit code → bareagent's `Verdict`
+    (consumed, not reinvented): `0 → satisfied` (close GREEN), `nonzero → needs_revision` (RETRYABLE, the
+    failure output fed back as `critique`/the gap), `spawn-error|signal|null → failed` (TERMINAL — the close
+    couldn't produce a verdict, so refine STOPS and relayfact escalates instead of spinning). `verdictFromExit`
+    is split out pure so the retryable/terminal mapping is unit-tested without spawning; proven fail-capable
+    by mutation (inverting nonzero→satisfied turned 3 tests red incl. the anti-inversion control).
+  - **`src/validity-gate.mjs`** — the G1 honesty machinery (probe-15/F33) in shipped form, pure over an
+    injected suite-runner: `validateSuite` (stub-catch + reference-gate "a correct impl MUST pass" +
+    mutant-kill ≥4/5 — the two failure modes over-constraint/fit-to-pass each guarded); `countGrounded`
+    (the N/M grounded-vs-rubric-residue split, reported not gated); `arbitrate` (the standing GOLD arbiter,
+    descope **D5** — own-green + GOLD-green ⇒ deliver, own-green + GOLD-RED ⇒ **fit-to-pass, never delivered**).
+  - **`test/close.test.js` + `test/validity-gate.test.js`** — controls that FAIL on a dishonest suite:
+    a stub-green suite rejected, an over-constrained suite rejected (the SAFE G1 mode), a weak 3/5-mutant
+    suite rejected, and the own-green/GOLD-red fit-to-pass tripwire.
+  - **Still HELD for a warm `pass amr/claude_api` key:** the prose→suite compilation (the LLM arm that
+    authors the suite `validateSuite` then judges) — step 2's only token-spending piece.
+
 ### Added — G5: the graduated PRD, and the GRADUATE call (2026-07-04)
 - **G5 written (`docs/01-product/relayfact-prd-v3-graduated.md`) — the last §8.2 gate item, a spec-before-
   build artifact, not a code probe.** With G1/G2/G3/G4 all met **on stock library defaults** (bareguard
