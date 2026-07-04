@@ -80,9 +80,15 @@ shippable `src/` yet, by design.
     from the child env. Pinned by a regression test (a failing `node --test` child must report red under a
     test-runner parent) proven fail-capable — removing the strip turns it red. Reading the source would
     never have surfaced this; only running the close under a test-runner parent did.
-  - **Still HELD for a warm `pass amr/claude_api` key:** `authorSuiteViaRecurse` (the LLM author that drives
-    a recurse worker with a `write_test`-scoped tool) — written + verified together with the first real
-    prose→suite run, never shipped unverified. It is step 2's only token-spending piece.
+  - **`src/author.mjs` (`authorSuiteViaRecurse`) — the LLM author, VERIFIED BY A LIVE RUN (step 2 COMPLETE).**
+    Drives a `maxDepth:0` recurse worker whose only tool (`write_test`) is write-scoped by a bareguard `Gate`;
+    relayfact supplies the persona (senior-engineer, suite-only), the fixed write path (F19/F20), and the
+    deterministic leaf `sensor` (suite exists AND a correct impl passes it — the in-loop over-constraint
+    guard, not a model judge). Graduated from probe-15. **Live run (haiku, `test/integration/compile-close.live.test.js`,
+    self-skips unless `RELAYFACT_LIVE=1`):** a real worker self-authored a suite from prose alone and
+    relayfact's gate found it **`trusted`** — stub caught, reference passes, **5/5 mutants killed**, 656-byte
+    suite. End-to-end `authorSuiteViaRecurse → compileClose → validateSuite` on a real model reproduces G1's
+    shipped shape. `npm test` = 31 pass / 1 skip (the live test), still token-free by default.
 
 ### Added — G5: the graduated PRD, and the GRADUATE call (2026-07-04)
 - **G5 written (`docs/01-product/relayfact-prd-v3-graduated.md`) — the last §8.2 gate item, a spec-before-
