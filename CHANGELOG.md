@@ -31,6 +31,24 @@ past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped +
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
 
+### Added — `src/` build STARTED: step 1, the event-stream spine + observer contract (2026-07-04)
+- **First shippable `src/` code (the graduated rewrite begins; `poc/` stays throwaway, §2).** Build-order
+  step 1 from `relayfact-prd-v3-graduated.md` §6 — token-free, and it instruments everything after it (same
+  reason G4 was built first). **`npm test` → 10/10 green.**
+  - **`src/event-log.mjs`** — the event-stream spine (PRD §7): append-only JSONL, every event stamped
+    `{ ...payload, type, seq, ts }` with spine fields LAST so a stray payload key can't clobber sequencing
+    (a hardening over the POC `emit`); monotonic in-process `seq` (single-process doctrine); injectable
+    clock for deterministic tests. Built on **stdlib `node:fs`**, NOT bare-agent's `JsonlTransport` — an
+    append-only log is stdlib in <100 lines (AGENT_RULES dependency hierarchy) and decoupling the narration
+    substrate from the engine IS the §7 invariant.
+  - **`src/observer.mjs`** — the observer CONTRACT: a pure listener that reads only the persisted log and
+    tolerates a corrupt trailing line (crashed-run discipline, graduated from `poc/observer.mjs`). The rich
+    facet analyzer/renderer graduates in a later step.
+  - **`test/` (Testing Trophy, controls that can FAIL)** — spine: monotonic seq, ts/type stamping, the
+    payload-can't-clobber control, append-only byte-check, valid-JSONL, closed-log + bad-input rejection;
+    observer: round-trip, corrupt-line survival, and the **§7 pure-listener invariant** (imports are
+    node-builtin-only) — proven fail-capable by injecting a spine import (went red, then reverted green).
+
 ### Added — G5: the graduated PRD, and the GRADUATE call (2026-07-04)
 - **G5 written (`docs/01-product/relayfact-prd-v3-graduated.md`) — the last §8.2 gate item, a spec-before-
   build artifact, not a code probe.** With G1/G2/G3/G4 all met **on stock library defaults** (bareguard

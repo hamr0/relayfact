@@ -138,6 +138,47 @@ prose request
   closes the loop. Mapping where that line falls **is** the experiment, carried into `src/` as the per-task
   N/M count.
 
+### 5.1 Where each eval falls — the two-placement rule
+
+There are **exactly two** places judgment (rubric) is allowed, and **one** place that can ever declare the
+work done. This is the single clearest statement of the iron rule, and the `src/` build must preserve it:
+
+```
+YOUR PRD / prose request
+      │
+      ▼
+①  PRE-FLIGHT          ◄── RUBRIC (LLM judgment) — relayfact-owned
+    "does this make sense / is it coherent?"
+    → proceed | clarify | decline
+    ⚠ can only OPEN a stop/ask. It can NEVER say "done".
+      │ proceed
+      ▼
+②  COMPILE THE CLOSE   → an executable test that can FAIL (a PREDICATE) — relayfact-owned
+      │                   (agent self-authors it from the PRD; independent GOLD guards it)
+      ▼
+③  RECURSIVE SELF-HEALING LOOP   ◄── bareagent (recurse / refine / refineLeaf)
+    attempt → run the CLOSE on the OUTCOME → exit code = truth
+        ✅ pass  → deliver green
+        ❌ fail  → feed the gap back, try again
+        🛑 stuck / cap hit / genuinely uncertain → stop, escalate
+    ⚠ the eval HERE is DETERMINISTIC and runs on the OUTCOME (the produced artifact),
+      never the model's say-so. This is the ONLY thing that closes the loop.
+      │                          (the whole loop runs inside the bareguard leash: caps/halts/redaction)
+      ▼
+④  DELIVER green   OR   come back with a decision-ready escalation
+```
+
+| Eval type | Where it lives | Owner | What it's allowed to do |
+|---|---|---|---|
+| **Rubric** (LLM judgment) | Pre-flight (①); advisory "I'm uncertain" signal | **relayfact** | Only **open** a stop/ask/escalation. **Never** declare work done. |
+| **Predicate / deterministic** (test, exit code) | The close, run inside the loop (③) on the outcome | **relayfact** (authored) / **bareagent** (runs it as `opts.evaluate`) | The **only** thing that can close the loop green. |
+
+**Lib ownership, stated once so it stops being ambiguous:** the **loop** (recurse/refine/refineLeaf — the
+"rlm") is **bareagent**; the **evals** (the deterministic close *and* the pre-flight rubric) are
+**relayfact-owned** (the one thing relayfact builds — the PRD→close compilation); the **leash** around the
+loop (cost/depth/children caps, halts, write-gating, secret redaction) is **bareguard** — it never judges
+"done"; **memory** (recall/remember) is **litectx**. bareguard is *not* the evaluator; relayfact is.
+
 ---
 
 ## 6. Build order for `src/` (POC-first still applies to the rewrite)

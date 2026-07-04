@@ -9,7 +9,8 @@
     "probe:noop": "node poc/probe-01-inner-loop.mjs noop",
     "probe:llm": "node poc/probe-01-inner-loop.mjs llm",
     "probe2:sum": "node poc/probe-02-real-attempt.mjs sum",
-    "probe2:csv": "node poc/probe-02-real-attempt.mjs csv"
+    "probe2:csv": "node poc/probe-02-real-attempt.mjs csv",
+    "test": "node --test 'test/**/*.test.js'"
   },
   "dependencies": {
     "bare-agent": "file:../bareagent",
