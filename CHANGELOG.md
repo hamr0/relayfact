@@ -8,8 +8,14 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
-Phase: **graduation gate (§8.2 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call is GRADUATE.**
-Next phase is the `src/` build (a rewrite; `poc/` discarded, §2), against `relayfact-prd-v3-graduated.md`.
+Phase: **`src/` build UNDERWAY (the graduated rewrite; `poc/` discarded, §2) — build steps 1–4 shipped +
+the pipe ASSEMBLED end-to-end + D3 (memory widening) done.** Against `relayfact-prd-v3-graduated.md` §6:
+step 1 (spine+observer) ✅ · step 2 (close+honesty+author) ✅ · step 3 (gated worker) ✅ + **D3 close-driven
+recall widening** ✅ · step 4 (pre-flight+escalation) ✅ · **the pipe assembled into one `runRequest`
+(prose+repo → deliver|escalate, live e2e green)** ✅. **Remaining: step 5** — the `agentic`-tier close spike
+(D1) + the ≥3-real-task benches cohort (D7) — then retire `poc/` and cut `0.1.0`. Every step live-verified
+where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
+G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call was GRADUATE.**
 _(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
 complete; v2 de-risked on shipped `recurse()`. The earlier "no open blockers / graduate-or-archive" framing was
 **premature** — the validated spikes covered the loop's MIDDLE (worker/close/decomposition/memory/caps); the
@@ -30,6 +36,54 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Added — `src/` D3: close-driven recall widening over a bounded set (F40, 2026-07-05)
+- **D3 (the step-3 memory follow-on) shipped — graduates probe-13's fix (F26/F27/F29) into `src/`.** relayfact
+  OWNS the widening POLICY + candidate FRAMING + the BOUND; litectx owns the store + BM25 (consumed). `npm test`
+  = 58 pass / 7 live-skip.
+  - **`src/memory.mjs`** — `makeWidener` (on each FAILED close the recall window widens `base 3 → cap 6` over a
+    BOUNDED candidate set — the close drives recall, not rank), `frameCandidates` ("unverified — the TEST
+    decides"), `rememberLesson` (rule-framed litectx `fact`), `windowFor` (pure schedule). **THE BOUND (D3):**
+    sound only for a bounded pool; unbounded-store retrieval stays an open caveat (F26/F27) — this reaches
+    *past* rank within the bound, it does NOT fix rank.
+  - **`src/worker.mjs`** — an OPTIONAL `memory` seam: it augments the retry SENSOR only, NEVER the top
+    `opts.evaluate`, so a note can never close the loop — only the test can. Default off ⇒ existing worker/pipe
+    behavior byte-identical. `src/pipeline.mjs` threads it and emits `recall` events; `observer.mjs` renders them.
+  - **`test/memory.test.js` (token-free, real BM25, controls that can FAIL):** over the adversarial store
+    (2 length-matched wrong "twins" + far notes + the right rule) the failure query BURIES the right note at
+    **rank 3** (verified-by-running, pinned); a rank-trusting base window MISSES it (starvation real), a
+    non-widening widener never reaches it (fail-capability shown directly), close-driven widening surfaces it;
+    a fit-to-pass guard asserts the surfaced note carries no literal answer.
+  - **`test/integration/memory.live.test.js` — LIVE A/B (n=1, haiku): memory is LOAD-BEARING.** Same task, same
+    4-temperature budget, ONLY memory differs; a leak-proof suite (failure output reveals no `AUDIT`/`000006`/
+    `<<` — verified) + a leak-free task (convention withheld). **BLIND** starves (`delivered=false`);
+    **MEMORY** delivers — attempt 1 window 3 = wrong twins (buried → RED), attempt 2 window 6 surfaces the
+    right rule → GREEN. *Recall proposes (rank-first = wrong), the executable close disposes, widening rescues.*
+  - **The control CAUGHT a confound (the session's whole discipline).** A first live draft leaked the convention
+    via a worked task example AND gave the arms unequal attempts — the memory arm "passed" on wrong-only notes;
+    the "widening must reach window ≥6" assertion FAILED and exposed it. Fixed both, then the honest A/B held.
+    Also re-confirmed F26 firsthand (an abbreviated distractor store lost the burial). n=1/haiku named; the
+    token-free test carries the policy claim, the live A/B carries the load-bearing claim.
+
+### Added — `src/` the PIPE ASSEMBLED: prose+repo → deliver|escalate as one program (F39, 2026-07-05)
+- **The capstone: build steps 1–4 composed into one top-level `src/pipeline.mjs::runRequest` (§5/§5.1/
+  G5-EXIT).** A prose request + a repo dir go IN; a DELIVERED green artifact or a decision-ready `run.escalate`
+  comes OUT, every step narrated to the event log. Builds no new engine — only composes. `npm test` = 52 pass /
+  6 live-skip.
+  - **Pipe:** ① pre-flight (rubric OPENS HITL, never closes) → ② compile the grounded close (worker
+    self-authors, validity-gate TRUSTS it) → ③ gated worker on `recurse()` (same close = top predicate +
+    leaf sensor) → ④ **D5 GOLD arbiter** → deliver green OR a G3 escalation. Two escalation stop-classes the
+    assembly needed added to `escalation.mjs` (`close-untrustworthy`, `gold-mismatch`) — both decision-ready.
+  - **Two gates by design:** the author writes ONLY the suite; the worker writes ONLY the impl (write-scope
+    EXCLUDES the suite) — own-green is uncheatable. **D5 stays the standing arbiter:** own-green + GOLD-red ⇒
+    NEVER deliver (fail-capable, proven token-free with a deliberately-wrong impl).
+  - **`src/observer.mjs`** gains `renderRun` — a pure listener (still `node:fs`-only, §7 contract intact) that
+    renders the pipe's event vocabulary; unknown event types surfaced verbatim, never silently dropped.
+  - **`test/pipeline.test.js` (token-free, all branches):** the three token-spending stages injected as fakes,
+    the D5 GOLD arbiter run FOR REAL; every escalation asserted decision-ready; the fit-to-pass tripwire
+    (own-green/GOLD-red ⇒ no deliver) exercised. **`test/integration/pipeline.live.test.js` — LIVE e2e (haiku,
+    n=1 named):** proceed → close trusted (5/5 mutants) → worker red→green → INDEPENDENT GOLD green on fresh
+    values → DELIVER 1/1; the observer rendered the whole timeline from the log alone.
 
 ### Added — `src/` build STARTED: step 1, the event-stream spine + observer contract (2026-07-04)
 - **First shippable `src/` code (the graduated rewrite begins; `poc/` stays throwaway, §2).** Build-order

@@ -1,10 +1,18 @@
 # relayfact — Graduated PRD (v3)
 
-**Status:** GRADUATE recommendation (2026-07-04). This is the **G5** deliverable of the §8.2 graduation
-gate — the spec-before-build document for the `src/` rewrite. It supersedes nothing: the v1/v2 PRD
-(`relayfact-prd.md`) remains the **spike changelog and rationale**; this doc is the **build spec**. It
-encodes the G1–G4 numbers, makes the goal sentence testable, and draws every known descope explicitly
-(IN-with-a-spike or OUT-with-the-claim-shrunk — no silent gaps).
+**Status:** GRADUATE recommendation (2026-07-04); **`src/` build UNDERWAY (2026-07-05).** This is the **G5**
+deliverable of the §8.2 graduation gate — the spec-before-build document for the `src/` rewrite. It supersedes
+nothing: the v1/v2 PRD (`relayfact-prd.md`) remains the **spike changelog and rationale**; this doc is the
+**build spec**. It encodes the G1–G4 numbers, makes the goal sentence testable, and draws every known descope
+explicitly (IN-with-a-spike or OUT-with-the-claim-shrunk — no silent gaps).
+
+> **Build progress against §6 (as of 2026-07-05):** step 1 spine+observer ✅ · step 2 close+honesty+author ✅ ·
+> step 3 gated worker ✅ **+ D3 close-driven recall widening ✅ (F40)** · step 4 pre-flight+escalation ✅ ·
+> **the pipe ASSEMBLED into one `runRequest` — prose+repo → deliver|escalate, live e2e green (F39)** ✅.
+> **Remaining: step 5** — the `agentic`-tier close spike (**D1**) + the ≥3-real-task benches cohort (**D7**) —
+> then retire `poc/` and cut `0.1.0`. `src/` suite: **65 tests / 58 pass / 7 live-skip**, every token-spending
+> step live-verified, every load-bearing control fail-capable. The **archive path stays live** (§0/§7): if
+> step 5's cohort shows the §4 residue is worse than recorded, it re-opens — the bar does not move.
 
 > **The gate that had to hold before this doc could exist (§8.2):** G1 ✅ · G2 ✅ · G3 ✅ · G4 ✅ — all
 > four empirical gates met, on **stock library defaults**, with **no papering-over**. G5 (this document)
