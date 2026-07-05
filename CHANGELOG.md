@@ -8,14 +8,21 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
-Phase: **`src/` build UNDERWAY (the graduated rewrite; `poc/` discarded, §2) — build steps 1–4 shipped +
-the pipe ASSEMBLED end-to-end + D3 (memory widening) done.** Against `relayfact-prd-v3-graduated.md` §6:
+**Remaining housekeeping: retire `poc/`** (the 269-file throwaway tree, recoverable from git; deferred by
+choice — nothing in `src/` imports it, only provenance comments). The graduated `src/` build is otherwise
+complete and released as `0.1.0` below.
+
+## [0.1.0] — 2026-07-05 — the graduated build
+
+Phase: **`src/` build COMPLETE (the graduated rewrite; `poc/` retired by doctrine, §2) — build steps 1–4 shipped +
+the pipe ASSEMBLED end-to-end + D3 (memory widening) + the ≥3-real-task benches cohort (D7) done.** Against
+`relayfact-prd-v3-graduated.md` §6:
 step 1 (spine+observer) ✅ · step 2 (close+honesty+author) ✅ · step 3 (gated worker) ✅ + **D3 close-driven
 recall widening** ✅ · step 4 (pre-flight+escalation) ✅ · **the pipe assembled into one `runRequest`
-(prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅ · **benches cohort (D7) UNDERWAY — shape signed off,
-the benches cohort (D7) is DONE — 4/4 arms delivered green through the assembled pipe, fit-to-pass=0 (F42)** ✅.
-**Remaining: retire `poc/` and cut `0.1.0`** (the src/ build is otherwise complete). Every step
-live-verified where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
+(prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅ ·
+**benches cohort (D7) DONE — 4/4 arms delivered green through the assembled pipe, fit-to-pass=0 (F42)** ✅.
+Every step live-verified where it spends tokens; every load-bearing control fail-capable. Full live
+ship-check green (13/13); token-free suite 82 tests / 69 pass / 13 live-skip / 0 fail. _(prior phase:)_ **graduation gate (§8.2
 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call was GRADUATE.**
 _(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
 complete; v2 de-risked on shipped `recurse()`. The earlier "no open blockers / graduate-or-archive" framing was
