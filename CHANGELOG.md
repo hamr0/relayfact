@@ -12,9 +12,9 @@ Phase: **`src/` build UNDERWAY (the graduated rewrite; `poc/` discarded, §2) �
 the pipe ASSEMBLED end-to-end + D3 (memory widening) done.** Against `relayfact-prd-v3-graduated.md` §6:
 step 1 (spine+observer) ✅ · step 2 (close+honesty+author) ✅ · step 3 (gated worker) ✅ + **D3 close-driven
 recall widening** ✅ · step 4 (pre-flight+escalation) ✅ · **the pipe assembled into one `runRequest`
-(prose+repo → deliver|escalate, live e2e green)** ✅. **Remaining: step 5** — the `agentic`-tier close spike
-(D1) + the ≥3-real-task benches cohort (D7) — then retire `poc/` and cut `0.1.0`. Every step live-verified
-where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
+(prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅.
+**Remaining: the ≥3-real-task benches cohort (D7)** — then retire `poc/` and cut `0.1.0`. Every step
+live-verified where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call was GRADUATE.**
 _(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
 complete; v2 de-risked on shipped `recurse()`. The earlier "no open blockers / graduate-or-archive" framing was
@@ -36,6 +36,28 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Added — `src/` step 5, D1: the `agentic` eval tier proven (deploy + probe the real artifact) (F41, 2026-07-05)
+- **The strongest close tier (§5) exercised for the first time — NO new relayfact primitive.** The result:
+  `runClose` is already tier-agnostic, so an agentic close is just an EXERCISE harness (`node exercise.mjs` —
+  boot `server.listen(0)`, probe `/health` over real HTTP with a timeout + watchdog, exit code = truth) in
+  place of a `node --test` suite. The worker is write-scoped to the artifact, never the exercise (same
+  uncheatable shape). All three tiers flow through the one `opts.evaluate` seam relayfact owns. `npm test`
+  = 63 pass / 9 live-skip.
+  - **`test/agentic-close.test.js` (token-free, real TCP, controls that can FAIL):** correct deploy → GREEN;
+    wrong body / never-responds (caught by the 2.5s timeout, not a hang) / boot-throws → each RED; and **the
+    strongest-tier case — unit-GREEN but integration-RED:** an artifact whose `health()` unit-passes but whose
+    `createApp()` never routes `/health` is caught RED by the agentic close (the integration gap a source test
+    structurally cannot see) — this is the evidence §5's "strongest tier" claim needed.
+  - **`test/integration/agentic-close.live.test.js` — LIVE (haiku, n=1 named):** same `src/worker.mjs`, same
+    leash, ONLY `closeCommand` changed to `['node','exercise.mjs']`. **deliver:** the worker implemented
+    `createApp()` from prose → deploy+probe close drove **red→green, DELIVERED** (1 iter). **CONTROL:** a
+    contradictory probe (no live server answers `/health` both `{ok:true}` and `{ok:false}`) →
+    **escalated-red, delivered=false** — a live green cannot be faked.
+  - **Descope D1 shrinks:** the eval table may now list **predicate- AND agentic-tier both proven on a real
+    artifact**; the "designed, not evidenced" caveat is lifted for this artifact class (bound: n=1, one model,
+    a stdlib `node:http` server, in-process listen + localhost probe — a real TCP round-trip, not a
+    separate-process/networked deploy). **Step 5 remaining: the ≥3-real-task cohort (D7).**
 
 ### Added — `src/` D3: close-driven recall widening over a bounded set (F40, 2026-07-05)
 - **D3 (the step-3 memory follow-on) shipped — graduates probe-13's fix (F26/F27/F29) into `src/`.** relayfact

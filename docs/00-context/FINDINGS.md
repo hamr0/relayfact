@@ -1158,3 +1158,39 @@ CONSUME it and that memory is load-bearing — it does not re-establish probe-13
 The BOUND is the standing constraint; unbounded retrieval remains out of scope. Store eviction is NOT built
 (widening is gated to a bounded candidate set instead — the simpler sound option). src/ suite: 65 tests / 58
 pass / 7 live-skip, 0 fail; the memory seam is OPTIONAL (default off → existing worker/pipe behavior byte-same).
+
+---
+
+## F41 — D1: the `agentic` eval tier proven (deploy + probe the real artifact); strictly stronger than predicate
+
+**Status:** src/ step 5 spike (D1), the first of the two remaining. **No new relayfact primitive** — the key
+result is that `runClose` is already tier-agnostic: an agentic close is just `runClose` pointed at an EXERCISE
+HARNESS (`node exercise.mjs`) instead of a unit suite (`node --test`). The harness DEPLOYS the artifact
+(`server.listen(0)`), probes it over real HTTP with a bounded timeout + watchdog, and exits 0=pass/nonzero=fail
+— so a broken deployed artifact becomes a truthful exit code, never a hang. The worker is write-scoped to the
+artifact, never the exercise (same uncheatable shape as the predicate suite). The three tiers (predicate /
+rubric / agentic) differ only in the COMMAND, all flowing through the one `opts.evaluate` seam relayfact owns.
+
+**Token-free evidence (`test/agentic-close.test.js`, real HTTP over TCP, controls that can fail):**
+- a correct deployed artifact → agentic close **satisfied** (200 + `{ok:true}` on the wire);
+- three real deploy-time faults each drive it **RED** (needs_revision, retryable): a wrong response body, a
+  server that never responds (caught by the 2.5s probe timeout — NOT a hang), and an artifact that throws on
+  boot (no false green);
+- **the strongest-tier case — unit-GREEN but integration-RED:** an artifact whose `health()` is correct in
+  isolation (a `node --test` predicate close PASSES) but whose `createApp()` never routes `/health` is caught
+  **RED** by the agentic close. Predicate green + agentic red on the SAME artifact = the integration gap a
+  source test structurally cannot see. This is why §5 calls agentic the strongest tier — now evidenced.
+
+**Live (n=1, haiku) — the agentic tier grounds a real loop (`test/integration/agentic-close.live.test.js`).**
+Same `src/worker.mjs`, same leash; the ONLY change from the predicate live test is `closeCommand`:
+`['node','exercise.mjs']`. **deliver:** the worker implemented `createApp()` from prose and the deploy+probe
+close drove **red→green, DELIVERED** (1 iter). **CONTROL:** a contradictory probe (no live server can answer
+`/health` with both `{ok:true}` and `{ok:false}`) → **escalated-red, delivered=false** — the worker cannot
+fake a live green because the gate write-scopes it to `server.mjs`, not the exercise.
+
+**Honest limits (named).** n=1, one model (haiku), one artifact class (a stdlib `node:http` server, one GET
+endpoint). The exercise harness is in-process listen + `fetch` on localhost — a real TCP/HTTP round-trip, but
+not a separate-process deploy or a networked service. The token-free test carries the tier-grounding + strictly-
+stronger claims; the live run carries "a real worker drives it end-to-end". **Descope D1 shrinks:** the eval
+table may now list **agentic = predicate-and-agentic tiers both proven on a real artifact**; the earlier
+"designed, not evidenced" caveat is lifted for this artifact class. src/ suite: 72 tests / 63 pass / 9 live-skip.

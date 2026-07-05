@@ -8,10 +8,11 @@ explicitly (IN-with-a-spike or OUT-with-the-claim-shrunk — no silent gaps).
 
 > **Build progress against §6 (as of 2026-07-05):** step 1 spine+observer ✅ · step 2 close+honesty+author ✅ ·
 > step 3 gated worker ✅ **+ D3 close-driven recall widening ✅ (F40)** · step 4 pre-flight+escalation ✅ ·
-> **the pipe ASSEMBLED into one `runRequest` — prose+repo → deliver|escalate, live e2e green (F39)** ✅.
-> **Remaining: step 5** — the `agentic`-tier close spike (**D1**) + the ≥3-real-task benches cohort (**D7**) —
-> then retire `poc/` and cut `0.1.0`. `src/` suite: **65 tests / 58 pass / 7 live-skip**, every token-spending
-> step live-verified, every load-bearing control fail-capable. The **archive path stays live** (§0/§7): if
+> **the pipe ASSEMBLED into one `runRequest` — prose+repo → deliver|escalate, live e2e green (F39)** ✅ ·
+> **step 5: the `agentic`-tier close spike (D1) DONE — deploy+probe grounds the loop, strictly stronger than
+> predicate (F41)** ✅. **Remaining: the ≥3-real-task benches cohort (D7)** — then retire `poc/` and cut
+> `0.1.0`. `src/` suite: **72 tests / 63 pass / 9 live-skip**, every token-spending step live-verified, every
+> load-bearing control fail-capable. The **archive path stays live** (§0/§7): if
 > step 5's cohort shows the §4 residue is worse than recorded, it re-opens — the bar does not move.
 
 > **The gate that had to hold before this doc could exist (§8.2):** G1 ✅ · G2 ✅ · G3 ✅ · G4 ✅ — all
@@ -111,7 +112,7 @@ match). No silent gaps.
 
 | # | Descope | Status | The honest claim after shrinking |
 |---|---|---|---|
-| **D1** | **`agentic` eval tier never run.** All closes to date are **predicate-tier** (`node --test`, exit code = truth). The `agentic` tier (a close that *exercises* the deployed artifact — the strongest close per §5) is unexercised. | **IN — first `src/` spike.** Cheapest high-value gap; the grounded-close doctrine claims it as the strongest tier, so the build must exercise it once on a real artifact before the eval table lists it. | Until that spike passes: **"grounded close = predicate-tier proven; agentic-tier is designed, not evidenced."** Do not list `agentic` as validated. |
+| **D1** | ~~**`agentic` eval tier never run.**~~ **DONE (F41).** The `agentic` tier (a close that *exercises* the deployed artifact — the strongest close per §5) is now proven: `runClose` is tier-agnostic, so an agentic close is just an EXERCISE harness (deploy + probe over real HTTP) in place of `node --test`. | **DONE — spike passed (F41).** Token-free: correct deploy → green; wrong-body/no-response/boot-throw → red (fail-capable); **unit-GREEN-but-integration-RED** proves it strictly stronger than predicate. Live (n=1/haiku): real red→green deliver + unsatisfiable→escalate. | **Claim now:** *predicate- AND agentic-tier both proven on a real artifact.* Honest bound: n=1, one model, one artifact class (stdlib `node:http`, in-process listen + localhost probe — a real TCP round-trip, not a separate-process/networked deploy). |
 | **D2** | **Embeddings retrieval tier unrun**, and F26 argues it **cannot** fix the correctness-vs-similarity problem (a word-for-word wrong "twin" embeds to ~the same vector). | **OUT — deliberately.** Memory ships **lexical BM25 + close-driven widening** (the F29 fix: widen the candidate window on each failed close, framed "unverified candidates — the test decides"). Embeddings is **not a dependency** and not a claimed upgrade path. | **"Recall is lexical; its value is surfacing the right note to the worker+close, never ranking correctness."** Embeddings is explicitly not relied upon (F26). |
 | **D3** | **Memory widening only works for a BOUNDED pool** (F29 caveat). At store scale, naive top-k can **starve** the worker (right note falls out of top-k, F27) or be misled by an equally-worded wrong note (F26). | **IN — with a hard constraint.** `src/` must **cap the store** (or gate widening to a bounded candidate set) so widening stays sound; solving unbounded real retrieval is **out of scope**. Lessons stored as litectx **`kind:'fact'`** (BM25-rankable; `episode` scored 0). | **"Memory self-improvement holds for a capped/bounded store."** Unbounded-store retrieval is an open caveat, not a claim. |
 | **D4** | **The bare-`refine` `terminate` nuance** (F30): `terminate` sticks as a stop-signal but does **not** self-stop an in-flight over-cap call in the bare primitive. | **OUT — N/A to relayfact.** relayfact's real loop is **`refineLeaf`**, which halts cleanly after exactly one over-cap call (F30, verified). Documented so a future bare-`refine` caller isn't surprised. | **"Cost-control is sound under `refineLeaf` (relayfact's loop)."** The bare-`refine` latch is a caller-side concern relayfact doesn't hit. |
@@ -211,7 +212,10 @@ Each module works end-to-end before the next (walking skeleton + vertical slices
    deliver-green | decision-ready escalation, every step on the event log; observer renders it). Live e2e
    green on real haiku, n=1/double (named). D5 GOLD stays the standing arbiter; D3 memory NOT wired yet.
 5. **The `agentic`-tier close spike (D1)** and the **≥3-real-task cohort (D7)** — the benches datapoints
-   that turn §3's exit criteria green as shipped code. **(next; D3 recall-widening precedes it, own session.)**
+   that turn §3's exit criteria green as shipped code.
+   **↳ D1 DONE (F41):** `runClose` is tier-agnostic; an agentic close = an EXERCISE harness (deploy + probe
+   the real artifact) in place of `node --test`. Token-free proof grounds it (incl. unit-green/integration-red
+   = strictly stronger); live n=1/haiku red→green deliver + unsatisfiable→escalate. **Remaining: D7 cohort.**
 
 Then: retire `poc/` (throwaway, §2), and the build carries its own CHANGELOG entries under a real version
 (`0.1.0`+ per the CHANGELOG's "versioning starts at the first graduated build").
