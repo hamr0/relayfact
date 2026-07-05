@@ -53,6 +53,9 @@ export function renderRun(events) {
       case 'close.compiled':
         L.push(`② compile close → ${e.verdict} ok=${e.ok} suiteBytes=${e.suiteBytes}${e.validity ? ` (stubCatch=${e.validity.stubCatch} refPasses=${e.validity.referencePasses} mutantsKilled=${e.validity.mutantsKilled})` : ''}`);
         break;
+      case 'recall':
+        L.push(`   ↳ recall (close-driven widen) attempt=${e.attempt} window=${e.window} candidates=[${(e.candidates || []).join(', ')}]`);
+        break;
       case 'receipts':
         L.push(`   ↳ receipts: iterations=${e.iterations} incomplete=${e.incomplete}`);
         break;

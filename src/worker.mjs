@@ -49,9 +49,13 @@ export function deliveryDecision({ finalClose, incomplete }) {
  * @param {object} args.gate - an initialised bareguard Gate (writeScope MUST include `target`, exclude the suite).
  * @param {string} [args.persona]
  * @param {number[]} [args.temperatures]
+ * @param {{ widen: (query:string, attempt:number)=>Promise<{window:number, candidates:{name,body}[], text:string, rankOf:Function}>, query: string, onRecall?: Function }} [args.memory]
+ *   - OPTIONAL close-driven recall widening (D3, see memory.mjs). Augments the retry SENSOR only — on each
+ *     FAILED close it widens the candidate window and appends the framed candidates to the gap. The
+ *     authoritative top predicate (`opts.evaluate`) stays memory-free: the test, never a note, closes the loop.
  * @returns {Promise<{ delivered: boolean, outcome: string, verdict: object|null, finalClose: object, incomplete: boolean, iterations: number|null }>}
  */
-export async function implementAgainstClose({ task, workdir, target, closeCommand, provider, gate, persona = IMPL_PERSONA, temperatures = [0.2, 0.4, 0.6, 0.8] }) {
+export async function implementAgainstClose({ task, workdir, target, closeCommand, provider, gate, persona = IMPL_PERSONA, temperatures = [0.2, 0.4, 0.6, 0.8], memory = null }) {
   const editTool = {
     name: 'edit_file',
     description: `Write ${basename(target)} with the FULL file contents in "contents". Returns {ok,bytes}.`,
@@ -62,18 +66,33 @@ export async function implementAgainstClose({ task, workdir, target, closeComman
   const { policy, onLlmResult } = wireGate(gate, { actionTranslator });
   const stream = new Stream();
 
-  // The one close, used for both the top global predicate and the leaf sensor. On failure, enrich the
-  // critique so the gap fed back tells the worker to fix the SOURCE (it cannot touch the test).
-  const close = () => {
+  // The one grounded close — exit code = truth. On failure, enrich the gap so the worker fixes the SOURCE (it
+  // cannot touch the test). This is the AUTHORITATIVE predicate, used memory-free for the top `opts.evaluate`.
+  const baseClose = () => {
     const v = runClose(closeCommand, { cwd: workdir });
     if (v.pass) return v;
     return { ...v, critique: `The close still fails. Fix the SOURCE (never the test). Failing output:\n${(v.output || '').slice(0, 1400)}` };
   };
 
+  // The retry SENSOR. When memory is wired (D3), a FAILED close widens the recall window and appends framed,
+  // UNVERIFIED candidates to the gap — the close drives recall, not the ranking. Memory NEVER touches the
+  // top predicate, so a note can never close the loop; only the test can.
+  let memAttempt = 0;
+  const sensor = memory
+    ? async () => {
+        const v = baseClose();
+        if (v.pass) return v;
+        memAttempt += 1;
+        const r = await memory.widen(memory.query, memAttempt);
+        memory.onRecall?.({ attempt: memAttempt, window: r.window, candidates: r.candidates.map((c) => c.name) });
+        return { ...v, critique: `${v.critique}${r.text}` };
+      }
+    : () => baseClose();
+
   const result = await recurse(
     task,
     { provider, policy, onLlmResult, stream },
-    { persona, tools: [editTool], maxDepth: 0, evaluate: () => close(), refineLeaf: { sensor: () => close(), temperatures } },
+    { persona, tools: [editTool], maxDepth: 0, evaluate: () => baseClose(), refineLeaf: { sensor, temperatures } },
   );
 
   // Authoritative final close — never trust the loop's own report; re-run the test on the delivered artifact.

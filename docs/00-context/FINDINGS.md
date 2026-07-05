@@ -1112,3 +1112,49 @@ best-effort via `gate.haltContext()`; the observer shows authoritative cost from
 
 **src/ suite:** 58 tests / 52 pass / 6 live-skip, 0 fail; the observer §7 pure-listener contract (imports only
 `node:fs`) still holds after adding `renderRun`.
+
+---
+
+## F40 — D3 shipped in src/: close-driven recall widening over a BOUNDED set; live A/B proves memory load-bearing (n=1)
+
+**Status:** src/ step 3 follow-on (`src/memory.mjs` + a `memory` seam in `src/worker.mjs`/`src/pipeline.mjs`).
+Graduates probe-13's fix (F26/F27/F29) into shipped code. relayfact OWNS the widening POLICY + candidate
+FRAMING + the BOUND; litectx owns the store + BM25 (consumed). The two-fix doctrine, encoded:
+- **FIX-1 (retrieval):** don't trust rank. On each FAILED close the recall window WIDENS (base 3 → cap 6),
+  candidates framed "unverified — the TEST decides". The close drives recall; memory augments ONLY the retry
+  sensor, NEVER the top `opts.evaluate` — a note can never close the loop, only the test can.
+- **FIX-2 (transfer):** lessons stored as a rule-framed litectx `fact` (a RULE + example, never the verbatim
+  answer). The token-free guard asserts the surfaced note contains no task entity name and no output wrapping.
+- **THE BOUND (D3):** widening is hard-capped at a bounded candidate set. Sound only for a bounded pool;
+  unbounded-store retrieval quality stays an OPEN CAVEAT (F26/F27) — this module reaches *past* rank within
+  the bound, it does NOT fix rank.
+
+**Token-free evidence (real litectx BM25, controls that can fail):** over the adversarial store (2 length-
+matched wrong "twins" + far notes + the right rule), the failure-derived query BURIES the right note at
+**rank 3** — verified by running, pinned. A rank-trusting base window (n=3) MISSES it (starvation is real); a
+non-widening widener (cap=3) never reaches it even after 5 attempts (fail-capability demonstrated directly);
+close-driven widening (cap=6) surfaces it. Fit-to-pass guard: the surfaced note carries no literal answer.
+
+**Live A/B (n=1, haiku) — memory is LOAD-BEARING, not decorative.** Same task, same 4-temperature budget, the
+ONLY difference is memory. A leak-proof suite (asserts an inline oracle but reveals only a convention-mismatch
+message — verified the failure output leaks no `AUDIT`/`000006`/`<<`; the worker has no read tool and is
+write-scoped to the impl), and a leak-free task (wrapping given as `<<X>>`, the ID convention withheld):
+- **BLIND** (no memory): `delivered=false` — the convention is unobtainable, it cannot converge.
+- **MEMORY**: `delivered=true`, and the recall trace is the F26/F27/F29 story verbatim — attempt 1 window 3 =
+  `[wrong-twin, promo, wrong-legacy]` (right note buried → worker applies a wrong rule → close RED); attempt 2
+  window 6 surfaces `lesson:entity-id-format` → worker applies it → close GREEN. *Recall proposes (rank-first =
+  wrong), the executable close disposes, widening rescues.*
+
+**A confound the control CAUGHT (the session's whole point).** The FIRST live draft (a) leaked the convention
+via a worked task example (`FOO-000003-F → <<FOO-000003-F>>`) and (b) gave the arms unequal attempts — the
+memory arm "passed" having seen only the WRONG window-3 notes (right note never surfaced). The assertion
+"widening must reach window ≥6" FAILED, exposing it. Fixed by stripping the format leak and equalizing
+temperatures; only then did the honest A/B hold. Also re-confirmed F26 firsthand: an abbreviated distractor
+store lost the burial (rank sensitive to distractor length) — the burial premise must be verified per store.
+
+**Honest limits (named).** Live is **n=1, one model (haiku)**, one entity (auditBadge, the distant-transfer
+case). The token-free test proves the retrieval POLICY rigorously; the live A/B proves the wired worker can
+CONSUME it and that memory is load-bearing — it does not re-establish probe-13's full rate (that is F26–F29).
+The BOUND is the standing constraint; unbounded retrieval remains out of scope. Store eviction is NOT built
+(widening is gated to a bounded candidate set instead — the simpler sound option). src/ suite: 65 tests / 58
+pass / 7 live-skip, 0 fail; the memory seam is OPTIONAL (default off → existing worker/pipe behavior byte-same).

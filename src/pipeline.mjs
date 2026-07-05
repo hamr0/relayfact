@@ -51,6 +51,8 @@ function criteriaSplit() {
  * @param {object} [a.provider] - a bareagent provider (pre-flight + author + worker). Omit when all deps faked.
  * @param {object} [a.gate] - an initialised bareguard Gate for the worker (write-scoped to `target`).
  * @param {{emit:Function}} a.log - the event log (event-log.mjs).
+ * @param {{widen:Function, query:string}} [a.memory] - OPTIONAL close-driven recall widening (D3, memory.mjs):
+ *   threaded into the worker's retry sensor; each widening emits a `recall` event. Omit for no memory.
  * @param {string} [a.suiteName]
  * @param {string} [a.implName]
  * @param {{preflight?:Function, compileClose?:Function, implement?:Function}} [a.deps] - injectable seams.
@@ -58,7 +60,7 @@ function criteriaSplit() {
  */
 export async function runRequest({
   request, workdir, target, oracle, goldSuite = null, authorSuite,
-  provider, gate, log, suiteName = 'suite.test.mjs', implName = 'impl.mjs', deps = {},
+  provider, gate, log, memory = null, suiteName = 'suite.test.mjs', implName = 'impl.mjs', deps = {},
 }) {
   const emit = (t, p) => log?.emit(t, p);
   const preflight = deps.preflight ?? realPreflight;
@@ -98,7 +100,11 @@ export async function runRequest({
   }
 
   // ③ GATED WORKER on recurse() — the SAME close is the top global predicate AND the leaf sensor (worker.mjs).
-  const w = await implement({ task: request, workdir, target, closeCommand, provider, gate });
+  // When memory is wired (D3), each failed-close widening emits a `recall` event for the observer.
+  const workerMemory = memory
+    ? { ...memory, onRecall: (info) => emit('recall', info) }
+    : null;
+  const w = await implement({ task: request, workdir, target, closeCommand, provider, gate, memory: workerMemory });
   emit('receipts', { verdict: w.verdict, iterations: w.iterations, incomplete: w.incomplete });
   emit('worker.done', { outcome: w.outcome, delivered: w.delivered, finalClosePass: !!w.finalClose?.pass, iterations: w.iterations });
   if (!w.delivered) {

@@ -193,6 +193,11 @@ Each module works end-to-end before the next (walking skeleton + vertical slices
    check, GOLD arbiter. **D5 lives here permanently.**
 3. **The gated worker on `recurse()`** — persona + `edit_file` + `opts.evaluate` global predicate + gate
    caps; `refineLeaf` at the leaf with close-driven recall widening over a **capped** store (**D3**).
+   **↳ D3 DONE (F40):** `src/memory.mjs` — close-driven widening (base→cap, bounded set) + rule-framed
+   `fact` lessons + fit-to-pass guard; optional `memory` seam in the worker (augments the retry sensor only,
+   never the top predicate). Token-free proves the policy over real BM25 (burial pinned at rank 3, controls
+   fail-capable); live A/B (n=1/haiku, named) proves memory is load-bearing — blind starves, widening surfaces
+   the buried rule at window 6 → deliver. A leaky+confounded first draft was CAUGHT by the widening control.
 4. **Pre-flight + escalation** (G3) — `{proceed|clarify|decline}` in, `run.escalate` out.
    **↳ ASSEMBLED (F39):** steps 1–4 composed into one `src/pipeline.mjs::runRequest` (prose + repo →
    deliver-green | decision-ready escalation, every step on the event log; observer renders it). Live e2e
