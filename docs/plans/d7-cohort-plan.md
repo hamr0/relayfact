@@ -121,11 +121,26 @@ counted per task** (N grounded of M criteria — reported, not gated).
   shipped `validateSuite`+`runClose` — that GOLD passes the reference, catches the stub, and KILLS all 4
   mutants. **Fail-capability proven:** dropping GOLD's `NUL.tar.gz` assertion lets `m3-lastindexof` survive →
   the pre-check goes RED (that maintainer case is load-bearing, not decorative).
-- **Task 2 (semver) — TODO:** reference/stub/mutants/GOLD + extend `test/d7-cohort.test.js`.
-- **Task 3 (/echo agentic) — TODO:** agentic-tier close (exercise harness) + the one rubric-residue criterion.
-- **WIRING GAP for the live run:** `pipeline.mjs::criteriaSplit()` is HARDCODED `1/1`. Task 3 needs the REAL
-  per-task split (~5 grounded / 6 total) — wire it through the existing `validity-gate.mjs::countGrounded()`
-  over a per-task criteriaMap before the cohort runs, else the split is reported wrong.
+- **Task 2 (semver §11) — ORACLE BUILT + PRE-CHECK GREEN (2026-07-05).** `test/fixtures/d7/semver/`: reference
+  (§11-correct, verified by running the canonical chain + build-ignored + core-precedence cases); identity
+  stub; 4 mutants — `m1` lexical-only, `m2` no-pre-order, `m4` field-count-reversed (guarded patches) + `m3`
+  build-affects-order (explicit `mutant-build.mjs`, adds logic); GOLD = §11 chain + fresh pairs (build-equal,
+  numeric). **Fail-capability proven:** removing the numeric-compare cases frees `m1`; removing the build pair
+  frees `m3`. (`m1`/`m2`/`m4` are redundantly covered by the canonical chain — stronger, not weaker.)
+- **Task 3 (/echo, AGENTIC tier) — ORACLE BUILT + PRE-CHECK GREEN (2026-07-05).** `test/fixtures/d7/echo/`:
+  reference (stdlib-http service, verified GREEN by booting + probing via the GOLD harness); 404-everything
+  stub; 4 guarded mutants (`m1` healthz-shape, `m2` count-zero, `m3` malformed-not-400, `m4` unknown-not-404);
+  GOLD = an EXERCISE harness (`gold.exercise.mjs`, `command:['node','gold.exercise.mjs']`) that deploys the
+  artifact and probes FRESH inputs over real HTTP. The one **rubric residue** ("the 400 message is
+  developer-friendly") is in the `criteriaMap` as `eval:'rubric'` but has NO mutant (un-grounded ⇒ not an
+  executable kill). Split proven **5 grounded / 6 total** offline via shipped `countGrounded()`.
+  **Fail-capability proven:** dropping the `count` probe frees `m2`.
+- **WIRING GAPS for the live run (both token-free to close; do alongside the run so they verify e2e):**
+  1. `pipeline.mjs::criteriaSplit()` is HARDCODED `1/1` — replace with `countGrounded(task.criteriaMap)` so
+     Task 3 reports 5/6 (predicate tasks stay 1/1).
+  2. `pipeline.mjs` hardcodes `closeCommand = ['node','--test',suiteName]` — AGENTIC Task 3 needs
+     `['node', suiteName]` (exercise harness). Thread a per-task `closeCommand`/tier through `runRequest`,
+     `compile-close`, and the worker so the same close is authored, validated, and run as an exercise.
 
 ## Cohort execution
 

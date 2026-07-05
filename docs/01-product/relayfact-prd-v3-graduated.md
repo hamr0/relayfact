@@ -13,8 +13,11 @@ explicitly (IN-with-a-spike or OUT-with-the-claim-shrunk — no silent gaps).
 > predicate (F41)** ✅. **D7 (the benches cohort) UNDERWAY:** shape signed off (2026-07-05) — 3 tasks
 > [real-repo bug + semver §11 + `/echo` agentic], sonnet on the subtle arm, one rubric residue; **Task 1's
 > oracle (the swapped-in real-repo bug, `filenamify` #46) is BUILT + its token-free pre-check is green +
-> fail-capability proven**. **Remaining: Tasks 2–3 oracles + the live cohort run**, then retire `poc/` and cut
-> `0.1.0`. `src/` suite: **73 tests / 64 pass / 9 live-skip**, every token-spending step live-verified, every
+> fail-capability proven**. **All three task oracles now built + the token-free pre-check is green across
+> both tiers** (predicate: filenamify #46, semver §11; agentic: /echo deploy+probe with one rubric residue,
+> split 5/6). **Remaining: two token-free pipeline wiring gaps (per-task split + agentic close command) then
+> the live cohort run**, after which retire `poc/` and cut `0.1.0`. `src/` suite: **76 tests / 67 pass / 9
+> live-skip**, every token-spending step live-verified, every
 > load-bearing control fail-capable. The **archive path stays live** (§0/§7): if
 > step 5's cohort shows the §4 residue is worse than recorded, it re-opens — the bar does not move.
 
@@ -225,7 +228,11 @@ Each module works end-to-end before the next (walking skeleton + vertical slices
    — oracle (reference/stub/4 guarded mutants) + independent GOLD ported from the maintainer's regression
    test; a **token-free pre-check** (`test/d7-cohort.test.js`, via shipped `validateSuite`+`runClose`) proves
    the oracle well-built and is itself fail-capable (drop GOLD's `NUL.tar.gz` case → a mutant survives → red).
-   Plan: `docs/plans/d7-cohort-plan.md`. **Remaining: Tasks 2–3 oracles + the live run.**
+   **Tasks 2 (semver §11, predicate, sonnet arm) + 3 (/echo, AGENTIC tier — deploy+probe — with one rubric
+   residue, split 5/6) oracles now built + pre-check green across both tiers** (the agentic GOLD is an
+   exercise harness run via the same shipped `runClose`). Plan: `docs/plans/d7-cohort-plan.md`.
+   **Remaining: two token-free pipeline wiring gaps (per-task split via `countGrounded`; agentic close
+   command) + the live cohort run.**
 
 Then: retire `poc/` (throwaway, §2), and the build carries its own CHANGELOG entries under a real version
 (`0.1.0`+ per the CHANGELOG's "versioning starts at the first graduated build").

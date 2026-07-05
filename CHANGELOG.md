@@ -13,8 +13,9 @@ the pipe ASSEMBLED end-to-end + D3 (memory widening) done.** Against `relayfact-
 step 1 (spine+observer) ✅ · step 2 (close+honesty+author) ✅ · step 3 (gated worker) ✅ + **D3 close-driven
 recall widening** ✅ · step 4 (pre-flight+escalation) ✅ · **the pipe assembled into one `runRequest`
 (prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅ · **benches cohort (D7) UNDERWAY — shape signed off,
-Task 1's real-repo-bug oracle built + token-free pre-check green** 🔨.
-**Remaining: D7 Tasks 2–3 oracles + the live cohort run** — then retire `poc/` and cut `0.1.0`. Every step
+all THREE task oracles built + token-free pre-check green across predicate & agentic tiers** 🔨.
+**Remaining: two token-free pipeline wiring gaps + the live cohort run** — then retire `poc/` and cut
+`0.1.0`. Every step
 live-verified where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call was GRADUATE.**
 _(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
@@ -37,6 +38,27 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Added — D7 cohort: Tasks 2 (semver §11) + 3 (/echo agentic) oracles built + pre-check across both tiers (2026-07-05)
+
+- **Task 2 — semver §11 precedence** (`test/fixtures/d7/semver/`, predicate, the sonnet arm). Reference is
+  §11-correct (verified by running the canonical precedence chain + build-ignored + core-precedence cases);
+  stub returns `0` always; 4 subtle mutants = lexical-only / forget-no-pre>pre / build-affects-order /
+  reversed field-count tie-break (three guarded patches + one explicit `mutant-build.mjs`). GOLD = the §11
+  chain + fresh pairs (an equal-build pair, a numeric pair). Fail-capability proven per-mutant.
+- **Task 3 — /echo service** (`test/fixtures/d7/echo/`, **AGENTIC tier** + one **rubric residue**). The close
+  is an EXERCISE harness that DEPLOYS the artifact (`server.listen(0)`) and probes it over real HTTP (exit
+  code = truth), mirroring D1/F41 — reference verified GREEN by booting + probing. 4 grounded mutants
+  (healthz-shape / count-zero / malformed-not-400 / unknown-not-404); the rubric criterion ("the 400 message
+  is developer-friendly") is un-grounded and carries NO mutant. Split = **5 grounded / 6 total**.
+- **Pre-check generalized** (`test/d7-cohort.test.js`): `goldRunnerFor` now runs each task's own close command,
+  so the same shipped `validateSuite`+`runClose` path validates predicate (`node --test`) and agentic
+  (`node exercise.mjs`) oracles alike; a new test asserts the per-task grounded/rubric split via shipped
+  `countGrounded()`. Fail-capability shown on every task by weakening a GOLD case → a mutant survives → red.
+- **Two live-run wiring gaps flagged** (both token-free, to close alongside the run): `criteriaSplit()`
+  hardcodes `1/1` (→ route through `countGrounded`); `pipeline.mjs` hardcodes the `node --test` close command
+  (→ thread a per-task close command so the agentic task runs its exercise harness).
+- Suite: **76 tests / 67 pass / 9 live-skip / 0 fail** (token-free). No live budget spent.
 
 ### Added — D7 benches cohort: signed off + Task 1 (real-repo bug) oracle built + token-free pre-check (2026-07-05)
 

@@ -1,0 +1,12 @@
+Implement `createApp()` in `server.mjs` (a named export) that returns a `node:http` server for a small echo
+service. Use only the Node standard library.
+
+Routes:
+- `GET /healthz` → status 200 and a JSON body `{ "status": "ok" }`.
+- `POST /echo` with a JSON request body → status 200 and a JSON body that echoes the SAME parsed body under an
+  `echo` key, plus a `count` field equal to the number of top-level keys in the body.
+- Any other route or method → status 404.
+- If the body of a `POST /echo` request is not valid JSON → status 400 and a JSON error body whose `message`
+  field explains the problem in a way that is helpful to a developer.
+
+All successful and error responses are JSON.

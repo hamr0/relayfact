@@ -15,19 +15,26 @@ import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { runClose } from '../src/close.mjs';
-import { validateSuite } from '../src/validity-gate.mjs';
+import { validateSuite, countGrounded } from '../src/validity-gate.mjs';
 import { task1 } from './fixtures/d7/filenamify/task.mjs';
+import { task2 } from './fixtures/d7/semver/task.mjs';
+import { task3 } from './fixtures/d7/echo/task.mjs';
 
-/** A runSuiteAgainst that writes the task's GOLD suite to a temp workdir and swaps each impl at implName. */
+/**
+ * A runSuiteAgainst that writes the task's GOLD to a temp workdir and swaps each impl at implName. The GOLD's
+ * `command` is tier-agnostic: `['node','--test','gold.test.mjs']` for a predicate task, `['node',
+ * 'gold.exercise.mjs']` for an agentic one (deploy + probe). Exit code = truth, via the same shipped runClose.
+ */
 function goldRunnerFor(task) {
   const dir = mkdtempSync(join(tmpdir(), 'd7-oracle-'));
   writeFileSync(join(dir, task.goldSuite.name), task.goldSuite.source);
   const implName = task.implName ?? 'impl.mjs';
+  const command = task.goldSuite.command ?? ['node', '--test', task.goldSuite.name];
   return {
     dir,
     runSuiteAgainst(code) {
       writeFileSync(join(dir, implName), code);
-      return runClose(['node', '--test', task.goldSuite.name], { cwd: dir });
+      return runClose(command, { cwd: dir });
     },
     cleanup() { rmSync(dir, { recursive: true, force: true }); },
   };
@@ -60,4 +67,25 @@ function assertOracleWellBuilt(task) {
 
 test('D7 Task 1 — filenamify reserved-name-with-extension (real-repo bug): oracle + GOLD are well-built', () => {
   assertOracleWellBuilt(task1);
+});
+
+test('D7 Task 2 — semver §11 precedence compare: oracle + GOLD are well-built', () => {
+  assertOracleWellBuilt(task2);
+});
+
+test('D7 Task 3 — /echo service (AGENTIC tier: deploy + probe): oracle + GOLD are well-built', () => {
+  assertOracleWellBuilt(task3);
+});
+
+// The grounded/rubric split is a REPORTED cohort number (G5-EXIT). Prove it is computed correctly OFFLINE via
+// the shipped countGrounded() before the live run leans on it — the predicate tasks are fully grounded (N/N),
+// and the agentic task carries exactly one un-grounded rubric residue (5 grounded / 6 total, per the plan).
+test('D7 grounded/rubric split per task is correct (via shipped countGrounded)', () => {
+  const s1 = countGrounded(task1.criteriaMap);
+  assert.deepEqual([s1.N, s1.M], [1, 1], 'Task 1 is fully grounded (1/1)');
+  const s2 = countGrounded(task2.criteriaMap);
+  assert.deepEqual([s2.N, s2.M], [1, 1], 'Task 2 is fully grounded (1/1)');
+  const s3 = countGrounded(task3.criteriaMap);
+  assert.deepEqual([s3.N, s3.M], [5, 6], 'Task 3 is 5 grounded of 6 (one rubric residue)');
+  assert.deepEqual(s3.residue, ['the 400 error message is developer-friendly']);
 });

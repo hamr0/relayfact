@@ -58,6 +58,7 @@ export const task1 = {
 	tier: 'predicate',
 	request,
 	oracle: { reference, stub, mutants },
-	goldSuite: { name: 'gold.test.mjs', source: goldSource },
+	goldSuite: { name: 'gold.test.mjs', source: goldSource, command: ['node', '--test', 'gold.test.mjs'] },
 	implName: 'impl.mjs',
+	criteriaMap: [{ criterion: 'filenamify escapes reserved names with extensions per the maintainer regression test', eval: 'predicate' }],
 };
