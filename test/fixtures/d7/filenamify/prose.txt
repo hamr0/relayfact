@@ -1,0 +1,13 @@
+In `filenamify.js`, Windows reserved device names are escaped by appending a replacement suffix — for
+example `filenamify('con')` returns `'con!'`. But when a reserved name carries a file extension it is
+currently left untouched: `filenamify('CON.txt')` returns `'CON.txt'`, which is still an invalid filename on
+Windows.
+
+Fix `filenamify` so that a reserved BASE name is escaped even when an extension is present, inserting the
+replacement suffix immediately BEFORE the extension. For example `filenamify('CON.txt')` must return
+`'CON!.txt'`.
+
+Rules:
+- The reserved set is `con`, `prn`, `aux`, `nul`, `com<digit>`, `lpt<digit>`, matched case-INSENSITIVELY.
+- Only the base name (before the extension) determines whether the name is reserved.
+- Do not change behavior for names that are not reserved, or for bare reserved names that already work.

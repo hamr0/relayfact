@@ -12,8 +12,9 @@ Phase: **`src/` build UNDERWAY (the graduated rewrite; `poc/` discarded, §2) �
 the pipe ASSEMBLED end-to-end + D3 (memory widening) done.** Against `relayfact-prd-v3-graduated.md` §6:
 step 1 (spine+observer) ✅ · step 2 (close+honesty+author) ✅ · step 3 (gated worker) ✅ + **D3 close-driven
 recall widening** ✅ · step 4 (pre-flight+escalation) ✅ · **the pipe assembled into one `runRequest`
-(prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅.
-**Remaining: the ≥3-real-task benches cohort (D7)** — then retire `poc/` and cut `0.1.0`. Every step
+(prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅ · **benches cohort (D7) UNDERWAY — shape signed off,
+Task 1's real-repo-bug oracle built + token-free pre-check green** 🔨.
+**Remaining: D7 Tasks 2–3 oracles + the live cohort run** — then retire `poc/` and cut `0.1.0`. Every step
 live-verified where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call was GRADUATE.**
 _(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
@@ -36,6 +37,31 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Added — D7 benches cohort: signed off + Task 1 (real-repo bug) oracle built + token-free pre-check (2026-07-05)
+
+- **Sign-off decisions** (`docs/plans/d7-cohort-plan.md`): the cohort is 3 tasks — a **real-repo bug** (swapped
+  in for the original RFC `Range` task), semver §11, and a `/echo` agentic service; **haiku ×3, sonnet on the
+  semver arm** (model-modulation datapoint); **one rubric-residue criterion** on the agentic task so the
+  grounded/rubric split is non-trivial (~5 grounded / 6 total).
+- **Task 1 source locked:** `sindresorhus/filenamify` **#46** ("handle Windows reserved names with
+  extensions", merged 2026-06-16 — **post knowledge-cutoff**, human-authored regression test = GOLD). ESM,
+  single-file impl, one data-dep (`filename-reserved-regex`) **vendored inline** so the fixture is
+  `node_modules`-free/offline (only the regex data is vendored; the bug, fix, and locking assertions are all
+  the maintainer's — nothing crafted).
+- **Oracle** (`test/fixtures/d7/filenamify/`): `reference.mjs` (post-#46, verified correct by running against
+  every GOLD + control case), `stub.mjs` (identity), 4 subtle mutants derived by **guarded** single-substring
+  patches in `task.mjs` (each throws if its anchor goes stale — no silent no-op mutants), and `gold.test.mjs`
+  = the maintainer's regression assertions ported verbatim ava→`node:test`. Prose gives only the `CON.txt`
+  example; GOLD's `NUL.tar.gz`/`COM1.log`/`LPT9.csv` cases are **fresh** discriminators the prose never lists.
+- **Token-free pre-check** (`test/d7-cohort.test.js`): via shipped `validateSuite`+`runClose`
+  (replay-through-shipped-code) it proves GOLD passes the reference, catches the stub, and **kills all 4
+  mutants** — catching a mis-built oracle for free before any live budget. **Fail-capability proven:** drop
+  GOLD's `NUL.tar.gz` assertion and `m3-lastindexof` survives → the pre-check goes red (that maintainer case
+  is load-bearing, not decoration).
+- **Wiring gap flagged for the live run:** `pipeline.mjs::criteriaSplit()` is hardcoded `1/1`; Task 3's real
+  ~5/6 split must route through the existing `validity-gate.mjs::countGrounded()` before the cohort runs.
+- Suite: **73 tests / 64 pass / 9 live-skip / 0 fail** (token-free). No live budget spent.
 
 ### Added — `src/` step 5, D1: the `agentic` eval tier proven (deploy + probe the real artifact) (F41, 2026-07-05)
 - **The strongest close tier (§5) exercised for the first time — NO new relayfact primitive.** The result:

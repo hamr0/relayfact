@@ -10,8 +10,11 @@ explicitly (IN-with-a-spike or OUT-with-the-claim-shrunk — no silent gaps).
 > step 3 gated worker ✅ **+ D3 close-driven recall widening ✅ (F40)** · step 4 pre-flight+escalation ✅ ·
 > **the pipe ASSEMBLED into one `runRequest` — prose+repo → deliver|escalate, live e2e green (F39)** ✅ ·
 > **step 5: the `agentic`-tier close spike (D1) DONE — deploy+probe grounds the loop, strictly stronger than
-> predicate (F41)** ✅. **Remaining: the ≥3-real-task benches cohort (D7)** — then retire `poc/` and cut
-> `0.1.0`. `src/` suite: **72 tests / 63 pass / 9 live-skip**, every token-spending step live-verified, every
+> predicate (F41)** ✅. **D7 (the benches cohort) UNDERWAY:** shape signed off (2026-07-05) — 3 tasks
+> [real-repo bug + semver §11 + `/echo` agentic], sonnet on the subtle arm, one rubric residue; **Task 1's
+> oracle (the swapped-in real-repo bug, `filenamify` #46) is BUILT + its token-free pre-check is green +
+> fail-capability proven**. **Remaining: Tasks 2–3 oracles + the live cohort run**, then retire `poc/` and cut
+> `0.1.0`. `src/` suite: **73 tests / 64 pass / 9 live-skip**, every token-spending step live-verified, every
 > load-bearing control fail-capable. The **archive path stays live** (§0/§7): if
 > step 5's cohort shows the §4 residue is worse than recorded, it re-opens — the bar does not move.
 
@@ -215,7 +218,14 @@ Each module works end-to-end before the next (walking skeleton + vertical slices
    that turn §3's exit criteria green as shipped code.
    **↳ D1 DONE (F41):** `runClose` is tier-agnostic; an agentic close = an EXERCISE harness (deploy + probe
    the real artifact) in place of `node --test`. Token-free proof grounds it (incl. unit-green/integration-red
-   = strictly stronger); live n=1/haiku red→green deliver + unsatisfiable→escalate. **Remaining: D7 cohort.**
+   = strictly stronger); live n=1/haiku red→green deliver + unsatisfiable→escalate.
+   **↳ D7 UNDERWAY (signed off 2026-07-05):** cohort = a **real-repo bug** (swap of the original RFC task) +
+   semver §11 + a `/echo` agentic task; haiku ×3, sonnet on the semver arm, one rubric-residue criterion so
+   the grounded/rubric split is non-trivial. **Task 1 built:** `filenamify` #46 (post-cutoff, human-locked)
+   — oracle (reference/stub/4 guarded mutants) + independent GOLD ported from the maintainer's regression
+   test; a **token-free pre-check** (`test/d7-cohort.test.js`, via shipped `validateSuite`+`runClose`) proves
+   the oracle well-built and is itself fail-capable (drop GOLD's `NUL.tar.gz` case → a mutant survives → red).
+   Plan: `docs/plans/d7-cohort-plan.md`. **Remaining: Tasks 2–3 oracles + the live run.**
 
 Then: retire `poc/` (throwaway, §2), and the build carries its own CHANGELOG entries under a real version
 (`0.1.0`+ per the CHANGELOG's "versioning starts at the first graduated build").

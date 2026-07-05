@@ -1,7 +1,16 @@
 # D7 — the ≥3-real-task benches cohort (plan, for sign-off)
 
-**Status:** DRAFT — awaiting sign-off on "what counts as real/uncrafted" before running. This is the last
-`src/` build item (PRD-v3 §6 step 5, descope D7); on completion → retire `poc/`, cut `0.1.0`.
+**Status:** SIGNED OFF (2026-07-05) — cohort shape locked. This is the last `src/` build item (PRD-v3 §6
+step 5, descope D7); on completion → retire `poc/`, cut `0.1.0`.
+
+**Sign-off decisions:**
+1. **Swap Task 1 (Range parser) for a G2-style real-repo bug** — one of the three is now an uncrafted,
+   post-cutoff repo bug locked by a human regression test (the strongest realness claim); Tasks 2 & 3 stay
+   (Task 2 carries the sonnet arm, Task 3 the agentic+rubric residue).
+2. **Sonnet on Task 2 only** — haiku on all three (control tier); sonnet adds the model-modulation datapoint
+   on the subtlest task (semver §11).
+3. **One rubric-residue criterion** — Task 3's "400 error message is developer-friendly" (~5 grounded / 6
+   total); keeps the split non-trivial without rubric creep into gating.
 
 ## What D7 is (and the bar it must clear)
 
@@ -26,7 +35,11 @@ counted per task** (N grounded of M criteria — reported, not gated).
 
 ## The cohort (3 tasks, spanning tiers + a real rubric residue)
 
-### Task 1 — HTTP `Range` header parser  ·  PREDICATE tier  ·  spec = RFC 7233 §2.1
+> **Task 1 SWAPPED (sign-off #1):** the RFC 7233 `Range` parser below is **retired from the cohort** in
+> favor of a G2-style real-repo bug (see "Task 1 (replacement)"). It is kept here only as the descoped
+> reference. The live cohort runs: **[real-repo bug] + [semver §11] + [/echo agentic]**.
+
+### ~~Task 1 — HTTP `Range` header parser~~  ·  PREDICATE tier  ·  spec = RFC 7233 §2.1  ·  *(descoped — replaced)*
 - **Prose (what the worker sees):** "Implement `parseRange(header, size)` for an HTTP `Range` request header
   over a resource of `size` bytes. Support `bytes=A-B` (inclusive), `bytes=A-` (A to end), `bytes=-N` (last N
   bytes). Return an array of `{start, end}` (inclusive, resolved against `size`); clamp `end` to `size-1`.
@@ -40,6 +53,35 @@ counted per task** (N grounded of M criteria — reported, not gated).
   unsatisfiable, one multi-range.
 - **Controls that can fail:** a stub returning `null` for everything must be caught (vacuous); the reference
   must pass the self-authored suite (else over-constrained → escalate SAFE); GOLD red on own-green ⇒ no deliver.
+
+### Task 1 (replacement) — a G2-style real-repo bug  ·  PREDICATE tier  ·  spec = the repo's own issue + regression test
+- **What it is:** an uncrafted, post-cutoff bug from a real repository, locked by a **human-authored
+  regression test** (exactly as G2 did — that test is the GOLD, relayfact-held, never shown to the worker).
+- **Prose (what the worker sees):** the issue/bug report as written by a human, plus the failing symptom —
+  NOT my paraphrase of the fix. The worker gets the buggy tree (gate-write-scoped to the impl) and must make
+  the human regression test pass.
+- **Why uncrafted:** the bug, the fix, and the locking test are all the maintainers' — nothing authored to
+  fit a reference. This is the strongest realness arm; it re-runs the G2 datapoint inside the assembled pipe.
+- **Oracle / validity gate:** the human regression test **is** the GOLD; the "reference" is the maintainer's
+  actual fix (held back); "mutants" = the pre-fix tree + near-miss partial fixes that leave the test red.
+- **Controls that can fail:** the buggy tree must fail the human test RED first (else the bug isn't captured);
+  own-green + human-test-red ⇒ no deliver; an over-narrow fix that passes only the self-authored suite but
+  not the human GOLD ⇒ escalate.
+- **SOURCE — LOCKED (2026-07-05):** `sindresorhus/filenamify` **PR #46** ("handle Windows reserved names with
+  extensions", merged 2026-06-16, post knowledge-cutoff). ESM, single-file impl, one tiny data-dep
+  (`filename-reserved-regex` — two regex factories, VENDORED inline so the fixture is `node_modules`-free and
+  offline/token-free). The bug: reserved names WITH an extension (`CON.txt`) were left unsanitized because the
+  check tested the WHOLE string against `/^(con|…)$/i`; the fix inserts the replacement suffix BEFORE the
+  extension (`CON.txt`→`CON!.txt`, `NUL.tar.gz`→`NUL!.tar.gz`).
+  - **prose (worker sees):** the issue + one example (`CON.txt`→`CON!.txt`); the buggy full `filenamify.js` tree.
+  - **reference (held):** post-#46 `filenamify.js`. **stub:** identity. **mutants (k=5 canon: stub + 4 subtle):**
+    (m1) original whole-string check; (m2) suffix appended at END, ignoring extension position; (m3) base via
+    `lastIndexOf('.')` (breaks `NUL.tar.gz`); (m4) reserved regex without `/i` (misses `con.txt`).
+  - **GOLD (independent = the maintainer's regression assertions, ported node:test):** `CON.txt`→`CON!.txt`,
+    `con.txt`→`con!.txt`, `NUL.tar.gz`→`NUL!.tar.gz` (FRESH — not in prose; kills m3), `COM1.log`→`COM1!.log`,
+    `LPT9.csv`→`LPT9!.csv`. The `NUL.tar.gz`/numbered-device cases are the discriminators the prose never lists.
+  - **Vendoring caveat (honest):** only the two `filename-reserved-regex` factories are inlined (data, not the
+    bug); the logic under test, the fix, and the locking assertions are all the maintainer's — nothing crafted.
 
 ### Task 2 — Semantic-version precedence compare  ·  PREDICATE tier  ·  spec = semver.org §11
 - **Prose:** "Implement `compareSemver(a, b)` returning `-1 | 0 | 1` by SemVer precedence: compare
@@ -71,6 +113,20 @@ counted per task** (N grounded of M criteria — reported, not gated).
 - **Controls:** a server that 404s `/healthz` (unwired) → agentic red; own-green + GOLD-red ⇒ no deliver; the
   rubric criterion never flips a red close green.
 
+## Build progress (token-free, no live budget spent yet)
+- **Task 1 (filenamify real-repo bug) — ORACLE BUILT + PRE-CHECK GREEN (2026-07-05).** Assets under
+  `test/fixtures/d7/filenamify/` (`reference.mjs` = post-#46, GOLD-verified by running; `stub.mjs`;
+  `gold.test.mjs` = the maintainer's ported assertions; `prose.txt` = one example only; `task.mjs` derives the
+  4 mutants by guarded single-substring patches). Token-free pre-check `test/d7-cohort.test.js` proves — via
+  shipped `validateSuite`+`runClose` — that GOLD passes the reference, catches the stub, and KILLS all 4
+  mutants. **Fail-capability proven:** dropping GOLD's `NUL.tar.gz` assertion lets `m3-lastindexof` survive →
+  the pre-check goes RED (that maintainer case is load-bearing, not decorative).
+- **Task 2 (semver) — TODO:** reference/stub/mutants/GOLD + extend `test/d7-cohort.test.js`.
+- **Task 3 (/echo agentic) — TODO:** agentic-tier close (exercise harness) + the one rubric-residue criterion.
+- **WIRING GAP for the live run:** `pipeline.mjs::criteriaSplit()` is HARDCODED `1/1`. Task 3 needs the REAL
+  per-task split (~5 grounded / 6 total) — wire it through the existing `validity-gate.mjs::countGrounded()`
+  over a per-task criteriaMap before the cohort runs, else the split is reported wrong.
+
 ## Cohort execution
 
 - **Models:** haiku on all 3 (the control tier); **sonnet on ≥1** (Task 2, the subtlest) to keep the
@@ -85,12 +141,20 @@ counted per task** (N grounded of M criteria — reported, not gated).
   `runRequest` call with its oracle+gold; a token-free `test/d7-cohort.test.js` can pre-validate each oracle
   offline (reference passes its own mutants' kill-check) before spending — so a mis-built oracle is caught free.
 
-## Open questions for sign-off
-1. Do these 3 count as "real/uncrafted" for you (external-authority specs + fresh GOLD), or do you want a
-   real-repo bug (G2-style) as one of the three instead of a standards-transcription task?
-2. Sonnet on Task 2 only, or a wider model sweep (cost ↑)?
-3. Is the single rubric-residue criterion (Task 3's error-message quality) the right way to make the split
-   non-trivial, or should more tasks carry a rubric criterion?
+## Real-repo bug source (the one thing Task 1 still needs before running)
+The swap requires a concrete bug. Candidates:
+- **(a) Reuse the G2 private-repo bug** — already sourced, already locked by a human regression test, already
+  post-cutoff. Cheapest; but it re-runs a datapoint we've seen (still real, still valid inside the pipe).
+- **(b) A fresh private-repo bug** — another genuine bug from the user's own repos + its regression test. Real
+  and unseen; needs the user to point at the repo/commit.
+- **(c) A public-OSS post-cutoff bugfix** — pick a real merged bugfix (post knowledge-cutoff so it can't be
+  memorized), revert it, transcribe the issue as prose, use the project's own regression test as GOLD. Fully
+  uncrafted and reproducible; I can source it via web search, but it costs a scouting pass.
+
+## Resolved sign-off (2026-07-05)
+1. **Real/uncrafted:** swap one task for a G2-style real-repo bug (Task 1). ✅ — source TBD (above).
+2. **Model sweep:** sonnet on Task 2 only. ✅
+3. **Rubric residue:** one criterion, Task 3. ✅
 
 ## Descopes NOT reopened by D7
 D2 (embeddings OUT), D4 (bare-refine terminate N/A), D6 (depth OUT) stay closed. D3 (bounded memory) and D5
