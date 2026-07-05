@@ -15,10 +15,10 @@ explicitly (IN-with-a-spike or OUT-with-the-claim-shrunk — no silent gaps).
 > oracle (the swapped-in real-repo bug, `filenamify` #46) is BUILT + its token-free pre-check is green +
 > fail-capability proven**. **All three task oracles now built + the token-free pre-check is green across
 > both tiers** (predicate: filenamify #46, semver §11; agentic: /echo deploy+probe with one rubric residue,
-> split 5/6). **Both pipeline wiring gaps closed + tested (per-task split via `countGrounded`; tier-agnostic
-> close command with an agentic D5 tripwire). Remaining: the live cohort run ONLY**, after which retire
-> `poc/` and cut `0.1.0`. `src/` suite: **78 tests / 69 pass / 9 live-skip**, every token-spending step
-> live-verified, every
+> split 5/6). **D7 DONE — the cohort ran green through the assembled pipe: 4/4 arms delivered, GOLD-green,
+> fit-to-pass=0 (F42; filenamify·haiku 1/1, semver·haiku 1/1, semver·sonnet 1/1, echo·haiku 5/6). Remaining:
+> retire `poc/` and cut `0.1.0`** — the `src/` build is otherwise complete. `src/` suite: **82 tests / 69
+> pass / 13 live-skip**, every token-spending step live-verified, every
 > load-bearing control fail-capable. The **archive path stays live** (§0/§7): if
 > step 5's cohort shows the §4 residue is worse than recorded, it re-opens — the bar does not move.
 
@@ -231,10 +231,14 @@ Each module works end-to-end before the next (walking skeleton + vertical slices
    the oracle well-built and is itself fail-capable (drop GOLD's `NUL.tar.gz` case → a mutant survives → red).
    **Tasks 2 (semver §11, predicate, sonnet arm) + 3 (/echo, AGENTIC tier — deploy+probe — with one rubric
    residue, split 5/6) oracles now built + pre-check green across both tiers** (the agentic GOLD is an
-   exercise harness run via the same shipped `runClose`). **Both pipeline wiring gaps now closed + tested**
+   exercise harness run via the same shipped `runClose`). **Both pipeline wiring gaps closed + tested**
    (per-task split via `countGrounded`; tier-agnostic close command threaded through compile-close + worker,
-   with an agentic D5 tripwire proven fail-capable). Plan: `docs/plans/d7-cohort-plan.md`.
-   **Remaining: the live cohort run ONLY.**
+   with an agentic D5 tripwire proven fail-capable).
+   **↳ D7 DONE (F42):** the cohort ran GREEN through the assembled pipe — **4/4 arms delivered, every
+   independent GOLD green, fit-to-pass=0**, split reported per task (echo 5/6). Three findings surfaced +
+   fixed honestly: the pipe reimplements-from-spec (no patch-a-tree); the export shape must be pinned in the
+   visible prose; F33 in the wild (over-constrain → decision-ready escalate → fix a real oracle bug + complete
+   the spec → deliver). Plan: `docs/plans/d7-cohort-plan.md`. **Remaining: retire `poc/`, cut `0.1.0`.**
 
 Then: retire `poc/` (throwaway, §2), and the build carries its own CHANGELOG entries under a real version
 (`0.1.0`+ per the CHANGELOG's "versioning starts at the first graduated build").

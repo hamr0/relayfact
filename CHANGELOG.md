@@ -13,9 +13,8 @@ the pipe ASSEMBLED end-to-end + D3 (memory widening) done.** Against `relayfact-
 step 1 (spine+observer) ✅ · step 2 (close+honesty+author) ✅ · step 3 (gated worker) ✅ + **D3 close-driven
 recall widening** ✅ · step 4 (pre-flight+escalation) ✅ · **the pipe assembled into one `runRequest`
 (prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅ · **benches cohort (D7) UNDERWAY — shape signed off,
-all THREE task oracles built + token-free pre-check green across predicate & agentic tiers + both pipeline
-wiring gaps closed** 🔨.
-**Remaining: the live cohort run ONLY** — then retire `poc/` and cut `0.1.0`. Every step
+the benches cohort (D7) is DONE — 4/4 arms delivered green through the assembled pipe, fit-to-pass=0 (F42)** ✅.
+**Remaining: retire `poc/` and cut `0.1.0`** (the src/ build is otherwise complete). Every step
 live-verified where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call was GRADUATE.**
 _(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
@@ -38,6 +37,28 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Added — D7 COHORT RAN GREEN: 4/4 arms delivered through the assembled pipe, fit-to-pass=0 (F42, 2026-07-05)
+
+- **Result** (`test/integration/d7-cohort.live.test.js`, one canonical live run): filenamify·haiku (real-repo
+  bug) **1/1**, semver·haiku **1/1**, semver·sonnet **1/1**, /echo·haiku (agentic) **5/6** — every arm
+  delivered, every independent GOLD green, every close `trusted` (4/4 mutants killed), each in 1 iteration,
+  ≈$0.60 total. **fit-to-pass = 0**; the D5 GOLD tripwire never tripped; the split reported per task.
+- **Agentic tier proven end to end live:** the author self-authored a valid EXERCISE HARNESS (via the new
+  `AUTHOR_PERSONA_AGENTIC`), the validity gate killed all four mutants over real HTTP, and the deploy+probe
+  GOLD went green on the delivered `/echo` server.
+- **`src/author.mjs` made tier-aware** (token-free, backward-compatible): exports `AUTHOR_PERSONA` (predicate)
+  + `AUTHOR_PERSONA_AGENTIC` (exercise harness); `authorSuiteViaRecurse` takes an optional `persona` +
+  `artifactNoun`. Existing callers unaffected.
+- **Task 1 (filenamify) reconciled to the pipe's reimplement-from-spec reality** (F42): prose reframed
+  from-scratch (the pipe hands the worker no buggy tree), the validity-gate reference narrowed to the task
+  spec (not the whole library), a REAL reference bug fixed (`com\d` matched `com0`; spec is `com1`–`com9`),
+  and the export shape + reserved-name boundary pinned in the visible prose. Token-free pre-check stays green.
+- **Three findings, none papered over** (F42): the pipe reimplements-from-spec (no patch-a-tree); the export
+  shape must be pinned in the visible spec; and F33 in the wild (over-constrain → decision-ready escalate →
+  fix a real oracle bug + complete the spec → deliver). Cost varied 8× at iters=1; haiku cost more than
+  sonnet on semver.
+- Suite: **82 tests / 69 pass / 13 live-skip / 0 fail**.
 
 ### Changed — D7: closed both live-run pipeline wiring gaps (per-task split + agentic close command), token-free (2026-07-05)
 

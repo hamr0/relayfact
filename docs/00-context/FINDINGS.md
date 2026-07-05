@@ -1194,3 +1194,61 @@ not a separate-process deploy or a networked service. The token-free test carrie
 stronger claims; the live run carries "a real worker drives it end-to-end". **Descope D1 shrinks:** the eval
 table may now list **agentic = predicate-and-agentic tiers both proven on a real artifact**; the earlier
 "designed, not evidenced" caveat is lifted for this artifact class. src/ suite: 72 tests / 63 pass / 9 live-skip.
+
+## F42 — D7: the ≥3-real-task cohort ran green through the assembled pipe; 4/4 arms delivered, fit-to-pass=0
+
+**Status:** src/ step 5, D7 — the LAST build item (the benches cohort, PRD-v3 §6 / G5-EXIT). **RESULT: PASS.**
+Three real tasks spanning tiers, four arms (haiku ×3 + sonnet on the subtle one), all through one canonical
+live invocation of `runRequest` (`test/integration/d7-cohort.live.test.js`), each independently re-verified.
+
+| task | model | outcome | close verdict | iters | GOLD | split | cost |
+|------|-------|---------|---------------|-------|------|-------|------|
+| filenamify reserved-name-with-ext (real-repo bug, `sindresorhus/filenamify#46`, post-cutoff) | haiku | delivered | trusted (4/4 mutants) | 1 | 🟢 green | 1/1 | $0.05 |
+| semver §11 precedence (semver.org) | haiku | delivered | trusted (4/4) | 1 | 🟢 green | 1/1 | $0.36 |
+| semver §11 precedence | sonnet | delivered | trusted (4/4) | 1 | 🟢 green | 1/1 | $0.14 |
+| /echo service (AGENTIC tier: deploy+probe) + 1 rubric residue | haiku | delivered | trusted (4/4) | 1 | 🟢 green | **5/6** | $0.04 |
+
+**The bar cleared:** every arm truthful-terminal (delivered-green AND independent-GOLD-green), **fit-to-pass = 0**
+(no own-green + GOLD-red delivery anywhere), the grounded/rubric split reported per task (the agentic task's one
+un-grounded rubric residue → 5/6, counted through `countGrounded()`). Zero GOLD-red deliveries (the hard
+tripwire never tripped). The independent GOLDs are the tasks' real arbiters — the maintainer's own PR #46
+regression assertions (filenamify), the §11 canonical chain + fresh pairs (semver), a fresh deploy+probe (echo);
+none were visible to the worker. Token-free oracle pre-check (`test/d7-cohort.test.js`) proved every oracle
+well-built first (each fail-capable), so a mis-built oracle could not have produced a false green here.
+
+**Three honest findings surfaced en route (none papered over):**
+
+1. **The assembled pipe REIMPLEMENTS FROM SPEC — it does not patch a repo.** `runRequest` hands the worker no
+   buggy tree and no read tool (multi-file `resolveIn` is deferred in `worker.mjs`); the worker authors a close
+   from prose and implements a single file from scratch. So a "real-repo bug" runs as a *from-scratch reimplement
+   locked by the maintainer's real regression test as GOLD* — the realness lives in the (post-cutoff, human-
+   authored) GOLD, not in a patched tree. Consequence: the validity-gate `reference` must implement exactly the
+   *task's* spec, not the *full library* — the first filenamify draft used the whole `filenamify` lib as
+   reference and it over-constrained a suite authored from the narrow prose (the lib sanitizes control/reserved
+   chars the task never mentions). Narrowing the reference to the spec fixed it. **The claim shrinks honestly:**
+   D7 shows deliver-from-spec on real contracts, NOT autonomous repo-bug-patching.
+
+2. **The export SHAPE must be pinned in the VISIBLE prose (F25-class).** With the export shape unstated, haiku
+   authored `import { filenamify }` (named) against a `export default` reference → the correct reference threw →
+   `over-constrained` escalation. This is the "shape is a task spec, not hidden-test business" rule: stating
+   `export default` + the exact import line in the prose removed it. (Semver and echo delivered first-try because
+   their prose already pinned the shape — default / named respectively.)
+
+3. **F33 in the wild — over-constrain → decision-ready escalate → complete-the-spec → deliver.** On the edge-rich
+   filenamify task haiku over-constrained twice: it (correctly) flagged that `com0` is not reserved — exposing a
+   REAL bug in my reference regex (`com\d` matched `com0`; the spec says `com1`–`com9`) — and it (incorrectly)
+   treated bare `com` as reserved. The reference gate caught both SAFE (`close-untrustworthy`, decision-ready,
+   0 delivery), exactly F33's prediction. Fixing the real regex bug + completing the spec's boundary (the
+   escalation's own signal — the designed HITL cycle) turned the next run green. Net: the honesty machinery
+   caught a genuine oracle bug *and* a model misconception, and neither shipped.
+
+**Side datapoint (cost, not iterations, is the variance).** Every delivering arm closed in **1 iteration**, but
+cost ranged 8× ($0.04–$0.36); on semver, haiku cost MORE than sonnet ($0.36 vs $0.14) — the weaker model churns
+more author/worker turns to reach the same green. Model-modulation shows up in spend + spec-completeness needed,
+not in the final iteration count here.
+
+**Honest limits (named).** n=1 per (task,model) arm; two of three tasks are external-authority spec
+transcriptions and the third is a from-scratch reimplement (not a patched tree, per finding 1); single process,
+localhost HTTP for the agentic tier (F41's class). The cohort proves the assembled pipe reaches a truthful
+terminal on real tasks across both tiers and both models with fit-to-pass=0 — it does not claim a benches-grade
+*rate* (that needs a larger n). src/ suite: 82 tests / 69 pass / 13 live-skip.

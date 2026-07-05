@@ -1,13 +1,20 @@
-In `filenamify.js`, Windows reserved device names are escaped by appending a replacement suffix — for
-example `filenamify('con')` returns `'con!'`. But when a reserved name carries a file extension it is
-currently left untouched: `filenamify('CON.txt')` returns `'CON.txt'`, which is still an invalid filename on
-Windows.
+Implement a function `filenamify(string)` in `impl.mjs` that sanitizes a string into a filename that is safe
+on Windows, handling RESERVED DEVICE NAMES. Export it as the module's DEFAULT export
+(`export default function filenamify(string) { ... }`), so tests import it as
+`import filenamify from './impl.mjs'`.
 
-Fix `filenamify` so that a reserved BASE name is escaped even when an extension is present, inserting the
-replacement suffix immediately BEFORE the extension. For example `filenamify('CON.txt')` must return
-`'CON!.txt'`.
+Windows forbids these reserved device names (matched case-INSENSITIVELY): `con`, `prn`, `aux`, `nul`, `com`
+followed by a single digit `1`–`9` (`com1`–`com9`), and `lpt` followed by a single digit `1`–`9`
+(`lpt1`–`lpt9`). A filename whose BASE name is one of these is invalid even when it carries a file extension.
+NOTE: a bare `com` or `lpt` with no digit is NOT reserved, and `com0`/`lpt0` are NOT reserved — only the
+digits 1 through 9 count.
 
 Rules:
-- The reserved set is `con`, `prn`, `aux`, `nul`, `com<digit>`, `lpt<digit>`, matched case-INSENSITIVELY.
-- Only the base name (before the extension) determines whether the name is reserved.
-- Do not change behavior for names that are not reserved, or for bare reserved names that already work.
+- The BASE name is the substring BEFORE THE FIRST dot; the extension is everything from the first dot onward.
+  (A name with no dot is entirely base.)
+- If the base name is a reserved device name, append the replacement suffix `!` immediately after the base
+  name and BEFORE the extension.
+- Otherwise, return the string unchanged.
+
+Examples: `filenamify('con')` → `'con!'`; `filenamify('CON.txt')` → `'CON!.txt'`; `filenamify('Com')` →
+`'Com'` (not a reserved name); `filenamify('hello.txt')` → `'hello.txt'`.

@@ -30,26 +30,26 @@ function patch(name, find, replace) {
 }
 
 const mutants = [
-	// m1 — the ORIGINAL bug (pre-#46): test the WHOLE filename for reservedness, so "CON.txt" (base+ext) never
+	// m1 — the ORIGINAL bug (pre-#46): test the WHOLE string for reservedness, so "CON.txt" (base+ext) never
 	// matches `^(con|…)$` and is left untouched. Kills on: CON.txt.
 	patch('m1-whole-string-check',
-		"const base = extensionIndex === -1 ? filename : filename.slice(0, extensionIndex);",
-		"const base = filename;"),
+		"const base = dot === -1 ? string : string.slice(0, dot);",
+		"const base = string;"),
 	// m2 — right reservedness check, WRONG suffix position: append at the very end instead of before the
 	// extension, so "CON.txt" -> "CON.txt!". Kills on: CON.txt (wrong output).
 	patch('m2-suffix-at-end',
-		"base + replacement + filename.slice(extensionIndex)",
-		"filename + replacement"),
+		"return base + '!' + extension;",
+		"return string + '!';"),
 	// m3 — base via lastIndexOf('.') instead of indexOf('.'): for "NUL.tar.gz" the base becomes "NUL.tar"
 	// (not reserved) so it is left untouched. Kills on: NUL.tar.gz (the maintainer's discriminator case).
 	patch('m3-lastindexof-base',
-		"const extensionIndex = filename.indexOf('.');",
-		"const extensionIndex = filename.lastIndexOf('.');"),
+		"const dot = string.indexOf('.');",
+		"const dot = string.lastIndexOf('.');"),
 	// m4 — case-SENSITIVE reserved regex (drops the /i): "CON.txt" (uppercase base) no longer matches.
 	// Kills on: CON.txt.
 	patch('m4-case-sensitive',
-		"/^(con|prn|aux|nul|com\\d|lpt\\d)$/i",
-		"/^(con|prn|aux|nul|com\\d|lpt\\d)$/"),
+		"/^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/i",
+		"/^(con|prn|aux|nul|com[1-9]|lpt[1-9])$/"),
 ];
 
 export const task1 = {

@@ -1,7 +1,18 @@
 # D7 — the ≥3-real-task benches cohort (plan, for sign-off)
 
-**Status:** SIGNED OFF (2026-07-05) — cohort shape locked. This is the last `src/` build item (PRD-v3 §6
-step 5, descope D7); on completion → retire `poc/`, cut `0.1.0`.
+**Status:** ✅ DONE (2026-07-05) — cohort ran green through the assembled pipe: **4/4 arms delivered,
+GOLD-green, fit-to-pass=0** (F42). This was the last `src/` build item (PRD-v3 §6 step 5, descope D7);
+remaining → retire `poc/`, cut `0.1.0`.
+
+**Result (canonical live run, `test/integration/d7-cohort.live.test.js`):** filenamify·haiku (real-repo bug)
+1/1 · semver·haiku 1/1 · semver·sonnet 1/1 · echo·haiku (agentic) 5/6 — all delivered, all independent GOLDs
+green, every close `trusted` (4/4 mutants), each in 1 iteration, ≈$0.60 total. Three findings surfaced en
+route (F42): (1) the pipe REIMPLEMENTS-FROM-SPEC (no patch-a-tree) → the real-repo-bug reference was narrowed
+to the task spec + prose reframed from-scratch; (2) the export SHAPE must be pinned in the visible prose
+(haiku authored a named import vs a default-export reference → over-constrained); (3) F33 in the wild —
+over-constrain → decision-ready escalate → fix a REAL reference bug (`com\d` matched `com0`) + complete the
+spec boundary → deliver. Honesty machinery caught a genuine oracle bug AND a model misconception; neither
+shipped. Side datapoint: cost varied 8× at iters=1; haiku cost MORE than sonnet on semver.
 
 **Sign-off decisions:**
 1. **Swap Task 1 (Range parser) for a G2-style real-repo bug** — one of the three is now an uncrafted,
