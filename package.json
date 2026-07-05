@@ -2,6 +2,7 @@
   "name": "relayfact",
   "version": "0.1.0",
   "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "description": "Experiment: an autonomous senior-dev runner assembled from bareagent + litectx + bareguard. Relays facts through the bare suite; graduates or gets archived. Builds no primitives.",
   "scripts": {
