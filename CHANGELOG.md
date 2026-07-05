@@ -13,9 +13,9 @@ the pipe ASSEMBLED end-to-end + D3 (memory widening) done.** Against `relayfact-
 step 1 (spine+observer) ✅ · step 2 (close+honesty+author) ✅ · step 3 (gated worker) ✅ + **D3 close-driven
 recall widening** ✅ · step 4 (pre-flight+escalation) ✅ · **the pipe assembled into one `runRequest`
 (prose+repo → deliver|escalate, live e2e green)** ✅ · **step 5 `agentic`-tier close spike (D1) done** ✅ · **benches cohort (D7) UNDERWAY — shape signed off,
-all THREE task oracles built + token-free pre-check green across predicate & agentic tiers** 🔨.
-**Remaining: two token-free pipeline wiring gaps + the live cohort run** — then retire `poc/` and cut
-`0.1.0`. Every step
+all THREE task oracles built + token-free pre-check green across predicate & agentic tiers + both pipeline
+wiring gaps closed** 🔨.
+**Remaining: the live cohort run ONLY** — then retire `poc/` and cut `0.1.0`. Every step
 live-verified where it spends tokens; every load-bearing control fail-capable. _(prior phase:)_ **graduation gate (§8.2
 G1–G5) COMPLETE — G1/G2/G3/G4 met, G5 written → the call was GRADUATE.**
 _(prior:)_ **v2 spikes complete + graduation gate IN PROGRESS — G1/G2/G3/G4 met, G5 open.** v1 POC
@@ -38,6 +38,23 @@ global predicate catches an ungrounded child's fault) but found depth is **model
 past depth 1, so depth-2 reach is unproven. All blocking upstream asks shipped + verified through bareagent
 v0.23.0 / bareguard v0.10.x. **All three v2 spikes are run; next is the graduate-or-archive call.** No
 shippable `src/` yet, by design.
+
+### Changed — D7: closed both live-run pipeline wiring gaps (per-task split + agentic close command), token-free (2026-07-05)
+
+- **Per-task grounded/rubric split** — `runRequest` now takes an optional `criteriaMap`; `criteriaSplit()`
+  routes it through the shipped `countGrounded()` (grounded = predicate|agentic, residue = rubric). Task 3
+  reports **5/6**; predicate tasks and callers passing no map keep the prior **1/1**. Backward-compatible.
+- **Agentic close command** — `runRequest` takes `tier` (default `'predicate'`). The grounded close is now
+  tier-agnostic end to end: `['node','--test',suiteName]` (predicate, over source) or `['node',suiteName]`
+  (agentic exercise harness — deploy + probe), threaded into `compile-close` (so the validity gate measures
+  the REAL close) and the worker (`opts.evaluate` + sensor, which already took `closeCommand`); the GOLD
+  honors an explicit `goldSuite.command`. All changes additive with backward-compatible defaults (the
+  high-impact `runRequest`'s existing 9 call-sites are unaffected).
+- **Tested** (`test/pipeline.test.js`, token-free): an agentic run DELIVERS with the exercise-harness GOLD
+  green and split 5/6; the **agentic D5 tripwire** fires — a wrong server that passes its own close is caught
+  RED by the exercise GOLD → `gold-mismatch`, never delivered (the tripwire is real, not faked).
+- Suite: **78 tests / 69 pass / 9 live-skip / 0 fail**. The live cohort run is now the ONLY remaining step
+  before retiring `poc/` and cutting `0.1.0`.
 
 ### Added — D7 cohort: Tasks 2 (semver §11) + 3 (/echo agentic) oracles built + pre-check across both tiers (2026-07-05)
 

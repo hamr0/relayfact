@@ -15,6 +15,7 @@ import { createEventLog } from '../src/event-log.mjs';
 import { readEventLog, renderRun } from '../src/observer.mjs';
 import { runRequest } from '../src/pipeline.mjs';
 import { isDecisionReady } from '../src/escalation.mjs';
+import { task3 } from './fixtures/d7/echo/task.mjs';
 
 const ORACLE = { reference: 'export const double = (n) => n * 2;\n', stub: 'export const double = (n) => {};\n', mutants: [] };
 // An independent GOLD the worker never sees. GREEN only for a genuinely-correct double().
@@ -141,5 +142,54 @@ test('happy path: own-green AND GOLD-green ⇒ DELIVER, split reported, renders 
     const out = renderRun(readEventLog(join(h.dir, 'run.jsonl')));
     assert.match(out, /✅ DELIVER/);
     assert.match(out, /④ GOLD arbiter → GREEN/);
+  } finally { h.cleanup(); }
+});
+
+// AGENTIC tier wiring (D7 Task 3 shape): the GOLD is an EXERCISE harness (deploy + probe over real HTTP), and
+// the grounded/rubric split routes through the shipped countGrounded() → 5/6. Token-spending stages are faked;
+// the agentic GOLD runs FOR REAL (boots the echo server) — that tripwire must be able to fail, so it is real.
+function agenticBase(h) {
+  return {
+    request: task3.request, workdir: h.dir, target: join(h.dir, 'server.mjs'),
+    oracle: task3.oracle, goldSuite: task3.goldSuite, log: h.log,
+    tier: 'agentic', criteriaMap: task3.criteriaMap, implName: 'server.mjs', suiteName: 'suite.mjs',
+  };
+}
+
+test('agentic tier: exercise-harness GOLD closes GREEN on a correct server; split routes through countGrounded (5/6)', async () => {
+  const h = harness();
+  try {
+    const r = await runRequest({ ...agenticBase(h),
+      deps: {
+        preflight: async () => ({ verdict: 'proceed', reason: '', questions: [] }),
+        compileClose: async () => okCompile,
+        implement: async () => { writeFileSync(join(h.dir, 'server.mjs'), task3.oracle.reference); // correct /echo service
+          return { delivered: true, outcome: 'delivered', incomplete: false, verdict: null, iterations: 1, finalClose: { pass: true, status: 'satisfied', output: '' } }; },
+      } });
+    assert.equal(r.delivered, true);
+    assert.equal(r.gold.pass, true, 'the agentic exercise-harness GOLD must go GREEN on the correct server');
+    assert.equal(r.split.groundedOfTotal, '5/6');
+    assert.equal(r.split.rubric, 1, 'the one rubric residue is reported, not gated');
+    assert.ok(types(h).includes('run.deliver'));
+  } finally { h.cleanup(); }
+});
+
+test('agentic D5 TRIPWIRE: a wrong server passes own-close but the exercise GOLD goes RED ⇒ gold-mismatch', async () => {
+  const h = harness();
+  try {
+    const wrong = task3.oracle.mutants.find((m) => m.name === 'm1-healthz-shape').code; // healthz returns {ok:true}
+    const r = await runRequest({ ...agenticBase(h),
+      deps: {
+        preflight: async () => ({ verdict: 'proceed', reason: '', questions: [] }),
+        compileClose: async () => okCompile,
+        implement: async () => { writeFileSync(join(h.dir, 'server.mjs'), wrong);
+          return { delivered: true, outcome: 'delivered', incomplete: false, verdict: null, iterations: 1, finalClose: { pass: true, status: 'satisfied', output: '' } }; },
+      } });
+    assert.equal(r.delivered, false, 'own-green must not deliver — the agentic GOLD is the arbiter');
+    assert.equal(r.escalation.blocker, 'gold-mismatch');
+    assert.equal(r.decisionReady, true);
+    const goldEvent = readEventLog(join(h.dir, 'run.jsonl')).find((e) => e.type === 'gold.checked');
+    assert.equal(goldEvent?.pass, false, 'the agentic GOLD must have run and gone RED');
+    assert.ok(!types(h).includes('run.deliver'));
   } finally { h.cleanup(); }
 });

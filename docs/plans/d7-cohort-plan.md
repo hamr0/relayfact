@@ -135,12 +135,18 @@ counted per task** (N grounded of M criteria — reported, not gated).
   developer-friendly") is in the `criteriaMap` as `eval:'rubric'` but has NO mutant (un-grounded ⇒ not an
   executable kill). Split proven **5 grounded / 6 total** offline via shipped `countGrounded()`.
   **Fail-capability proven:** dropping the `count` probe frees `m2`.
-- **WIRING GAPS for the live run (both token-free to close; do alongside the run so they verify e2e):**
-  1. `pipeline.mjs::criteriaSplit()` is HARDCODED `1/1` — replace with `countGrounded(task.criteriaMap)` so
-     Task 3 reports 5/6 (predicate tasks stay 1/1).
-  2. `pipeline.mjs` hardcodes `closeCommand = ['node','--test',suiteName]` — AGENTIC Task 3 needs
-     `['node', suiteName]` (exercise harness). Thread a per-task `closeCommand`/tier through `runRequest`,
-     `compile-close`, and the worker so the same close is authored, validated, and run as an exercise.
+- **WIRING GAPS — BOTH CLOSED + TESTED (2026-07-05, token-free).**
+  1. **Split** ✅ — `runRequest` takes an optional `criteriaMap`; `criteriaSplit()` routes it through shipped
+     `countGrounded()` (Task 3 → 5/6; predicate tasks default 1/1). Backward-compatible.
+  2. **Agentic close command** ✅ — `runRequest` takes `tier` (default `'predicate'`); the close is
+     `['node','--test',suiteName]` (predicate) or `['node',suiteName]` (agentic exercise harness), threaded to
+     `compile-close` (validity gate) and the worker (`opts.evaluate`+sensor), and the GOLD honors
+     `goldSuite.command`. Tested in `test/pipeline.test.js`: an agentic run delivers with the exercise-harness
+     GOLD green + split 5/6, AND the **agentic D5 tripwire** fires (a wrong server → exercise GOLD RED →
+     `gold-mismatch`, never delivered). The `worker.mjs` close was already tier-agnostic (took `closeCommand`).
+  - **The only remaining live part** is the AUTHOR: for an agentic task the worker must self-author an
+    EXERCISE harness (not a `node:test` suite) from the prose. That is a live-model behavior verified during
+    the run, not a wiring blocker — the plumbing above is proven token-free.
 
 ## Cohort execution
 

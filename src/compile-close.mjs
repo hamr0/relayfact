@@ -25,9 +25,12 @@ import { validateSuite } from './validity-gate.mjs';
  * @param {number} [args.minKill] - mutants the suite must kill (default 4 of the k=5 canon).
  * @param {string} [args.suiteName]
  * @param {string} [args.implName]
+ * @param {string[]} [args.closeCommand] - the close command run against each impl. Default is the PREDICATE
+ *   tier (`['node','--test',suiteName]`); an AGENTIC task passes `['node',suiteName]` (an exercise harness).
+ *   The SAME command the worker's grounded close will use — so validity is measured on the real close.
  * @returns {Promise<{ ok: boolean, verdict: 'trusted'|'vacuous'|'over-constrained'|'weak-grounding'|'no-suite', validity: object|null, suiteBytes: number }>}
  */
-export async function compileClose({ workdir, prose, oracle, authorSuite, minKill = 4, suiteName = 'suite.test.mjs', implName = 'impl.mjs' }) {
+export async function compileClose({ workdir, prose, oracle, authorSuite, minKill = 4, suiteName = 'suite.test.mjs', implName = 'impl.mjs', closeCommand = ['node', '--test', suiteName] }) {
   const suitePath = join(workdir, suiteName);
   const implPath = join(workdir, implName);
 
@@ -40,7 +43,7 @@ export async function compileClose({ workdir, prose, oracle, authorSuite, minKil
   const codeOf = (m) => (typeof m === 'string' ? m : m.code);
   const runSuiteAgainst = (code) => {
     writeFileSync(implPath, code);
-    return runClose(['node', '--test', suiteName], { cwd: workdir });
+    return runClose(closeCommand, { cwd: workdir });
   };
 
   const validity = validateSuite({

@@ -23,16 +23,25 @@ import { preflight as realPreflight } from './preflight.mjs';
 import { compileClose as realCompileClose } from './compile-close.mjs';
 import { implementAgainstClose as realImplement } from './worker.mjs';
 import { buildEscalation, isDecisionReady } from './escalation.mjs';
+import { countGrounded } from './validity-gate.mjs';
 
 /** Best-effort spend read from the bareguard gate (audit-derived); 0 when no gate (token-free tests). */
 async function costOf(gate) {
   try { return (await gate?.haltContext?.())?.spent?.costUsd ?? 0; } catch { return 0; }
 }
 
-/** The per-task grounded/rubric split — the §1 secondary-goal number, REPORTED not gated (G5-EXIT). */
-function criteriaSplit() {
-  // One deterministic close (predicate, exit code = truth) grounds delivery; pre-flight is the one rubric,
-  // and it can only OPEN a stop — it never counts toward "done". So a delivered task is 1/1 grounded.
+/**
+ * The per-task grounded/rubric split — the §1 secondary-goal number, REPORTED not gated (G5-EXIT). When the
+ * task supplies a criteria→eval map it is counted through the shipped `countGrounded()` (grounded =
+ * predicate|agentic; residue = rubric): an agentic task with one rubric residue reports e.g. 5/6. With no map,
+ * a delivered task is 1/1 (one deterministic close grounds delivery; pre-flight is the one rubric, and it can
+ * only OPEN a stop — it never counts toward "done").
+ */
+function criteriaSplit(criteriaMap) {
+  if (Array.isArray(criteriaMap) && criteriaMap.length > 0) {
+    const { N, M, residue } = countGrounded(criteriaMap);
+    return { grounded: N, rubric: residue.length, total: M, groundedOfTotal: `${N}/${M}` };
+  }
   return { grounded: 1, rubric: 1, total: 1, groundedOfTotal: '1/1' };
 }
 
@@ -60,13 +69,17 @@ function criteriaSplit() {
  */
 export async function runRequest({
   request, workdir, target, oracle, goldSuite = null, authorSuite,
-  provider, gate, log, memory = null, suiteName = 'suite.test.mjs', implName = 'impl.mjs', deps = {},
+  provider, gate, log, memory = null, suiteName = 'suite.test.mjs', implName = 'impl.mjs',
+  tier = 'predicate', criteriaMap = null, deps = {},
 }) {
   const emit = (t, p) => log?.emit(t, p);
   const preflight = deps.preflight ?? realPreflight;
   const compileClose = deps.compileClose ?? realCompileClose;
   const implement = deps.implement ?? realImplement;
-  const closeCommand = ['node', '--test', suiteName];
+  // The grounded close is tier-agnostic (runClose maps exit code → Verdict for ANY command). A PREDICATE close
+  // runs `node --test <suite>` over the source; an AGENTIC close runs `node <harness>` that deploys + probes
+  // the artifact (D1/F41). The SAME command validates the authored suite (compile-close) and closes the loop.
+  const closeCommand = tier === 'agentic' ? ['node', suiteName] : ['node', '--test', suiteName];
 
   // A come-back is only allowed OUT if a human can act on it without the raw log — assert, then narrate.
   const finishEscalate = (escalation) => {
@@ -89,7 +102,7 @@ export async function runRequest({
   }
 
   // ② COMPILE THE CLOSE — the worker authors the suite from prose; relayfact's validity-gate decides TRUST.
-  const compiled = await compileClose({ workdir, prose: request, oracle, authorSuite, suiteName, implName });
+  const compiled = await compileClose({ workdir, prose: request, oracle, authorSuite, suiteName, implName, closeCommand });
   emit('close.compiled', { verdict: compiled.verdict, ok: compiled.ok, suiteBytes: compiled.suiteBytes, validity: compiled.validity });
   if (!compiled.ok) {
     return finishEscalate(buildEscalation({
@@ -122,7 +135,10 @@ export async function runRequest({
   let gold = null;
   if (goldSuite) {
     writeFileSync(join(workdir, goldSuite.name), goldSuite.source);
-    gold = runClose(['node', '--test', goldSuite.name], { cwd: workdir });
+    // The GOLD is closed the same tier-agnostic way as the loop's own close: a predicate GOLD runs `node
+    // --test`, an agentic GOLD runs its exercise harness. The task may carry an explicit `command`.
+    const goldCommand = goldSuite.command ?? (tier === 'agentic' ? ['node', goldSuite.name] : ['node', '--test', goldSuite.name]);
+    gold = runClose(goldCommand, { cwd: workdir });
     emit('gold.checked', { pass: gold.pass, exitCode: gold.exitCode });
     if (!gold.pass) {
       return finishEscalate(buildEscalation({
@@ -133,7 +149,7 @@ export async function runRequest({
     }
   }
 
-  const split = criteriaSplit();
+  const split = criteriaSplit(criteriaMap);
   emit('run.deliver', { target, outcome: 'delivered', goldChecked: !!goldSuite, split });
   emit('run.end', { outcome: 'delivered' });
   return { outcome: 'delivered', delivered: true, target, worker: w, gold, split };
