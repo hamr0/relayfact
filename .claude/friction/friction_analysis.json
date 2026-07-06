@@ -116,16 +116,16 @@
     "session_id": "hamr/0619-1632-763b3c8f",
     "session_metadata": {
       "git_branch": "HEAD",
-      "cwd": "/home/hamr/PycharmProjects/hamr0",
+      "cwd": "/home/hamr/Applications",
       "started_at": "2026-06-19T14:32:25.337Z",
-      "ended_at": "2026-06-22T11:50:04.169Z",
-      "turn_count": 18,
-      "duration_min": 4157
+      "ended_at": "2026-07-01T20:41:20.584Z",
+      "turn_count": 20,
+      "duration_min": 17648
     },
     "friction_summary": {
       "peak": 32,
       "final": 32,
-      "total_signals": 13,
+      "total_signals": 14,
       "learning_moments": 0
     },
     "momentum": {
@@ -137,10 +137,10 @@
     "by_source": {
       "user": {
         "total_friction": 30,
-        "signal_count": 9,
+        "signal_count": 10,
         "signals": {
           "checkpoint": {
-            "count": 3,
+            "count": 4,
             "total_weight": 0
           },
           "repeated_question": {
@@ -185,6 +185,7 @@
       }
     },
     "friction_trajectory": [
+      0,
       0,
       0,
       0,
@@ -348,130 +349,98 @@
     "patterns_detected": []
   },
   {
-    "session_id": "addypin/0602-1540-318d27da",
+    "session_id": "addypin/0702-0849-374142ec",
     "session_metadata": {
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/addypin",
-      "started_at": "2026-06-02T13:40:53.851Z",
-      "ended_at": "2026-06-02T20:28:42.546Z",
-      "turn_count": 12,
-      "duration_min": 407
+      "started_at": "2026-07-02T06:49:20.466Z",
+      "ended_at": "2026-07-02T14:12:13.365Z",
+      "turn_count": 17,
+      "duration_min": 442
     },
     "friction_summary": {
-      "peak": 8,
-      "final": 8,
-      "total_signals": 4,
+      "peak": 4.5,
+      "final": 4.5,
+      "total_signals": 21,
       "learning_moments": 0
     },
     "momentum": {
       "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 8,
-        "signal_count": 4,
-        "signals": {
-          "checkpoint": {
-            "count": 2,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 1,
-            "total_weight": 5
-          },
-          "request_interrupted": {
-            "count": 1,
-            "total_weight": 3
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      5,
-      5,
-      8
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "addypin/0531-2027-e498d7e9",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/addypin",
-      "started_at": "2026-05-31T18:27:01.329Z",
-      "ended_at": "2026-06-02T06:58:09.176Z",
-      "turn_count": 6,
-      "duration_min": 2191
-    },
-    "friction_summary": {
-      "peak": 1,
-      "final": 1,
-      "total_signals": 3,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 1,
+      "error_count": 5,
       "error_ratio": 1
     },
-    "quality": "OK",
+    "quality": "FRICTION",
     "by_source": {
       "user": {
         "total_friction": 0,
-        "signal_count": 1,
+        "signal_count": 14,
         "signals": {
           "checkpoint": {
-            "count": 1,
+            "count": 14,
             "total_weight": 0
           }
         }
       },
       "tool": {
-        "total_friction": 0.5,
-        "signal_count": 1,
+        "total_friction": 2.5,
+        "signal_count": 5,
         "signals": {
           "exit_error": {
-            "count": 1,
-            "total_weight": 0.5
+            "count": 5,
+            "total_weight": 2.5
           }
         }
       },
-      "session": {
-        "total_friction": 0.5,
-        "signal_count": 1,
+      "llm": {
+        "total_friction": 2,
+        "signal_count": 2,
         "signals": {
-          "no_resolution": {
-            "count": 1,
-            "total_weight": 0.5
+          "false_success": {
+            "count": 2,
+            "total_weight": 2
           }
         }
       }
     },
     "friction_trajectory": [
       0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
       0.5,
-      1
+      1,
+      1.5,
+      2,
+      3,
+      3.5,
+      4.5,
+      4.5,
+      4.5
     ],
     "patterns_detected": []
   },
   {
-    "session_id": "addypin/0602-1249-fd009f14",
+    "session_id": "agentic-toolkit/0703-1545-8e48c2ae",
     "session_metadata": {
       "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/addypin",
-      "started_at": "2026-06-02T10:49:17.414Z",
-      "ended_at": "2026-06-02T13:27:36.527Z",
-      "turn_count": 11,
-      "duration_min": 158
+      "cwd": "/home/hamr/PycharmProjects/agentic-toolkit",
+      "started_at": "2026-07-03T13:45:15.619Z",
+      "ended_at": "2026-07-03T13:47:09.135Z",
+      "turn_count": 2,
+      "duration_min": 1
     },
     "friction_summary": {
       "peak": 0,
       "final": 0,
-      "total_signals": 6,
+      "total_signals": 0,
       "learning_moments": 0
     },
     "momentum": {
@@ -480,26 +449,8 @@
       "error_ratio": 0
     },
     "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 0,
-        "signal_count": 6,
-        "signals": {
-          "checkpoint": {
-            "count": 6,
-            "total_weight": 0
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
+    "by_source": {},
+    "friction_trajectory": [],
     "patterns_detected": []
   },
   {
@@ -1203,67 +1154,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareagent/0602-0903-37e05f74",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareagent",
-      "started_at": "2026-06-02T07:03:17.521Z",
-      "ended_at": "2026-06-02T07:03:52.678Z",
-      "turn_count": 4,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 4,
-      "final": 4,
-      "total_signals": 3,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 1,
-      "error_ratio": 1
-    },
-    "quality": "OK",
-    "by_source": {
-      "tool": {
-        "total_friction": 0.5,
-        "signal_count": 1,
-        "signals": {
-          "exit_error": {
-            "count": 1,
-            "total_weight": 0.5
-          }
-        }
-      },
-      "user": {
-        "total_friction": 3,
-        "signal_count": 1,
-        "signals": {
-          "request_interrupted": {
-            "count": 1,
-            "total_weight": 3
-          }
-        }
-      },
-      "session": {
-        "total_friction": 0.5,
-        "signal_count": 1,
-        "signals": {
-          "no_resolution": {
-            "count": 1,
-            "total_weight": 0.5
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0.5,
-      3.5,
-      4
-    ],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareagent/0626-2256-38c1251c",
     "session_metadata": {
       "git_branch": "docs/rlm-prd",
@@ -1737,32 +1627,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareagent/0602-1353-63254d58",
-    "session_metadata": {
-      "started_at": "2026-06-02T11:53:11.141Z",
-      "ended_at": "2026-06-02T11:53:14.284Z",
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareagent",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareagent/0627-0000-6d4929bc",
     "session_metadata": {
       "git_branch": "docs/rlm-prd",
@@ -2077,39 +1941,55 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareagent/0601-1551-a1bfc5ce",
+    "session_id": "bareagent/0703-1307-a7aabbdd",
     "session_metadata": {
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/bareagent",
-      "started_at": "2026-06-01T13:51:54.495Z",
-      "ended_at": "2026-06-02T07:10:48.787Z",
-      "turn_count": 44,
-      "duration_min": 1038
+      "started_at": "2026-07-03T11:07:24.496Z",
+      "ended_at": "2026-07-03T14:14:36.541Z",
+      "turn_count": 12,
+      "duration_min": 187
     },
     "friction_summary": {
-      "peak": 8,
-      "final": 8,
-      "total_signals": 6,
+      "peak": 3,
+      "final": 3,
+      "total_signals": 10,
       "learning_moments": 0
     },
     "momentum": {
       "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
+      "error_count": 2,
+      "error_ratio": 1
     },
     "quality": "FRICTION",
     "by_source": {
       "user": {
-        "total_friction": 8,
+        "total_friction": 0,
         "signal_count": 6,
         "signals": {
           "checkpoint": {
-            "count": 5,
+            "count": 6,
             "total_weight": 0
-          },
-          "user_curse": {
-            "count": 1,
-            "total_weight": 8
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 1,
+        "signal_count": 2,
+        "signals": {
+          "exit_error": {
+            "count": 2,
+            "total_weight": 1
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 2,
+        "signal_count": 2,
+        "signals": {
+          "false_success": {
+            "count": 2,
+            "total_weight": 2
           }
         }
       }
@@ -2119,25 +1999,29 @@
       0,
       0,
       0,
-      0,
-      8
+      0.5,
+      1.5,
+      2,
+      3,
+      3,
+      3
     ],
     "patterns_detected": []
   },
   {
-    "session_id": "bareagent/0530-1602-aa1b7c54",
+    "session_id": "bareagent/0703-1616-aad33692",
     "session_metadata": {
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/bareagent",
-      "started_at": "2026-05-30T14:02:57.650Z",
-      "ended_at": "2026-06-01T13:24:33.816Z",
-      "turn_count": 10,
-      "duration_min": 2841
+      "started_at": "2026-07-03T14:16:13.058Z",
+      "ended_at": "2026-07-03T14:17:12.964Z",
+      "turn_count": 3,
+      "duration_min": 0
     },
     "friction_summary": {
-      "peak": 10,
-      "final": 10,
-      "total_signals": 5,
+      "peak": 0,
+      "final": 0,
+      "total_signals": 1,
       "learning_moments": 0
     },
     "momentum": {
@@ -2148,26 +2032,18 @@
     "quality": "OK",
     "by_source": {
       "user": {
-        "total_friction": 10,
-        "signal_count": 5,
+        "total_friction": 0,
+        "signal_count": 1,
         "signals": {
           "checkpoint": {
-            "count": 3,
+            "count": 1,
             "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 2,
-            "total_weight": 10
           }
         }
       }
     },
     "friction_trajectory": [
-      0,
-      0,
-      0,
-      5,
-      10
+      0
     ],
     "patterns_detected": []
   },
@@ -2367,32 +2243,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareagent/0602-1133-cdbfcc28",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareagent",
-      "started_at": "2026-06-02T09:33:18.273Z",
-      "ended_at": "2026-06-02T09:36:20.676Z",
-      "turn_count": 5,
-      "duration_min": 3
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareagent/0623-0846-cee6489a",
     "session_metadata": {
       "git_branch": "main",
@@ -2448,37 +2298,67 @@
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/bareagent",
       "started_at": "2026-06-30T18:15:45.247Z",
-      "ended_at": "2026-06-30T18:51:03.980Z",
-      "turn_count": 4,
-      "duration_min": 35
+      "ended_at": "2026-07-03T11:04:30.085Z",
+      "turn_count": 10,
+      "duration_min": 3888
     },
     "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 2,
+      "peak": 3.5,
+      "final": 3.5,
+      "total_signals": 12,
       "learning_moments": 0
     },
     "momentum": {
       "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
+      "error_count": 3,
+      "error_ratio": 1
     },
-    "quality": "OK",
+    "quality": "FRICTION",
     "by_source": {
       "user": {
         "total_friction": 0,
-        "signal_count": 2,
+        "signal_count": 7,
         "signals": {
           "checkpoint": {
-            "count": 2,
+            "count": 7,
             "total_weight": 0
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 1.5,
+        "signal_count": 3,
+        "signals": {
+          "exit_error": {
+            "count": 3,
+            "total_weight": 1.5
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 2,
+        "signal_count": 2,
+        "signals": {
+          "false_success": {
+            "count": 2,
+            "total_weight": 2
           }
         }
       }
     },
     "friction_trajectory": [
       0,
-      0
+      0,
+      0,
+      0,
+      0.5,
+      1.5,
+      2,
+      2.5,
+      3.5,
+      3.5,
+      3.5,
+      3.5
     ],
     "patterns_detected": []
   },
@@ -2856,124 +2736,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0530-0955-01c961bf",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "started_at": "2026-05-30T07:55:47.738Z",
-      "ended_at": "2026-05-31T21:57:13.406Z",
-      "turn_count": 36,
-      "duration_min": 2281
-    },
-    "friction_summary": {
-      "peak": 56.5,
-      "final": 56.5,
-      "total_signals": 38,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 8,
-      "error_ratio": 1
-    },
-    "quality": "FRICTION",
-    "by_source": {
-      "user": {
-        "total_friction": 30,
-        "signal_count": 21,
-        "signals": {
-          "checkpoint": {
-            "count": 15,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 6,
-            "total_weight": 30
-          }
-        }
-      },
-      "tool": {
-        "total_friction": 4,
-        "signal_count": 8,
-        "signals": {
-          "exit_error": {
-            "count": 8,
-            "total_weight": 4
-          }
-        }
-      },
-      "llm": {
-        "total_friction": 22,
-        "signal_count": 7,
-        "signals": {
-          "false_success": {
-            "count": 4,
-            "total_weight": 4
-          },
-          "tool_loop": {
-            "count": 3,
-            "total_weight": 18
-          }
-        }
-      },
-      "session": {
-        "total_friction": 0.5,
-        "signal_count": 2,
-        "signals": {
-          "no_resolution": {
-            "count": 1,
-            "total_weight": 0.5
-          },
-          "checkpoint": {
-            "count": 1,
-            "total_weight": 0
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      5,
-      10,
-      15,
-      20,
-      25,
-      30,
-      30.5,
-      31,
-      32,
-      38,
-      38.5,
-      39.5,
-      45.5,
-      46,
-      46.5,
-      52.5,
-      53,
-      53.5,
-      54.5,
-      55,
-      56,
-      56.5,
-      56.5
-    ],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0603-2318-065ac6fc",
     "session_metadata": {
       "git_branch": "main",
@@ -3140,58 +2902,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1355-171b6d8b",
-    "session_metadata": {
-      "started_at": "2026-06-02T11:55:34.005Z",
-      "ended_at": "2026-06-02T11:55:43.499Z",
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "bareguard/0602-1355-1945f90b",
-    "session_metadata": {
-      "started_at": "2026-06-02T11:55:26.429Z",
-      "ended_at": "2026-06-02T11:55:32.621Z",
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0615-1349-19d39cab",
     "session_metadata": {
       "started_at": "2026-06-15T11:49:30.308Z",
@@ -3283,32 +2993,6 @@
       0,
       0
     ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "bareguard/0602-1356-233d6a6a",
-    "session_metadata": {
-      "started_at": "2026-06-02T11:56:47.683Z",
-      "ended_at": "2026-06-02T11:56:57.130Z",
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
     "patterns_detected": []
   },
   {
@@ -3702,51 +3386,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1116-44bf383c",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "started_at": "2026-06-02T09:16:15.381Z",
-      "ended_at": "2026-06-02T11:40:09.428Z",
-      "turn_count": 18,
-      "duration_min": 143
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 7,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 0,
-        "signal_count": 7,
-        "signals": {
-          "checkpoint": {
-            "count": 7,
-            "total_weight": 0
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0615-1351-496d6ffb",
     "session_metadata": {
       "started_at": "2026-06-15T11:51:10.773Z",
@@ -4005,32 +3644,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1115-71ef1969",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "started_at": "2026-06-02T09:15:07.302Z",
-      "ended_at": "2026-06-02T09:15:50.103Z",
-      "turn_count": 3,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0615-1329-72261fd1",
     "session_metadata": {
       "started_at": "2026-06-15T11:29:12.513Z",
@@ -4155,32 +3768,6 @@
       "started_at": "2026-06-15T11:29:44.066Z",
       "ended_at": "2026-06-15T11:29:54.143Z",
       "git_branch": "docs/axis-b-judge-design-e6-poc",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "bareguard/0602-2242-79dbc147",
-    "session_metadata": {
-      "started_at": "2026-06-02T20:42:18.562Z",
-      "ended_at": "2026-06-02T20:42:35.173Z",
-      "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/bareguard",
       "turn_count": 1,
       "duration_min": 0
@@ -4363,32 +3950,6 @@
       "started_at": "2026-06-15T11:50:26.471Z",
       "ended_at": "2026-06-15T11:50:29.561Z",
       "git_branch": "docs/axis-b-judge-design-e6-poc",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "bareguard/0602-2242-9561ed17",
-    "session_metadata": {
-      "started_at": "2026-06-02T20:42:05.644Z",
-      "ended_at": "2026-06-02T20:42:17.087Z",
-      "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/bareguard",
       "turn_count": 1,
       "duration_min": 0
@@ -4891,58 +4452,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1342-b3c1efa9",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "started_at": "2026-06-02T11:42:01.223Z",
-      "ended_at": "2026-06-02T21:02:41.486Z",
-      "turn_count": 14,
-      "duration_min": 560
-    },
-    "friction_summary": {
-      "peak": 8,
-      "final": 8,
-      "total_signals": 6,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 8,
-        "signal_count": 6,
-        "signals": {
-          "checkpoint": {
-            "count": 4,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 1,
-            "total_weight": 5
-          },
-          "request_interrupted": {
-            "count": 1,
-            "total_weight": 3
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      5,
-      5,
-      8,
-      8
-    ],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0615-1330-bbc1ca9c",
     "session_metadata": {
       "started_at": "2026-06-15T11:30:01.829Z",
@@ -5197,32 +4706,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1358-cd0036ff",
-    "session_metadata": {
-      "started_at": "2026-06-02T11:58:04.261Z",
-      "ended_at": "2026-06-02T11:58:15.412Z",
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0615-1350-cf51e106",
     "session_metadata": {
       "started_at": "2026-06-15T11:50:44.795Z",
@@ -5249,45 +4732,19 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1356-d35fd81b",
-    "session_metadata": {
-      "started_at": "2026-06-02T11:56:41.686Z",
-      "ended_at": "2026-06-02T11:56:46.318Z",
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0629-2256-d3fed81f",
     "session_metadata": {
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/bareguard",
       "started_at": "2026-06-29T20:56:34.871Z",
-      "ended_at": "2026-06-29T21:18:38.458Z",
-      "turn_count": 6,
-      "duration_min": 22
+      "ended_at": "2026-07-03T13:01:24.387Z",
+      "turn_count": 18,
+      "duration_min": 5284
     },
     "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 1,
+      "peak": 10,
+      "final": 10,
+      "total_signals": 7,
       "learning_moments": 0
     },
     "momentum": {
@@ -5295,21 +4752,35 @@
       "error_count": 0,
       "error_ratio": 0
     },
-    "quality": "OK",
+    "quality": "BAD",
     "by_source": {
       "user": {
-        "total_friction": 0,
-        "signal_count": 1,
+        "total_friction": 10,
+        "signal_count": 7,
         "signals": {
           "checkpoint": {
-            "count": 1,
+            "count": 4,
             "total_weight": 0
+          },
+          "user_correction": {
+            "count": 1,
+            "total_weight": 8
+          },
+          "user_intervention": {
+            "count": 2,
+            "total_weight": 2
           }
         }
       }
     },
     "friction_trajectory": [
-      0
+      0,
+      0,
+      0,
+      0,
+      8,
+      9,
+      10
     ],
     "patterns_detected": []
   },
@@ -5418,32 +4889,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1357-e02b80ba",
-    "session_metadata": {
-      "started_at": "2026-06-02T11:57:56.014Z",
-      "ended_at": "2026-06-02T11:58:02.930Z",
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
     "session_id": "bareguard/0615-1348-e1d28d3c",
     "session_metadata": {
       "started_at": "2026-06-15T11:48:58.606Z",
@@ -5470,19 +4915,19 @@
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0615-1330-e45d7196",
+    "session_id": "bareguard/0703-1501-e38ab6ff",
     "session_metadata": {
-      "started_at": "2026-06-15T11:30:59.740Z",
-      "ended_at": "2026-06-15T11:31:03.094Z",
-      "git_branch": "docs/axis-b-judge-design-e6-poc",
+      "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/bareguard",
-      "turn_count": 1,
-      "duration_min": 0
+      "started_at": "2026-07-03T13:01:38.514Z",
+      "ended_at": "2026-07-03T19:10:37.372Z",
+      "turn_count": 11,
+      "duration_min": 368
     },
     "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
+      "peak": 5,
+      "final": 5,
+      "total_signals": 4,
       "learning_moments": 0
     },
     "momentum": {
@@ -5490,17 +4935,37 @@
       "error_count": 0,
       "error_ratio": 0
     },
-    "quality": "ONE-SHOT",
-    "by_source": {},
-    "friction_trajectory": [],
+    "quality": "OK",
+    "by_source": {
+      "user": {
+        "total_friction": 5,
+        "signal_count": 4,
+        "signals": {
+          "checkpoint": {
+            "count": 3,
+            "total_weight": 0
+          },
+          "repeated_question": {
+            "count": 1,
+            "total_weight": 5
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      5,
+      5
+    ],
     "patterns_detected": []
   },
   {
-    "session_id": "bareguard/0602-1356-e707322e",
+    "session_id": "bareguard/0615-1330-e45d7196",
     "session_metadata": {
-      "started_at": "2026-06-02T11:56:58.479Z",
-      "ended_at": "2026-06-02T11:57:09.523Z",
-      "git_branch": "main",
+      "started_at": "2026-06-15T11:30:59.740Z",
+      "ended_at": "2026-06-15T11:31:03.094Z",
+      "git_branch": "docs/axis-b-judge-design-e6-poc",
       "cwd": "/home/hamr/PycharmProjects/bareguard",
       "turn_count": 1,
       "duration_min": 0
@@ -10684,19 +10149,19 @@
     "patterns_detected": []
   },
   {
-    "session_id": "flightlog/0531-1155-7d7f8747",
+    "session_id": "flightlog/0701-2314-c5a398cc",
     "session_metadata": {
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/flightlog",
-      "started_at": "2026-05-31T09:55:13.123Z",
-      "ended_at": "2026-06-01T11:48:53.866Z",
-      "turn_count": 26,
-      "duration_min": 1553
+      "started_at": "2026-07-01T21:14:16.020Z",
+      "ended_at": "2026-07-01T21:31:46.978Z",
+      "turn_count": 3,
+      "duration_min": 17
     },
     "friction_summary": {
-      "peak": 5,
-      "final": 5,
-      "total_signals": 6,
+      "peak": 0,
+      "final": 0,
+      "total_signals": 0,
       "learning_moments": 0
     },
     "momentum": {
@@ -10705,91 +10170,24 @@
       "error_ratio": 0
     },
     "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 5,
-        "signal_count": 6,
-        "signals": {
-          "checkpoint": {
-            "count": 5,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 1,
-            "total_weight": 5
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      5,
-      5,
-      5
-    ],
+    "by_source": {},
+    "friction_trajectory": [],
     "patterns_detected": []
   },
   {
-    "session_id": "flightlog/0601-1350-d012e9db",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/flightlog",
-      "started_at": "2026-06-01T11:50:45.785Z",
-      "ended_at": "2026-06-02T09:15:27.756Z",
-      "turn_count": 7,
-      "duration_min": 1284
-    },
-    "friction_summary": {
-      "peak": 5,
-      "final": 5,
-      "total_signals": 3,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 5,
-        "signal_count": 3,
-        "signals": {
-          "checkpoint": {
-            "count": 2,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 1,
-            "total_weight": 5
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      5,
-      5
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "gitdone/0531-1921-0ce9abc2",
+    "session_id": "gitdone/0701-2219-79e52857",
     "session_metadata": {
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/gitdone",
-      "started_at": "2026-05-31T17:21:40.107Z",
-      "ended_at": "2026-06-01T10:55:09.447Z",
-      "turn_count": 20,
-      "duration_min": 1053
+      "started_at": "2026-07-01T20:19:23.504Z",
+      "ended_at": "2026-07-02T07:09:23.349Z",
+      "turn_count": 17,
+      "duration_min": 649
     },
     "friction_summary": {
-      "peak": 3,
-      "final": 3,
-      "total_signals": 11,
+      "peak": 0,
+      "final": 0,
+      "total_signals": 7,
       "learning_moments": 0
     },
     "momentum": {
@@ -10800,77 +10198,12 @@
     "quality": "OK",
     "by_source": {
       "user": {
-        "total_friction": 3,
-        "signal_count": 11,
-        "signals": {
-          "checkpoint": {
-            "count": 10,
-            "total_weight": 0
-          },
-          "request_interrupted": {
-            "count": 1,
-            "total_weight": 3
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      3,
-      3,
-      3
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "gitdone/0602-0021-40231750",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/gitdone",
-      "started_at": "2026-06-01T22:21:40.941Z",
-      "ended_at": "2026-06-02T12:32:23.070Z",
-      "turn_count": 23,
-      "duration_min": 850
-    },
-    "friction_summary": {
-      "peak": 15,
-      "final": 15,
-      "total_signals": 11,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "BAD",
-    "by_source": {
-      "user": {
-        "total_friction": 15,
-        "signal_count": 11,
+        "total_friction": 0,
+        "signal_count": 7,
         "signals": {
           "checkpoint": {
             "count": 7,
             "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 1,
-            "total_weight": 5
-          },
-          "user_correction": {
-            "count": 1,
-            "total_weight": 8
-          },
-          "user_intervention": {
-            "count": 2,
-            "total_weight": 2
           }
         }
       }
@@ -10882,91 +10215,7 @@
       0,
       0,
       0,
-      5,
-      5,
-      13,
-      14,
-      15
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "gitdone/0601-1255-b00fd171",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/gitdone",
-      "started_at": "2026-06-01T10:55:22.447Z",
-      "ended_at": "2026-06-01T21:02:28.982Z",
-      "turn_count": 16,
-      "duration_min": 607
-    },
-    "friction_summary": {
-      "peak": 7,
-      "final": 7,
-      "total_signals": 22,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 6,
-      "error_ratio": 1
-    },
-    "quality": "FRICTION",
-    "by_source": {
-      "user": {
-        "total_friction": 0,
-        "signal_count": 12,
-        "signals": {
-          "checkpoint": {
-            "count": 12,
-            "total_weight": 0
-          }
-        }
-      },
-      "tool": {
-        "total_friction": 3,
-        "signal_count": 6,
-        "signals": {
-          "exit_error": {
-            "count": 6,
-            "total_weight": 3
-          }
-        }
-      },
-      "llm": {
-        "total_friction": 4,
-        "signal_count": 4,
-        "signals": {
-          "false_success": {
-            "count": 4,
-            "total_weight": 4
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0.5,
-      1,
-      2,
-      2.5,
-      3,
-      4,
-      4.5,
-      5.5,
-      6,
-      7,
-      7,
-      7
+      0
     ],
     "patterns_detected": []
   },
@@ -11037,157 +10286,35 @@
     "patterns_detected": []
   },
   {
-    "session_id": "gitdone/0601-2303-f567697c",
+    "session_id": "gitdone/0702-0914-eab8c6de",
     "session_metadata": {
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/gitdone",
-      "started_at": "2026-06-01T21:03:28.215Z",
-      "ended_at": "2026-06-01T22:20:59.784Z",
-      "turn_count": 8,
-      "duration_min": 77
+      "started_at": "2026-07-02T07:14:50.171Z",
+      "ended_at": "2026-07-02T17:50:41.213Z",
+      "turn_count": 13,
+      "duration_min": 635
     },
     "friction_summary": {
-      "peak": 65,
-      "final": 65,
-      "total_signals": 24,
+      "peak": 0,
+      "final": 0,
+      "total_signals": 7,
       "learning_moments": 0
     },
     "momentum": {
       "success_count": 0,
-      "error_count": 6,
-      "error_ratio": 1
+      "error_count": 0,
+      "error_ratio": 0
     },
-    "quality": "FRICTION",
+    "quality": "OK",
     "by_source": {
       "user": {
         "total_friction": 0,
-        "signal_count": 6,
+        "signal_count": 7,
         "signals": {
           "checkpoint": {
-            "count": 6,
-            "total_weight": 0
-          }
-        }
-      },
-      "llm": {
-        "total_friction": 62,
-        "signal_count": 12,
-        "signals": {
-          "tool_loop": {
-            "count": 10,
-            "total_weight": 60
-          },
-          "false_success": {
-            "count": 2,
-            "total_weight": 2
-          }
-        }
-      },
-      "tool": {
-        "total_friction": 3,
-        "signal_count": 6,
-        "signals": {
-          "exit_error": {
-            "count": 6,
-            "total_weight": 3
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      6,
-      12,
-      18,
-      24,
-      30,
-      30.5,
-      31.5,
-      32,
-      32.5,
-      33,
-      39,
-      45,
-      45.5,
-      46.5,
-      52.5,
-      58.5,
-      59,
-      65,
-      65,
-      65
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "healthwatch/0531-1740-7c0c25c1",
-    "session_metadata": {
-      "git_branch": "HEAD",
-      "cwd": "/home/hamr/PycharmProjects/pulselog",
-      "started_at": "2026-05-31T15:40:16.834Z",
-      "ended_at": "2026-06-02T09:14:36.403Z",
-      "turn_count": 83,
-      "duration_min": 2494
-    },
-    "friction_summary": {
-      "peak": 143.5,
-      "final": 143.5,
-      "total_signals": 69,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 5,
-      "error_ratio": 1
-    },
-    "quality": "FRICTION",
-    "by_source": {
-      "user": {
-        "total_friction": 95,
-        "signal_count": 53,
-        "signals": {
-          "checkpoint": {
-            "count": 33,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 15,
-            "total_weight": 75
-          },
-          "request_interrupted": {
-            "count": 4,
-            "total_weight": 12
-          },
-          "interrupt_cascade": {
-            "count": 1,
-            "total_weight": 8
-          }
-        }
-      },
-      "tool": {
-        "total_friction": 2.5,
-        "signal_count": 5,
-        "signals": {
-          "exit_error": {
-            "count": 5,
-            "total_weight": 2.5
-          }
-        }
-      },
-      "llm": {
-        "total_friction": 46,
-        "signal_count": 11,
-        "signals": {
-          "false_success": {
-            "count": 4,
-            "total_weight": 4
-          },
-          "tool_loop": {
             "count": 7,
-            "total_weight": 42
+            "total_weight": 0
           }
         }
       }
@@ -11199,81 +10326,19 @@
       0,
       0,
       0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      5,
-      10,
-      15,
-      20,
-      25,
-      30,
-      35,
-      40,
-      45,
-      50,
-      55,
-      60,
-      65,
-      70,
-      75,
-      78,
-      78,
-      81,
-      81,
-      81.5,
-      82.5,
-      83,
-      83,
-      83,
-      83,
-      83.5,
-      84.5,
-      84.5,
-      84.5,
-      84.5,
-      85,
-      86,
-      86,
-      86,
-      86,
-      92,
-      92.5,
-      93.5,
-      99.5,
-      99.5,
-      99.5,
-      99.5,
-      102.5,
-      108.5,
-      114.5,
-      120.5,
-      120.5,
-      120.5,
-      120.5,
-      126.5,
-      129.5,
-      135.5,
-      143.5
+      0
     ],
     "patterns_detected": []
   },
   {
-    "session_id": "knowless/0602-1153-d910de2f",
+    "session_id": "hamr0/0703-1247-0521fd97",
     "session_metadata": {
       "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/knowless",
-      "started_at": "2026-06-02T09:53:36.379Z",
-      "ended_at": "2026-06-02T10:49:05.048Z",
-      "turn_count": 7,
-      "duration_min": 55
+      "cwd": "/home/hamr/PycharmProjects/hamr0",
+      "started_at": "2026-07-03T10:47:20.619Z",
+      "ended_at": "2026-07-03T13:36:37.050Z",
+      "turn_count": 4,
+      "duration_min": 169
     },
     "friction_summary": {
       "peak": 0,
@@ -11305,45 +10370,151 @@
     "patterns_detected": []
   },
   {
-    "session_id": "knowless/0531-1729-fcab3ed3",
+    "session_id": "hamr0/0702-1112-4f78a0ac",
     "session_metadata": {
       "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/knowless",
-      "started_at": "2026-05-31T15:29:42.785Z",
-      "ended_at": "2026-05-31T21:28:27.135Z",
-      "turn_count": 17,
-      "duration_min": 358
+      "cwd": "/home/hamr/PycharmProjects/hamr0",
+      "started_at": "2026-07-02T09:12:35.273Z",
+      "ended_at": "2026-07-02T19:17:17.188Z",
+      "turn_count": 16,
+      "duration_min": 604
     },
     "friction_summary": {
-      "peak": 4,
-      "final": 4,
-      "total_signals": 11,
+      "peak": 1,
+      "final": 1,
+      "total_signals": 5,
       "learning_moments": 0
     },
     "momentum": {
       "success_count": 0,
-      "error_count": 3,
+      "error_count": 1,
       "error_ratio": 1
     },
-    "quality": "FRICTION",
+    "quality": "OK",
     "by_source": {
       "user": {
         "total_friction": 0,
-        "signal_count": 4,
+        "signal_count": 3,
         "signals": {
           "checkpoint": {
-            "count": 4,
+            "count": 3,
             "total_weight": 0
           }
         }
       },
       "tool": {
-        "total_friction": 1.5,
-        "signal_count": 3,
+        "total_friction": 0.5,
+        "signal_count": 1,
         "signals": {
           "exit_error": {
-            "count": 3,
-            "total_weight": 1.5
+            "count": 1,
+            "total_weight": 0.5
+          }
+        }
+      },
+      "session": {
+        "total_friction": 0.5,
+        "signal_count": 1,
+        "signals": {
+          "no_resolution": {
+            "count": 1,
+            "total_weight": 0.5
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0,
+      0.5,
+      1
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "hamr0/0702-2143-edfae236",
+    "session_metadata": {
+      "git_branch": "main",
+      "cwd": "/home/hamr/PycharmProjects/hamr0",
+      "started_at": "2026-07-02T19:43:08.423Z",
+      "ended_at": "2026-07-02T20:05:35.404Z",
+      "turn_count": 5,
+      "duration_min": 22
+    },
+    "friction_summary": {
+      "peak": 0,
+      "final": 0,
+      "total_signals": 1,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 0,
+      "error_ratio": 0
+    },
+    "quality": "OK",
+    "by_source": {
+      "user": {
+        "total_friction": 0,
+        "signal_count": 1,
+        "signals": {
+          "checkpoint": {
+            "count": 1,
+            "total_weight": 0
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "latefyi/0702-0855-2b9cfc1d",
+    "session_metadata": {
+      "git_branch": "main",
+      "cwd": "/home/hamr/PycharmProjects/latefyi",
+      "started_at": "2026-07-02T06:55:21.029Z",
+      "ended_at": "2026-07-02T15:04:39.431Z",
+      "turn_count": 12,
+      "duration_min": 489
+    },
+    "friction_summary": {
+      "peak": 12.5,
+      "final": 12.5,
+      "total_signals": 13,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 2,
+      "error_ratio": 1
+    },
+    "quality": "BAD",
+    "by_source": {
+      "user": {
+        "total_friction": 8,
+        "signal_count": 7,
+        "signals": {
+          "checkpoint": {
+            "count": 6,
+            "total_weight": 0
+          },
+          "user_correction": {
+            "count": 1,
+            "total_weight": 8
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 1,
+        "signal_count": 2,
+        "signals": {
+          "exit_error": {
+            "count": 2,
+            "total_weight": 1
           }
         }
       },
@@ -11358,21 +10529,23 @@
         }
       },
       "session": {
-        "total_friction": 0.5,
+        "total_friction": 1.5,
         "signal_count": 2,
         "signals": {
           "no_resolution": {
             "count": 1,
             "total_weight": 0.5
           },
-          "checkpoint": {
+          "session_abandoned": {
             "count": 1,
-            "total_weight": 0
+            "total_weight": 1
           }
         }
       }
     },
     "friction_trajectory": [
+      0,
+      0,
       0,
       0,
       0,
@@ -11381,120 +10554,8 @@
       1.5,
       2,
       3,
-      3.5,
-      4,
-      4
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "latefyi/0602-0930-3e3082dc",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/latefyi",
-      "started_at": "2026-06-02T07:30:40.348Z",
-      "ended_at": "2026-06-02T09:33:07.990Z",
-      "turn_count": 3,
-      "duration_min": 122
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 0,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {},
-    "friction_trajectory": [],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "latefyi/0522-2324-5831364b",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/latefyi",
-      "started_at": "2026-05-22T21:24:33.829Z",
-      "ended_at": "2026-06-02T07:30:35.330Z",
-      "turn_count": 14,
-      "duration_min": 15006
-    },
-    "friction_summary": {
-      "peak": 12.5,
-      "final": 12.5,
-      "total_signals": 10,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 2,
-      "error_ratio": 1
-    },
-    "quality": "FRICTION",
-    "by_source": {
-      "user": {
-        "total_friction": 10,
-        "signal_count": 5,
-        "signals": {
-          "checkpoint": {
-            "count": 3,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 2,
-            "total_weight": 10
-          }
-        }
-      },
-      "tool": {
-        "total_friction": 1,
-        "signal_count": 2,
-        "signals": {
-          "exit_error": {
-            "count": 2,
-            "total_weight": 1
-          }
-        }
-      },
-      "llm": {
-        "total_friction": 1,
-        "signal_count": 1,
-        "signals": {
-          "false_success": {
-            "count": 1,
-            "total_weight": 1
-          }
-        }
-      },
-      "session": {
-        "total_friction": 0.5,
-        "signal_count": 2,
-        "signals": {
-          "no_resolution": {
-            "count": 1,
-            "total_weight": 0.5
-          },
-          "checkpoint": {
-            "count": 1,
-            "total_weight": 0
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      5,
-      10,
-      10.5,
+      11,
       11.5,
-      12,
-      12.5,
       12.5
     ],
     "patterns_detected": []
@@ -11792,6 +10853,45 @@
     "patterns_detected": []
   },
   {
+    "session_id": "liteagents/0703-1609-6a9e61b0",
+    "session_metadata": {
+      "git_branch": "main",
+      "cwd": "/home/hamr/PycharmProjects/liteagents",
+      "started_at": "2026-07-03T14:09:32.393Z",
+      "ended_at": "2026-07-03T14:11:20.640Z",
+      "turn_count": 3,
+      "duration_min": 1
+    },
+    "friction_summary": {
+      "peak": 0,
+      "final": 0,
+      "total_signals": 1,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 0,
+      "error_ratio": 0
+    },
+    "quality": "OK",
+    "by_source": {
+      "user": {
+        "total_friction": 0,
+        "signal_count": 1,
+        "signals": {
+          "checkpoint": {
+            "count": 1,
+            "total_weight": 0
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0
+    ],
+    "patterns_detected": []
+  },
+  {
     "session_id": "liteagents/0616-1125-cee40b55",
     "session_metadata": {
       "git_branch": "main",
@@ -11887,14 +10987,14 @@
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/liteagents",
       "started_at": "2026-06-17T05:40:23.460Z",
-      "ended_at": "2026-06-17T10:26:10.879Z",
-      "turn_count": 8,
-      "duration_min": 285
+      "ended_at": "2026-07-03T14:09:09.249Z",
+      "turn_count": 41,
+      "duration_min": 23548
     },
     "friction_summary": {
-      "peak": 5,
-      "final": 5,
-      "total_signals": 5,
+      "peak": 45,
+      "final": 45,
+      "total_signals": 19,
       "learning_moments": 0
     },
     "momentum": {
@@ -11902,19 +11002,27 @@
       "error_count": 0,
       "error_ratio": 0
     },
-    "quality": "OK",
+    "quality": "BAD",
     "by_source": {
       "user": {
-        "total_friction": 5,
-        "signal_count": 4,
+        "total_friction": 45,
+        "signal_count": 18,
         "signals": {
           "checkpoint": {
-            "count": 3,
+            "count": 8,
             "total_weight": 0
           },
           "repeated_question": {
+            "count": 7,
+            "total_weight": 35
+          },
+          "user_correction": {
             "count": 1,
-            "total_weight": 5
+            "total_weight": 8
+          },
+          "user_intervention": {
+            "count": 2,
+            "total_weight": 2
           }
         }
       },
@@ -11932,9 +11040,23 @@
     "friction_trajectory": [
       0,
       0,
+      0,
+      0,
+      0,
+      0,
+      0,
       5,
-      5,
-      5
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      35,
+      35,
+      43,
+      44,
+      45
     ],
     "patterns_detected": []
   },
@@ -20685,14 +19807,14 @@
       "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/litectx",
       "started_at": "2026-06-29T06:43:31.216Z",
-      "ended_at": "2026-06-30T14:30:15.586Z",
-      "turn_count": 6,
-      "duration_min": 1906
+      "ended_at": "2026-07-01T14:57:37.555Z",
+      "turn_count": 9,
+      "duration_min": 3374
     },
     "friction_summary": {
       "peak": 0,
       "final": 0,
-      "total_signals": 2,
+      "total_signals": 4,
       "learning_moments": 0
     },
     "momentum": {
@@ -20704,16 +19826,18 @@
     "by_source": {
       "user": {
         "total_friction": 0,
-        "signal_count": 2,
+        "signal_count": 4,
         "signals": {
           "checkpoint": {
-            "count": 2,
+            "count": 4,
             "total_weight": 0
           }
         }
       }
     },
     "friction_trajectory": [
+      0,
+      0,
       0,
       0
     ],
@@ -23650,6 +22774,45 @@
     ]
   },
   {
+    "session_id": "multis/0704-2334-5f0f58ae",
+    "session_metadata": {
+      "git_branch": "release-0.19.1",
+      "cwd": "/home/hamr/PycharmProjects/multis",
+      "started_at": "2026-07-04T21:34:52.961Z",
+      "ended_at": "2026-07-04T21:39:35.541Z",
+      "turn_count": 4,
+      "duration_min": 4
+    },
+    "friction_summary": {
+      "peak": 0,
+      "final": 0,
+      "total_signals": 1,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 0,
+      "error_ratio": 0
+    },
+    "quality": "OK",
+    "by_source": {
+      "user": {
+        "total_friction": 0,
+        "signal_count": 1,
+        "signals": {
+          "checkpoint": {
+            "count": 1,
+            "total_weight": 0
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0
+    ],
+    "patterns_detected": []
+  },
+  {
     "session_id": "multis/0617-1759-608bbd01",
     "session_metadata": {
       "git_branch": "baresuite-migration-m3",
@@ -24640,43 +23803,57 @@
   {
     "session_id": "multis/0628-1652-d02f8517",
     "session_metadata": {
-      "git_branch": "m5-context-engineering",
+      "git_branch": "main",
       "cwd": "/home/hamr/PycharmProjects/multis",
       "started_at": "2026-06-28T14:52:59.405Z",
-      "ended_at": "2026-06-29T06:07:46.160Z",
-      "turn_count": 6,
-      "duration_min": 914
+      "ended_at": "2026-07-04T21:34:08.852Z",
+      "turn_count": 22,
+      "duration_min": 9041
     },
     "friction_summary": {
-      "peak": 0.5,
-      "final": 0.5,
-      "total_signals": 4,
+      "peak": 7,
+      "final": 7,
+      "total_signals": 17,
       "learning_moments": 0
     },
     "momentum": {
       "success_count": 0,
-      "error_count": 1,
+      "error_count": 4,
       "error_ratio": 1
     },
-    "quality": "OK",
+    "quality": "FRICTION",
     "by_source": {
       "user": {
-        "total_friction": 0,
-        "signal_count": 3,
+        "total_friction": 3,
+        "signal_count": 11,
         "signals": {
           "checkpoint": {
-            "count": 3,
+            "count": 10,
             "total_weight": 0
+          },
+          "request_interrupted": {
+            "count": 1,
+            "total_weight": 3
           }
         }
       },
       "tool": {
-        "total_friction": 0.5,
-        "signal_count": 1,
+        "total_friction": 2,
+        "signal_count": 4,
         "signals": {
           "exit_error": {
-            "count": 1,
-            "total_weight": 0.5
+            "count": 4,
+            "total_weight": 2
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 2,
+        "signal_count": 2,
+        "signals": {
+          "false_success": {
+            "count": 2,
+            "total_weight": 2
           }
         }
       }
@@ -24685,7 +23862,20 @@
       0,
       0,
       0,
-      0.5
+      0,
+      0,
+      0,
+      0,
+      0,
+      0.5,
+      3.5,
+      4,
+      5,
+      5.5,
+      6.5,
+      7,
+      7,
+      7
     ],
     "patterns_detected": []
   },
@@ -25335,424 +24525,6 @@
     "patterns_detected": []
   },
   {
-    "session_id": "plato/0602-1247-33a4ac29",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-06-02T10:47:36.289Z",
-      "ended_at": "2026-06-02T13:06:58.163Z",
-      "turn_count": 21,
-      "duration_min": 139
-    },
-    "friction_summary": {
-      "peak": 11,
-      "final": 11,
-      "total_signals": 6,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 5,
-        "signal_count": 5,
-        "signals": {
-          "checkpoint": {
-            "count": 4,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 1,
-            "total_weight": 5
-          }
-        }
-      },
-      "llm": {
-        "total_friction": 6,
-        "signal_count": 1,
-        "signals": {
-          "tool_loop": {
-            "count": 1,
-            "total_weight": 6
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      5,
-      5,
-      11,
-      11,
-      11
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "plato/0601-1928-404593de",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-06-01T17:28:00.781Z",
-      "ended_at": "2026-06-01T21:08:26.192Z",
-      "turn_count": 19,
-      "duration_min": 220
-    },
-    "friction_summary": {
-      "peak": 7,
-      "final": 7,
-      "total_signals": 16,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 6,
-      "error_ratio": 1
-    },
-    "quality": "FRICTION",
-    "by_source": {
-      "user": {
-        "total_friction": 0,
-        "signal_count": 6,
-        "signals": {
-          "checkpoint": {
-            "count": 6,
-            "total_weight": 0
-          }
-        }
-      },
-      "tool": {
-        "total_friction": 3,
-        "signal_count": 6,
-        "signals": {
-          "exit_error": {
-            "count": 6,
-            "total_weight": 3
-          }
-        }
-      },
-      "llm": {
-        "total_friction": 4,
-        "signal_count": 4,
-        "signals": {
-          "false_success": {
-            "count": 4,
-            "total_weight": 4
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0.5,
-      1.5,
-      2,
-      2.5,
-      3,
-      4,
-      4.5,
-      5.5,
-      6,
-      7,
-      7,
-      7
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "plato/0602-0049-5e7efad7",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-06-01T22:49:10.532Z",
-      "ended_at": "2026-06-02T07:28:13.914Z",
-      "turn_count": 12,
-      "duration_min": 519
-    },
-    "friction_summary": {
-      "peak": 15,
-      "final": 15,
-      "total_signals": 6,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "ROUGH",
-    "by_source": {
-      "user": {
-        "total_friction": 15,
-        "signal_count": 6,
-        "signals": {
-          "checkpoint": {
-            "count": 3,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 3,
-            "total_weight": 15
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      5,
-      10,
-      15,
-      15
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "plato/0601-1229-6af53363",
-    "session_metadata": {
-      "git_branch": "feat/flightlog",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-06-01T10:29:04.857Z",
-      "ended_at": "2026-06-01T17:01:55.852Z",
-      "turn_count": 16,
-      "duration_min": 392
-    },
-    "friction_summary": {
-      "peak": 3,
-      "final": 3,
-      "total_signals": 9,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 3,
-        "signal_count": 9,
-        "signals": {
-          "checkpoint": {
-            "count": 8,
-            "total_weight": 0
-          },
-          "request_interrupted": {
-            "count": 1,
-            "total_weight": 3
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      3,
-      3,
-      3
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "plato/0602-1507-77ff8558",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-06-02T13:07:01.922Z",
-      "ended_at": "2026-06-02T20:52:32.236Z",
-      "turn_count": 8,
-      "duration_min": 465
-    },
-    "friction_summary": {
-      "peak": 5,
-      "final": 5,
-      "total_signals": 4,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 5,
-        "signal_count": 4,
-        "signals": {
-          "checkpoint": {
-            "count": 3,
-            "total_weight": 0
-          },
-          "repeated_question": {
-            "count": 1,
-            "total_weight": 5
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      5,
-      5
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "plato/0531-1732-927cf490",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-05-31T15:32:54.537Z",
-      "ended_at": "2026-06-01T10:27:43.066Z",
-      "turn_count": 9,
-      "duration_min": 1134
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 8,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 0,
-        "signal_count": 8,
-        "signals": {
-          "checkpoint": {
-            "count": 8,
-            "total_weight": 0
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "plato/0602-1116-dfb71fc6",
-    "session_metadata": {
-      "git_branch": "security/import-verify-mod-hardening",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-06-02T09:16:01.535Z",
-      "ended_at": "2026-06-02T10:46:18.784Z",
-      "turn_count": 5,
-      "duration_min": 90
-    },
-    "friction_summary": {
-      "peak": 0,
-      "final": 0,
-      "total_signals": 4,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 0,
-      "error_ratio": 0
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 0,
-        "signal_count": 4,
-        "signals": {
-          "checkpoint": {
-            "count": 4,
-            "total_weight": 0
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0
-    ],
-    "patterns_detected": []
-  },
-  {
-    "session_id": "plato/0601-2308-e88847ed",
-    "session_metadata": {
-      "git_branch": "main",
-      "cwd": "/home/hamr/PycharmProjects/plato",
-      "started_at": "2026-06-01T21:08:46.127Z",
-      "ended_at": "2026-06-01T22:48:29.169Z",
-      "turn_count": 14,
-      "duration_min": 99
-    },
-    "friction_summary": {
-      "peak": 0.5,
-      "final": 0.5,
-      "total_signals": 5,
-      "learning_moments": 0
-    },
-    "momentum": {
-      "success_count": 0,
-      "error_count": 1,
-      "error_ratio": 1
-    },
-    "quality": "OK",
-    "by_source": {
-      "user": {
-        "total_friction": 0,
-        "signal_count": 4,
-        "signals": {
-          "checkpoint": {
-            "count": 4,
-            "total_weight": 0
-          }
-        }
-      },
-      "tool": {
-        "total_friction": 0.5,
-        "signal_count": 1,
-        "signals": {
-          "exit_error": {
-            "count": 1,
-            "total_weight": 0.5
-          }
-        }
-      }
-    },
-    "friction_trajectory": [
-      0,
-      0,
-      0,
-      0.5,
-      0.5
-    ],
-    "patterns_detected": []
-  },
-  {
     "session_id": "privcloud/0605-0654-14e045b6",
     "session_metadata": {
       "git_branch": "main",
@@ -25990,6 +24762,89 @@
       15,
       15,
       15
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "privcloud/0702-2212-51534e35",
+    "session_metadata": {
+      "git_branch": "main",
+      "cwd": "/home/hamr/PycharmProjects/privcloud",
+      "started_at": "2026-07-02T20:12:20.371Z",
+      "ended_at": "2026-07-03T07:02:26.678Z",
+      "turn_count": 7,
+      "duration_min": 650
+    },
+    "friction_summary": {
+      "peak": 4.5,
+      "final": 4.5,
+      "total_signals": 11,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 4,
+      "error_ratio": 1
+    },
+    "quality": "FRICTION",
+    "by_source": {
+      "user": {
+        "total_friction": 0,
+        "signal_count": 3,
+        "signals": {
+          "checkpoint": {
+            "count": 3,
+            "total_weight": 0
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 2,
+        "signal_count": 4,
+        "signals": {
+          "exit_error": {
+            "count": 4,
+            "total_weight": 2
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 2,
+        "signal_count": 2,
+        "signals": {
+          "false_success": {
+            "count": 2,
+            "total_weight": 2
+          }
+        }
+      },
+      "session": {
+        "total_friction": 0.5,
+        "signal_count": 2,
+        "signals": {
+          "no_resolution": {
+            "count": 1,
+            "total_weight": 0.5
+          },
+          "checkpoint": {
+            "count": 1,
+            "total_weight": 0
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0,
+      0.5,
+      1.5,
+      2,
+      2.5,
+      3,
+      4,
+      4.5,
+      4.5
     ],
     "patterns_detected": []
   },
@@ -26467,6 +25322,109 @@
     "patterns_detected": []
   },
   {
+    "session_id": "pulselog/0702-1707-49f169ae",
+    "session_metadata": {
+      "git_branch": "main",
+      "cwd": "/home/hamr/PycharmProjects/pulselog",
+      "started_at": "2026-07-02T15:07:36.531Z",
+      "ended_at": "2026-07-03T13:32:21.607Z",
+      "turn_count": 6,
+      "duration_min": 1344
+    },
+    "friction_summary": {
+      "peak": 0,
+      "final": 0,
+      "total_signals": 3,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 0,
+      "error_ratio": 0
+    },
+    "quality": "OK",
+    "by_source": {
+      "user": {
+        "total_friction": 0,
+        "signal_count": 3,
+        "signals": {
+          "checkpoint": {
+            "count": 3,
+            "total_weight": 0
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "pulselog/0701-2314-81301c23",
+    "session_metadata": {
+      "git_branch": "main",
+      "cwd": "/home/hamr/PycharmProjects/pulselog",
+      "started_at": "2026-07-01T21:14:14.257Z",
+      "ended_at": "2026-07-02T13:27:41.077Z",
+      "turn_count": 22,
+      "duration_min": 973
+    },
+    "friction_summary": {
+      "peak": 11,
+      "final": 11,
+      "total_signals": 16,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 0,
+      "error_ratio": 0
+    },
+    "quality": "OK",
+    "by_source": {
+      "user": {
+        "total_friction": 11,
+        "signal_count": 16,
+        "signals": {
+          "checkpoint": {
+            "count": 13,
+            "total_weight": 0
+          },
+          "repeated_question": {
+            "count": 1,
+            "total_weight": 5
+          },
+          "request_interrupted": {
+            "count": 2,
+            "total_weight": 6
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      8,
+      11,
+      11,
+      11,
+      11,
+      11,
+      11
+    ],
+    "patterns_detected": []
+  },
+  {
     "session_id": "relayfact/0625-1332-0b45470e",
     "session_metadata": {
       "git_branch": "master",
@@ -26553,9 +25511,9 @@
       "git_branch": "master",
       "cwd": "/home/hamr/PycharmProjects/relayfact",
       "started_at": "2026-06-30T14:39:02.785Z",
-      "ended_at": "2026-06-30T20:28:28.724Z",
-      "turn_count": 17,
-      "duration_min": 349
+      "ended_at": "2026-06-30T20:32:39.195Z",
+      "turn_count": 18,
+      "duration_min": 353
     },
     "friction_summary": {
       "peak": 6,
@@ -26621,6 +25579,288 @@
       6,
       6,
       6
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "relayfact/0703-0853-1e77cd86",
+    "session_metadata": {
+      "git_branch": "master",
+      "cwd": "/home/hamr/PycharmProjects/relayfact",
+      "started_at": "2026-07-03T06:53:48.243Z",
+      "ended_at": "2026-07-03T14:14:28.821Z",
+      "turn_count": 12,
+      "duration_min": 440
+    },
+    "friction_summary": {
+      "peak": 11.5,
+      "final": 11.5,
+      "total_signals": 17,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 3,
+      "error_ratio": 1
+    },
+    "quality": "FRICTION",
+    "by_source": {
+      "user": {
+        "total_friction": 8,
+        "signal_count": 12,
+        "signals": {
+          "checkpoint": {
+            "count": 10,
+            "total_weight": 0
+          },
+          "repeated_question": {
+            "count": 1,
+            "total_weight": 5
+          },
+          "request_interrupted": {
+            "count": 1,
+            "total_weight": 3
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 1.5,
+        "signal_count": 3,
+        "signals": {
+          "exit_error": {
+            "count": 3,
+            "total_weight": 1.5
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 2,
+        "signal_count": 2,
+        "signals": {
+          "false_success": {
+            "count": 2,
+            "total_weight": 2
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      5,
+      5.5,
+      6.5,
+      7,
+      10,
+      10.5,
+      11.5,
+      11.5,
+      11.5
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "relayfact/0630-2233-4a5ee5f3",
+    "session_metadata": {
+      "git_branch": "master",
+      "cwd": "/home/hamr/PycharmProjects/relayfact",
+      "started_at": "2026-06-30T20:33:50.898Z",
+      "ended_at": "2026-07-02T06:55:34.096Z",
+      "turn_count": 9,
+      "duration_min": 2061
+    },
+    "friction_summary": {
+      "peak": 3.5,
+      "final": 3.5,
+      "total_signals": 13,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 3,
+      "error_ratio": 1
+    },
+    "quality": "FRICTION",
+    "by_source": {
+      "user": {
+        "total_friction": 0,
+        "signal_count": 8,
+        "signals": {
+          "checkpoint": {
+            "count": 8,
+            "total_weight": 0
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 1.5,
+        "signal_count": 3,
+        "signals": {
+          "exit_error": {
+            "count": 3,
+            "total_weight": 1.5
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 2,
+        "signal_count": 2,
+        "signals": {
+          "false_success": {
+            "count": 2,
+            "total_weight": 2
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0.5,
+      1,
+      2,
+      2.5,
+      3.5,
+      3.5,
+      3.5
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "relayfact/0704-2219-6577c784",
+    "session_metadata": {
+      "git_branch": "master",
+      "cwd": "/home/hamr/PycharmProjects/relayfact",
+      "started_at": "2026-07-04T20:19:35.367Z",
+      "ended_at": "2026-07-04T21:39:20.814Z",
+      "turn_count": 15,
+      "duration_min": 79
+    },
+    "friction_summary": {
+      "peak": 5,
+      "final": 5,
+      "total_signals": 7,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 0,
+      "error_ratio": 0
+    },
+    "quality": "OK",
+    "by_source": {
+      "user": {
+        "total_friction": 5,
+        "signal_count": 7,
+        "signals": {
+          "checkpoint": {
+            "count": 6,
+            "total_weight": 0
+          },
+          "repeated_question": {
+            "count": 1,
+            "total_weight": 5
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "relayfact/0703-1614-6a38e654",
+    "session_metadata": {
+      "git_branch": "master",
+      "cwd": "/home/hamr/PycharmProjects/relayfact",
+      "started_at": "2026-07-03T14:14:40.552Z",
+      "ended_at": "2026-07-04T20:18:50.590Z",
+      "turn_count": 17,
+      "duration_min": 1804
+    },
+    "friction_summary": {
+      "peak": 10.5,
+      "final": 10.5,
+      "total_signals": 13,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 1,
+      "error_ratio": 1
+    },
+    "quality": "FRICTION",
+    "by_source": {
+      "user": {
+        "total_friction": 3,
+        "signal_count": 10,
+        "signals": {
+          "checkpoint": {
+            "count": 9,
+            "total_weight": 0
+          },
+          "request_interrupted": {
+            "count": 1,
+            "total_weight": 3
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 7,
+        "signal_count": 2,
+        "signals": {
+          "tool_loop": {
+            "count": 1,
+            "total_weight": 6
+          },
+          "false_success": {
+            "count": 1,
+            "total_weight": 1
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 0.5,
+        "signal_count": 1,
+        "signals": {
+          "exit_error": {
+            "count": 1,
+            "total_weight": 0.5
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      6,
+      9,
+      9.5,
+      10.5,
+      10.5,
+      10.5
     ],
     "patterns_detected": []
   },
@@ -26693,6 +25933,86 @@
       2,
       2,
       2
+    ],
+    "patterns_detected": []
+  },
+  {
+    "session_id": "relayfact/0702-0858-db1e4021",
+    "session_metadata": {
+      "started_at": "2026-07-02T06:58:47.995Z",
+      "ended_at": "2026-07-03T06:53:09.767Z",
+      "git_branch": "master",
+      "cwd": "/home/hamr/PycharmProjects/relayfact",
+      "turn_count": 20,
+      "duration_min": 1434
+    },
+    "friction_summary": {
+      "peak": 29.5,
+      "final": 29.5,
+      "total_signals": 18,
+      "learning_moments": 0
+    },
+    "momentum": {
+      "success_count": 0,
+      "error_count": 3,
+      "error_ratio": 1
+    },
+    "quality": "FRICTION",
+    "by_source": {
+      "user": {
+        "total_friction": 25,
+        "signal_count": 12,
+        "signals": {
+          "checkpoint": {
+            "count": 7,
+            "total_weight": 0
+          },
+          "repeated_question": {
+            "count": 5,
+            "total_weight": 25
+          }
+        }
+      },
+      "tool": {
+        "total_friction": 1.5,
+        "signal_count": 3,
+        "signals": {
+          "exit_error": {
+            "count": 3,
+            "total_weight": 1.5
+          }
+        }
+      },
+      "llm": {
+        "total_friction": 3,
+        "signal_count": 3,
+        "signals": {
+          "false_success": {
+            "count": 3,
+            "total_weight": 3
+          }
+        }
+      }
+    },
+    "friction_trajectory": [
+      0,
+      0,
+      0,
+      5,
+      10,
+      15,
+      20,
+      25,
+      25,
+      25.5,
+      26.5,
+      27,
+      28,
+      28,
+      28,
+      28,
+      28.5,
+      29.5
     ],
     "patterns_detected": []
   },

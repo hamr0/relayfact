@@ -1,49 +1,5 @@
 [
   {
-    "theme": "healthwatch healthwatch / healthwatch built / flightlog shipped / built flightlog",
-    "suggested_artifact": "episode",
-    "confidence": "low",
-    "severity": "severe",
-    "signals": {
-      "interrupt_cascade": 1
-    },
-    "anchor_signal": "interrupt_cascade",
-    "tool_pattern": "episode/severe",
-    "count": 1,
-    "score": 2,
-    "sessions": 1,
-    "session_ids": [
-      "healthwatch/0531-1740-7c0c25c1"
-    ],
-    "projects": [
-      "healthwatch"
-    ],
-    "median_peak": 143.5,
-    "max_peak": 143.5,
-    "contexts": [
-      "/home/hamr/Documents/PycharmProjects/healthwatch/.claude/stash/2026-05-31-healthwatch-built-flightlog-shipped.md cont from here for context"
-    ],
-    "errors": [],
-    "preceding": {
-      "action": "Bash",
-      "result": "error",
-      "error": null
-    },
-    "self_suspect": false,
-    "top_keywords": [
-      "healthwatch healthwatch",
-      "healthwatch built",
-      "flightlog shipped",
-      "built flightlog",
-      "shipped cont",
-      "cont context",
-      "healthwatch",
-      "flightlog",
-      "shipped",
-      "context"
-    ]
-  },
-  {
     "theme": "fucking project / project fucking / fucking fucking / fucking generic",
     "suggested_artifact": "episode",
     "confidence": "low",
@@ -217,6 +173,50 @@
       "docs product",
       "litectx asks",
       "closed scope"
+    ]
+  },
+  {
+    "theme": "created workflow / workflow another / update workflow / workflow wanted",
+    "suggested_artifact": "episode",
+    "confidence": "low",
+    "severity": "severe",
+    "signals": {
+      "user_correction": 1
+    },
+    "anchor_signal": "user_correction",
+    "tool_pattern": "episode/severe",
+    "count": 1,
+    "score": 2,
+    "sessions": 1,
+    "session_ids": [
+      "liteagents/0617-0740-feaaac62"
+    ],
+    "projects": [
+      "liteagents"
+    ],
+    "median_peak": 45,
+    "max_peak": 45,
+    "contexts": [
+      "i usually have either context or guide as docs to update #2 is this a workflow? i wanted to created a workflow, this is another slash command that runs other slash commnads. #3 do slash commands need to exist for it to run?"
+    ],
+    "errors": [],
+    "preceding": {
+      "action": "none",
+      "result": "unknown",
+      "error": null
+    },
+    "self_suspect": false,
+    "top_keywords": [
+      "created workflow",
+      "workflow another",
+      "update workflow",
+      "workflow wanted",
+      "usually either",
+      "either context",
+      "wanted created",
+      "slash commnads",
+      "commnads slash",
+      "context guide"
     ]
   },
   {
@@ -958,49 +958,6 @@
     ]
   },
   {
-    "theme": "last changes / changes keep / keep gitdone / revert last",
-    "suggested_artifact": "episode",
-    "confidence": "low",
-    "severity": "severe",
-    "signals": {
-      "user_correction": 1
-    },
-    "anchor_signal": "user_correction",
-    "tool_pattern": "episode/severe",
-    "count": 1,
-    "score": 2,
-    "sessions": 1,
-    "session_ids": [
-      "gitdone/0602-0021-40231750"
-    ],
-    "projects": [
-      "gitdone"
-    ],
-    "median_peak": 15,
-    "max_peak": 15,
-    "contexts": [
-      "revert all last changes and just keep h1 as gitdone"
-    ],
-    "errors": [],
-    "preceding": {
-      "action": "Bash",
-      "result": "unknown",
-      "error": null
-    },
-    "self_suspect": false,
-    "top_keywords": [
-      "last changes",
-      "changes keep",
-      "keep gitdone",
-      "revert last",
-      "changes",
-      "gitdone",
-      "revert",
-      "last",
-      "keep"
-    ]
-  },
-  {
     "theme": "episode systematically / systematically live / lifespan separate / constant activity",
     "suggested_artifact": "episode",
     "confidence": "low",
@@ -1177,6 +1134,45 @@
     ]
   },
   {
+    "theme": "validate verify / gaps validate / validate / verify",
+    "suggested_artifact": "episode",
+    "confidence": "low",
+    "severity": "severe",
+    "signals": {
+      "user_correction": 1
+    },
+    "anchor_signal": "user_correction",
+    "tool_pattern": "episode/severe",
+    "count": 1,
+    "score": 2,
+    "sessions": 1,
+    "session_ids": [
+      "latefyi/0702-0855-2b9cfc1d"
+    ],
+    "projects": [
+      "latefyi"
+    ],
+    "median_peak": 12.5,
+    "max_peak": 12.5,
+    "contexts": [
+      "no gaps, validate and verify"
+    ],
+    "errors": [],
+    "preceding": {
+      "action": "Bash",
+      "result": "unknown",
+      "error": null
+    },
+    "self_suspect": false,
+    "top_keywords": [
+      "validate verify",
+      "gaps validate",
+      "validate",
+      "verify",
+      "gaps"
+    ]
+  },
+  {
     "theme": "specific documentation / powered applications / applications choose / documentation start",
     "suggested_artifact": "episode",
     "confidence": "low",
@@ -1221,6 +1217,50 @@
     ]
   },
   {
+    "theme": "nothing single / lines oduction / don't mention / mention lines",
+    "suggested_artifact": "episode",
+    "confidence": "low",
+    "severity": "severe",
+    "signals": {
+      "user_correction": 1
+    },
+    "anchor_signal": "user_correction",
+    "tool_pattern": "episode/severe",
+    "count": 1,
+    "score": 2,
+    "sessions": 1,
+    "session_ids": [
+      "bareguard/0629-2256-d3fed81f"
+    ],
+    "projects": [
+      "bareguard"
+    ],
+    "median_peak": 10,
+    "max_peak": 10,
+    "contexts": [
+      "don't mention lines, just imply that it;s small or nothing at all > Single audit log. Hard caps that halt with a human in the loop. ~3,000 lines, one pr\noduction dep."
+    ],
+    "errors": [],
+    "preceding": {
+      "action": "Bash",
+      "result": "unknown",
+      "error": null
+    },
+    "self_suspect": false,
+    "top_keywords": [
+      "nothing single",
+      "lines oduction",
+      "don't mention",
+      "mention lines",
+      "small nothing",
+      "single audit",
+      "oduction dep",
+      "lines imply",
+      "imply small",
+      "audit hard"
+    ]
+  },
+  {
     "theme": "wait until / until core / core right / right prep",
     "suggested_artifact": "episode",
     "confidence": "low",
@@ -1262,50 +1302,6 @@
       "until",
       "right",
       "while"
-    ]
-  },
-  {
-    "theme": "tailscale solutions / transfer tailscale / working working / solutions wrong",
-    "suggested_artifact": "episode",
-    "confidence": "low",
-    "severity": "severe",
-    "signals": {
-      "user_curse": 1
-    },
-    "anchor_signal": "user_curse",
-    "tool_pattern": "episode/severe",
-    "count": 1,
-    "score": 2,
-    "sessions": 1,
-    "session_ids": [
-      "bareagent/0601-1551-a1bfc5ce"
-    ],
-    "projects": [
-      "bareagent"
-    ],
-    "median_peak": 8,
-    "max_peak": 8,
-    "contexts": [
-      "it's working, was working prior transfer, tailscale solutions is wrong, you are making shit up. how can i make tailscale work back again?"
-    ],
-    "errors": [],
-    "preceding": {
-      "action": "Bash",
-      "result": "unknown",
-      "error": null
-    },
-    "self_suspect": false,
-    "top_keywords": [
-      "tailscale solutions",
-      "transfer tailscale",
-      "working working",
-      "solutions wrong",
-      "prior transfer",
-      "tailscale work",
-      "working prior",
-      "how tailscale",
-      "it's working",
-      "wrong making"
     ]
   }
 ]

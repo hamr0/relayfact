@@ -1,7 +1,0 @@
-{
-  "name": "stuck-fixture",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "description": "Unsatisfiable fixture: the spec is self-contradictory, so NO implementation can pass. Exists to prove the loop fails HONESTLY with a real attempt — it must escalate, not fake green. The real-attempt analog of probe-01's noop control."
-}

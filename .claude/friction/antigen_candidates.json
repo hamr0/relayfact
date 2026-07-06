@@ -1,48 +1,5 @@
 [
   {
-    "session_id": "healthwatch/0531-1740-7c0c25c1",
-    "anchor_signal": "interrupt_cascade",
-    "anchor_ts": "2026-05-31T15:49:57.137Z",
-    "peak_friction": 143.5,
-    "turns_in_window": 6,
-    "files": [
-      "/home/hamr/Documents/PycharmProjects/healthwatch/.claude/stash/2026-05-31-healthwatch-built-flightlog-shipped.md",
-      "/home/hamr/PycharmProjects/flightlog/docs/01-product/2026-05-31-prd.md",
-      "/home/hamr/PycharmProjects/flightlog/examples/ship.js",
-      "context.md",
-      "examples/ship.js",
-      "package.js"
-    ],
-    "tool_sequence": [
-      "Bash:error"
-    ],
-    "errors": [],
-    "preceding": {
-      "action": "Bash",
-      "result": "error",
-      "error": null
-    },
-    "self_suspect": false,
-    "keywords": [
-      "built",
-      "claude",
-      "cont",
-      "context",
-      "documents",
-      "flightlog",
-      "hamr",
-      "healthwatch",
-      "home",
-      "pycharmprojects",
-      "shipped",
-      "stash"
-    ],
-    "user_context": [
-      "/home/hamr/Documents/PycharmProjects/healthwatch/.claude/stash/2026-05-31-healthwatch-built-flightlog-shipped.md cont from here for context"
-    ],
-    "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
-  },
-  {
     "session_id": "hamr/0602-1412-38dcbe62",
     "anchor_signal": "user_curse",
     "anchor_ts": "2026-06-02T13:01:07.636Z",
@@ -309,6 +266,51 @@
     "user_context": [
       "no, just start implementing ~/PycharmProjects/multis/docs/01-product/litectx-asks/fail-closed-scope-default.md",
       "no, just start implementing doc updated ~/PycharmProjects/multis/docs/01-product/litectx-asks/fail-closed-scope-default.md"
+    ],
+    "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
+  },
+  {
+    "session_id": "liteagents/0617-0740-feaaac62",
+    "anchor_signal": "user_correction",
+    "anchor_ts": "2026-07-03T11:15:11.083Z",
+    "peak_friction": 45,
+    "turns_in_window": 6,
+    "files": [
+      "CHANGELOG.md",
+      "INSTALLER_GUIDE.md",
+      "README.md",
+      "package.js",
+      "packages/.../security.md",
+      "publish.yml",
+      "tests/installer/multi-tool-testing.test.js"
+    ],
+    "tool_sequence": [],
+    "errors": [],
+    "preceding": {
+      "action": "none",
+      "result": "unknown",
+      "error": null
+    },
+    "self_suspect": false,
+    "keywords": [
+      "always",
+      "another",
+      "command",
+      "context",
+      "created",
+      "docs",
+      "either",
+      "guide",
+      "runs",
+      "slash",
+      "update",
+      "usually",
+      "wanted",
+      "workflow"
+    ],
+    "user_context": [
+      "i usually have either context or guide as docs to update #2 is this a workflow? i wanted to created a workflow, this is another slash command that runs other slash commnads. #3 do slash commands need to exist for it to run?",
+      "no, i always have PRD + context/guide"
     ],
     "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
   },
@@ -1039,37 +1041,6 @@
     "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
   },
   {
-    "session_id": "gitdone/0602-0021-40231750",
-    "anchor_signal": "user_correction",
-    "anchor_ts": "2026-06-01T22:48:56.829Z",
-    "peak_friction": 15,
-    "turns_in_window": 6,
-    "files": [
-      "README.md"
-    ],
-    "tool_sequence": [
-      "Bash"
-    ],
-    "errors": [],
-    "preceding": {
-      "action": "Bash",
-      "result": "unknown",
-      "error": null
-    },
-    "self_suspect": false,
-    "keywords": [
-      "changes",
-      "gitdone",
-      "keep",
-      "last",
-      "revert"
-    ],
-    "user_context": [
-      "revert all last changes and just keep h1 as gitdone"
-    ],
-    "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
-  },
-  {
     "session_id": "multis/0627-2303-fa519180",
     "anchor_signal": "user_correction",
     "anchor_ts": "2026-06-28T09:10:04.848Z",
@@ -1241,6 +1212,42 @@
     "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
   },
   {
+    "session_id": "latefyi/0702-0855-2b9cfc1d",
+    "anchor_signal": "user_correction",
+    "anchor_ts": "2026-07-02T14:57:52.576Z",
+    "peak_friction": 12.5,
+    "turns_in_window": 6,
+    "files": [
+      "/opt/latefyi/.hc-validate.js",
+      "/opt/latefyi/node_modules/pulselog/bin/pulselog.js",
+      "/opt/latefyi/pulselog.config.js",
+      "/tmp/hc-validate.js",
+      "CHANGELOG.md",
+      "CLAUDE.md",
+      "README.md",
+      "latefyi-prd.md"
+    ],
+    "tool_sequence": [
+      "Bash"
+    ],
+    "errors": [],
+    "preceding": {
+      "action": "Bash",
+      "result": "unknown",
+      "error": null
+    },
+    "self_suspect": false,
+    "keywords": [
+      "gaps",
+      "validate",
+      "verify"
+    ],
+    "user_context": [
+      "no gaps, validate and verify"
+    ],
+    "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
+  },
+  {
     "session_id": "bareguard/0602-2302-6611b522",
     "anchor_signal": "user_correction",
     "anchor_ts": "2026-06-03T21:01:01.792Z",
@@ -1292,6 +1299,51 @@
     "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
   },
   {
+    "session_id": "bareguard/0629-2256-d3fed81f",
+    "anchor_signal": "user_correction",
+    "anchor_ts": "2026-07-02T20:03:08.924Z",
+    "peak_friction": 10,
+    "turns_in_window": 6,
+    "files": [
+      ".claude/memory/MEMORY.md",
+      "CHANGELOG.md",
+      "CLAUDE.md",
+      "README.md",
+      "budget.js",
+      "docs/01-product/bareguard-prd.md",
+      "docs/01-product/pico-type-fit-assessment.md"
+    ],
+    "tool_sequence": [
+      "Bash"
+    ],
+    "errors": [],
+    "preceding": {
+      "action": "Bash",
+      "result": "unknown",
+      "error": null
+    },
+    "self_suspect": false,
+    "keywords": [
+      "audit",
+      "caps",
+      "halt",
+      "hard",
+      "human",
+      "imply",
+      "lines",
+      "loop",
+      "mention",
+      "nothing",
+      "oduction",
+      "single",
+      "small"
+    ],
+    "user_context": [
+      "don't mention lines, just imply that it;s small or nothing at all > Single audit log. Hard caps that halt with a human in the loop. ~3,000 lines, one pr\noduction dep."
+    ],
+    "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
+  },
+  {
     "session_id": "litectx-poc/0604-1444-05d668b1",
     "anchor_signal": "user_correction",
     "anchor_ts": "2026-06-05T03:45:12.715Z",
@@ -1326,41 +1378,6 @@
     ],
     "user_context": [
       "no, we will wait until we get core memory right #2 is there any other prep work we can do while we wait?"
-    ],
-    "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
-  },
-  {
-    "session_id": "bareagent/0601-1551-a1bfc5ce",
-    "anchor_signal": "user_curse",
-    "anchor_ts": "2026-06-02T06:56:58.250Z",
-    "peak_friction": 8,
-    "turns_in_window": 6,
-    "files": [],
-    "tool_sequence": [
-      "Bash"
-    ],
-    "errors": [],
-    "preceding": {
-      "action": "Bash",
-      "result": "unknown",
-      "error": null
-    },
-    "self_suspect": false,
-    "keywords": [
-      "again",
-      "back",
-      "making",
-      "prior",
-      "shit",
-      "solutions",
-      "tailscale",
-      "transfer",
-      "work",
-      "working",
-      "wrong"
-    ],
-    "user_context": [
-      "it's working, was working prior transfer, tailscale solutions is wrong, you are making shit up. how can i make tailscale work back again?"
     ],
     "inhibitory_instruction": "# TODO: Write prevention instruction based on pattern above"
   }

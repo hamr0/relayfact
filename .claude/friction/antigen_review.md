@@ -1,17 +1,17 @@
 # Friction Antigen Clusters
 
-Generated: 2026-06-30T20:28:40.462Z
-Sessions scanned: 700 | Reaction candidates: 35 | Clusters: 30
+Generated: 2026-07-04T21:39:41.665Z
+Sessions scanned: 682 | Reaction candidates: 35 | Clusters: 30
 
 ## Cluster Summary
 
 | # | Signal | Artifact/Severity | Sessions | Projects | Score | Median Peak |
 |---|--------|-------------------|----------|----------|-------|-------------|
-| 1 | interrupt_cascade | episode/severe | 1 | healthwatch | 2 | 143.5 |
-| 2 | user_curse | episode/severe | 1 | hamr | 2 | 80 |
-| 3 | user_correction | episode/severe | 1 | litectx | 2 | 75 |
-| 4 | user_correction | episode/severe | 1 | career-ops | 2 | 66 |
-| 5 | user_correction | episode/severe | 1 | litectx | 2 | 64.5 |
+| 1 | user_curse | episode/severe | 1 | hamr | 2 | 80 |
+| 2 | user_correction | episode/severe | 1 | litectx | 2 | 75 |
+| 3 | user_correction | episode/severe | 1 | career-ops | 2 | 66 |
+| 4 | user_correction | episode/severe | 1 | litectx | 2 | 64.5 |
+| 5 | user_correction | episode/severe | 1 | liteagents | 2 | 45 |
 | 6 | user_correction | episode/severe | 1 | multis | 2 | 38 |
 | 7 | user_correction | episode/severe | 1 | multis | 2 | 36 |
 | 8 | user_correction | episode/severe | 1 | dwi | 2 | 35 |
@@ -29,31 +29,13 @@ Sessions scanned: 700 | Reaction candidates: 35 | Clusters: 30
 | 20 | user_curse | episode/severe | 1 | litectx | 2 | 16 |
 | 21 | user_correction | episode/severe | 1 | multis | 2 | 16 |
 | 22 | user_correction | episode/severe | 1 | bareagent | 2 | 15 |
-| 23 | user_correction | episode/severe | 1 | gitdone | 2 | 15 |
-| 24 | user_correction | episode/severe | 1 | multis | 2 | 15 |
-| 25 | user_correction | episode/severe | 1 | relayfact | 2 | 13.5 |
+| 23 | user_correction | episode/severe | 1 | multis | 2 | 15 |
+| 24 | user_correction | episode/severe | 1 | relayfact | 2 | 13.5 |
+| 25 | user_correction | episode/severe | 1 | multis | 2 | 13 |
 
 ---
 
-## Cluster 1: interrupt_cascade | episode/severe
-
-**Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 143.5 | **Max peak:** 143.5
-
-**Projects:** healthwatch
-
-### User Context (what the user said)
-
-> /home/hamr/Documents/PycharmProjects/healthwatch/.claude/stash/2026-05-31-healthwatch-built-flightlog-shipped.md cont from here for context
-
-### Trigger (agent action just before)
-
-- **Action:** Bash → error
-
-**Keywords:** healthwatch healthwatch, healthwatch built, flightlog shipped, built flightlog, shipped cont, cont context, healthwatch, flightlog, shipped, context
-
----
-
-## Cluster 2: user_curse | episode/severe
+## Cluster 1: user_curse | episode/severe
 
 **Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 80 | **Max peak:** 80
 
@@ -71,7 +53,7 @@ Sessions scanned: 700 | Reaction candidates: 35 | Clusters: 30
 
 ---
 
-## Cluster 3: user_correction | episode/severe
+## Cluster 2: user_correction | episode/severe
 
 **Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 75 | **Max peak:** 75
 
@@ -89,7 +71,7 @@ Sessions scanned: 700 | Reaction candidates: 35 | Clusters: 30
 
 ---
 
-## Cluster 4: user_correction | episode/severe
+## Cluster 3: user_correction | episode/severe
 
 **Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 66 | **Max peak:** 66
 
@@ -103,7 +85,7 @@ Sessions scanned: 700 | Reaction candidates: 35 | Clusters: 30
 
 ---
 
-## Cluster 5: user_correction | episode/severe
+## Cluster 4: user_correction | episode/severe
 
 **Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 64.5 | **Max peak:** 64.5
 
@@ -118,6 +100,20 @@ Sessions scanned: 700 | Reaction candidates: 35 | Clusters: 30
 - **Action:** Read → unknown
 
 **Keywords:** implementing multis, start implementing, implementing doc, product litectx, updated multis, scope default, implementing, docs product, litectx asks, closed scope
+
+---
+
+## Cluster 5: user_correction | episode/severe
+
+**Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 45 | **Max peak:** 45
+
+**Projects:** liteagents
+
+### User Context (what the user said)
+
+> i usually have either context or guide as docs to update #2 is this a workflow? i wanted to created a workflow, this is another slash command that runs other slash commnads. #3 do slash commands need to exist for it to run?
+
+**Keywords:** created workflow, workflow another, update workflow, workflow wanted, usually either, either context, wanted created, slash commnads, commnads slash, context guide
 
 ---
 
@@ -448,24 +444,6 @@ Chat mo...
 
 **Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 15 | **Max peak:** 15
 
-**Projects:** gitdone
-
-### User Context (what the user said)
-
-> revert all last changes and just keep h1 as gitdone
-
-### Trigger (agent action just before)
-
-- **Action:** Bash → unknown
-
-**Keywords:** last changes, changes keep, keep gitdone, revert last, changes, gitdone, revert, last, keep
-
----
-
-## Cluster 24: user_correction | episode/severe
-
-**Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 15 | **Max peak:** 15
-
 **Projects:** multis
 
 ### User Context (what the user said)
@@ -476,7 +454,7 @@ Chat mo...
 
 ---
 
-## Cluster 25: user_correction | episode/severe
+## Cluster 24: user_correction | episode/severe
 
 **Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 13.5 | **Max peak:** 13.5
 
@@ -491,6 +469,24 @@ Chat mo...
 - **Action:** Read → error
 
 **Keywords:** recursive driving, delivery resume, change delivery, delivery update, driving engine, prd recursive, engine update, pocs addition, its delivery, update rerun
+
+---
+
+## Cluster 25: user_correction | episode/severe
+
+**Occurrences:** 1 across 1 sessions | **Score:** 2 | **Median peak:** 13 | **Max peak:** 13
+
+**Projects:** multis
+
+### User Context (what the user said)
+
+> no, if its a beeper limitations that's fine and probably you don't need anything from anyone outside your recent if any, so that's acceptable. no error but limitaitons #2 i was even thinking to have one setup telegram or telegram + beeper then choose later business or personal since both are the sam...
+
+### Trigger (agent action just before)
+
+- **Action:** Bash → unknown
+
+**Keywords:** beeper limitations, limitations that's, personal assistant, that's acceptable, error limitaitons, telegram telegram, business personal, settings contacts, contacts business, acceptable error
 
 ---
 
