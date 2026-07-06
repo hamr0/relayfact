@@ -17,6 +17,8 @@ versioning starts at its first graduated build. Until then, entries are grouped 
   names which bare-suite libraries relayfact consumes and how (bareagent = loop + RLM, litectx = memory,
   bareguard = the leash), and frames the thesis — context engineering doesn't have to be heavy, locked-in,
   or complicated. The prior README was pre-graduation and stale (referenced the deleted `poc/` probes).
+  Folded the redundant `Status` section into the intro (honest bounds + doc trail) — the version badge and
+  intro already carry the graduated / `v0.1.0` status.
 - **Repo published** — public, Apache-2.0 `LICENSE` at root, description + topics set, `master` branch
   protection mirroring `multis`, `v0.1.0` tag pushed, and a `relayfact` entry added to the GitHub profile.
 

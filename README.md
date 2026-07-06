@@ -21,7 +21,7 @@
 
 A plain-English request goes in; a *verified* result comes out — a green artifact, or an honest, decision-ready escalation when the machine shouldn't decide alone. Under the hood it uses two things and only two things: **RLM** (recursive decompose → fan-out → verify → synthesize) to do the work, and **executable evals** (checks that can actually *fail*) to decide when it's done. Everything it does, it narrates as an append-only event stream. No framework, no orchestration plumbing, no rented infrastructure — just the three bare-suite libraries wired together and grounded on truth.
 
-relayfact is an **experiment with a bar**: it either graduates into its own thing or gets archived. It graduated. This is the first build.
+relayfact is an **experiment with a bar**: it either graduates into its own thing or gets archived. It graduated — v0.1.0, the first build. Honest bounds, kept in view: this is an experiment, not a benchmark — runs are small-*n*, results are model-modulated, and the ceiling is the *worker* (the model), not the close, which held through every observed failure. The full trail lives in the [CHANGELOG](./CHANGELOG.md), [FINDINGS.md](./docs/00-context/FINDINGS.md), and the governing spec under [`docs/01-product/`](./docs/01-product/).
 
 ---
 
@@ -82,12 +82,6 @@ relayfact builds **no primitives**. If it ever "needs" one, that's a finding aga
 **Deliberately *not* used:** barebrowse, baremobile, beeperbox. relayfact is a single domain (senior dev), a single process, and — by doctrine — no web UI before the loop closed. Its only interface is a CLI observer that replays the event log.
 
 ---
-
-## Status
-
-**Graduated — v0.1.0, the first shippable build.** The experiment cleared its bar: a request runs end-to-end through the assembled pipe, closes on grounded evals with an independent GOLD arbiter, and comes back green-or-escalation — demonstrated on real tasks with the grounded-vs-judgment split counted per task.
-
-Honest bounds, stated plainly: this is an experiment, not a benchmark. Runs are small-*n*, results are model-modulated, and the self-healing ceiling is the *worker* (the model), not the close — the grounded check held through every observed failure. The full trail lives in [CHANGELOG.md](./CHANGELOG.md), the friction log in [FINDINGS.md](./docs/00-context/FINDINGS.md), and the governing spec in [`docs/01-product/`](./docs/01-product/).
 
 ## The bare ecosystem
 
