@@ -256,3 +256,30 @@ fixtures built to bait it; and the whole pipe (G2) delivered gold-correct on sto
 because the answers are **positive and the residue is bounded and named** (§4), not because archiving would
 have been a failure. If the `src/` build surfaces that the residue is worse than §4 records, the archive
 path re-opens — the bar does not move.
+
+---
+
+## 8. Post-graduation — the trustworthy consumer surface (repo mode)
+
+A short exploration of how a person actually *hands* relayfact a request re-confirmed the founding thesis
+(§0, §5) from the interface side. Recorded here so the demo surface doesn't drift back into overselling.
+Two consumer shapes were tried:
+
+- **Repo mode (reliable).** The person brings a real, currently-failing executable test; relayfact edits
+  only a write-scoped file until that test passes, then re-runs it authoritatively on the delivered
+  artifact. The close is **human-authored and grounded** — relayfact invents nothing. This is the G2 /
+  G5-EXIT shape reduced to one command: **`demo/fix-with-test.mjs`** (`--repo` / `--target` = the one file
+  it may edit / `--test` = the check, run verbatim). Live red→green on an uncrafted `slugify` fixture
+  (0/3 → 3/3, first iteration), independently re-verified. Because the worker is write-scoped **out of** the
+  test, a green cannot be faked.
+- **Demo mode (a toy, self-graded).** The person types prose and relayfact self-authors the test, the
+  "planted-bug" validity mutants, **and** the hidden GOLD. This is exactly the self-grading trap the project
+  refuses (§5; R-S8 + GAN): the self-authored oracle is frequently internally inconsistent, so the validity
+  gate correctly **refuses to trust it** and the loop **escalates honestly** (observed on `slugify`,
+  `calculate`, and even `fizzbuzz` via a flaky AI-authored GOLD). The escalation is the product *working* —
+  but it makes demo mode an unreliable *surface*.
+
+**Consequence for the shipped build:** the trustworthy way to consume relayfact is **repo mode** — a close
+the person supplies and that can fail. Demo mode is kept only as a **labeled toy**; it is never the default
+and never an honest datapoint. The web UI that hosts both stays **throwaway** (scratchpad, uncommitted — §2
+doctrine); **`demo/fix-with-test.mjs` is the one committed reference consumer.**

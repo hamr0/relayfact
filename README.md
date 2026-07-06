@@ -71,6 +71,21 @@ Put together: recursion proposes, executable verification disposes, and the resi
 
 ---
 
+## Try it
+
+The trustworthy way to use relayfact is **repo mode** — you bring a currently-*failing* test, and it makes the test pass without ever touching it:
+
+```bash
+node demo/fix-with-test.mjs \
+  --repo   /path/to/repo \
+  --target /path/to/repo/src/impl.mjs \  # the ONE file it may edit (gate-locked)
+  --test   'npm test'                    # your check, run verbatim — the exit code is the truth
+```
+
+It edits only `--target`, re-runs `--test` on the result, and exits `0` on a real green — or hands back a decision-ready escalation. Because the worker is write-scoped *out* of the test, a green can't be faked. *(Needs `ANTHROPIC_API_KEY` at runtime — never in the tree.)* This is the one committed demo; the "type a prose description and it writes its own test" mode is a labeled toy that self-grades, so it honestly stops rather than trust an answer-key it invented — see [PRD §8](./docs/01-product/relayfact-prd-v3-graduated.md).
+
+---
+
 ## The bare suite it's assembled from
 
 relayfact builds **no primitives**. If it ever "needs" one, that's a finding against a library, not new code to grow here. Three libraries do all the load-bearing work:

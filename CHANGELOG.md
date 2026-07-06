@@ -8,6 +8,23 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
+### Added — repo-mode demo driver + UX exploration (2026-07-06)
+- **`demo/fix-with-test.mjs`** — a thin, repo-agnostic **reference consumer** of the shipped `src/` API
+  (`implementAgainstClose` + the event log + the pure observer). Point it at any repo with a failing test —
+  `--repo` / `--target` (the one file it may edit, gate write-scoped) / `--test` (the check, run verbatim) —
+  and it edits only the target until the test passes, re-runs the test **authoritatively** on the delivered
+  artifact, then exits `0` on a real green or escalates. This is the reference for the **reliable path**: the
+  person's own executable test grounds the loop, so relayfact invents nothing, and a green can't be faked
+  (the worker is write-scoped out of the test). Live-verified red→green on an uncrafted `slugify` fixture
+  (0/3 → 3/3, first iteration), independently re-verified. The one committed demo (PRD §8).
+- **Throwaway web UX explored in scratchpad — NOT committed** (doctrine: demos are throwaway, §2). A local
+  two-pane server: one natural-language chat that routes itself (a repo path → the reliable path; a function
+  description → a self-graded "toy"), with a live steps pane and plain-English stops. It **reconfirmed the
+  founding thesis from the UX side** — a "type prose and it invents its own check" demo *is* the self-grading
+  trap (§5): the self-authored oracle is untrustworthy, so the validity gate refuses it and the loop escalates
+  honestly (seen on `slugify`/`calculate`, and even `fizzbuzz` via a flaky AI-authored GOLD). The trustworthy
+  consumer surface is therefore "bring your own failing test" (repo mode). Written up in PRD §8.
+
 ### Changed — post-graduation housekeeping (2026-07-06)
 - **`poc/` retired.** Deleted the 269-file / 4 MB throwaway probe tree — its validated lessons are graduated
   into `src/`, `test/`, `FINDINGS.md` (F1–F42), and project memory; `src/` imports none of it (only
