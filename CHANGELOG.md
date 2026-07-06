@@ -8,9 +8,17 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
-**Remaining housekeeping: retire `poc/`** (the 269-file throwaway tree, recoverable from git; deferred by
-choice — nothing in `src/` imports it, only provenance comments). The graduated `src/` build is otherwise
-complete and released as `0.1.0` below.
+### Changed — post-graduation housekeeping (2026-07-06)
+- **`poc/` retired.** Deleted the 269-file / 4 MB throwaway probe tree — its validated lessons are graduated
+  into `src/`, `test/`, `FINDINGS.md` (F1–F42), and project memory; `src/` imports none of it (only
+  provenance comments remain). Fully recoverable from history and the `v0.1.0` tag.
+- **Dead `probe:*` npm scripts removed** and `comment:deps` refreshed; added a `test:live` convenience script.
+- **README rewritten** in the bare-suite house style (bareagent skeleton): conveys value with no code,
+  names which bare-suite libraries relayfact consumes and how (bareagent = loop + RLM, litectx = memory,
+  bareguard = the leash), and frames the thesis — context engineering doesn't have to be heavy, locked-in,
+  or complicated. The prior README was pre-graduation and stale (referenced the deleted `poc/` probes).
+- **Repo published** — public, Apache-2.0 `LICENSE` at root, description + topics set, `master` branch
+  protection mirroring `multis`, `v0.1.0` tag pushed, and a `relayfact` entry added to the GitHub profile.
 
 ## [0.1.0] — 2026-07-05 — the graduated build
 
