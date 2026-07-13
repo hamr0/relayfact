@@ -8,6 +8,10 @@ versioning starts at its first graduated build. Until then, entries are grouped 
 
 ## [Unreleased]
 
+### Changed
+
+- **Agent/IDE scratch gitignored and de-tracked.** `.gitignore` now default-denies every dot-directory (`.*/`), re-admitting only what ships (`.github/`). Per-machine agent/IDE state (`.claude/`, `.litectx/`, `.idea/`, …) regenerates locally and only added noise and churn; any already-committed copies are removed from tracking (local files kept on disk). Repo hygiene only.
+
 ### Added — repo-mode demo driver + UX exploration (2026-07-06)
 - **`demo/fix-with-test.mjs`** — a thin, repo-agnostic **reference consumer** of the shipped `src/` API
   (`implementAgainstClose` + the event log + the pure observer). Point it at any repo with a failing test —

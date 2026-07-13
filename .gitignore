@@ -53,3 +53,10 @@ poc/fixtures/g1-titlecase/gold.test.mjs
 # probe-16 (g2) — the ENTIRE work dir is materialized from `git archive` of a pinned
 # flightlog commit on every run; nothing here is source (the repo pointer + SHAs live in the probe).
 poc/fixtures/g2-flightlog-work/
+
+# Agent / IDE / tooling scratch — ignore EVERY dot-directory by default
+# (.claude, .litectx, .idea, .barebrowse, .vscode, and whatever the next tool
+# invents), then re-admit only the ones we actually ship. Default-deny beats
+# chasing each new scratch dir with its own line.
+.*/
+!.github/
