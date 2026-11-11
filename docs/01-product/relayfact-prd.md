@@ -114,7 +114,7 @@ autonomy, self-healing loops? Framed falsifiably, the answer hinges on one thing
 relayfact's real experiment is **mapping where that boundary falls** on real tasks. "It felt autonomous"
 is not a result; "N of M acceptance criteria grounded to executable checks; the rest needed a human" is.
 
-This PRD obeys `.claude/memory/AGENT_RULES.md` (Spec→Verify→Environment, POC-first, prove-don't-assert,
+This PRD obeys `.claude/remember/AGENT_RULES.md` (Spec→Verify→Environment, POC-first, prove-don't-assert,
 dependency hierarchy, surgical changes, security invariants). Where this doc disagrees with AGENT_RULES,
 **AGENT_RULES wins**.
 

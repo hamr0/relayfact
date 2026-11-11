@@ -13,7 +13,7 @@ falls. It either **graduates** or gets **archived**. That bar is the point.
 These govern; this CLAUDE.md only adds relayfact-specific doctrine. When anything here disagrees with
 them, **they win**.
 
-1. **`.claude/memory/AGENT_RULES.md`** — parent standard: Spec→Verify→Environment, POC-first,
+1. **`.claude/remember/AGENT_RULES.md`** — parent standard: Spec→Verify→Environment, POC-first,
    prove-don't-assert (the test must be able to fail), dependency hierarchy (vanilla → stdlib → external),
    simple-over-clever, surgical changes, the Testing Trophy, security invariants, responsive-web-once-graduated.
 2. **`docs/01-product/relayfact-prd.md`** — the single PRD that guides development (goals, non-goals,
@@ -25,7 +25,7 @@ them, **they win**.
 4. **`docs/00-context/FINDINGS.md`** — the running, no-papering-over log of friction with the three libs
    (grounded in `file:line`); "works as intended" is a finding too.
 
-`.claude/memory/LIBRARY_CONVENTIONS.md` is mostly **N/A** — relayfact is an application/experiment, not a
+`.claude/remember/LIBRARY_CONVENTIONS.md` is mostly **N/A** — relayfact is an application/experiment, not a
 published library. It applies only if relayfact ever graduates into a shipped lib; until then take from it
 only the always-true hygiene (pure ESM, JSDoc, no secrets).
 
@@ -83,5 +83,5 @@ External deps must be maintained, lightweight, widely adopted; vetted libs for s
 runtime; only `.env.example` committed). Responsive/mobile-by-default for any web UI once past POC.
 
 <!-- MEMORY:START -->
-@.claude/memory/MEMORY.md
+@.claude/remember/MEMORY.md
 <!-- MEMORY:END -->
